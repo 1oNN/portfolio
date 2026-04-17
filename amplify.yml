@@ -1,0 +1,66 @@
+version: 1
+
+# ─── AWS Amplify Build Configuration ─────────────────────────────────────────
+# Next.js 15 App Router with standalone output.
+# Environment variables must be set in the Amplify Console:
+#   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_TO_EMAIL,
+#   NEXT_PUBLIC_SITE_URL, ANALYTICS_SECRET (optional)
+# ─────────────────────────────────────────────────────────────────────────────
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Use Node.js 20 (specify via .nvmrc or inline)
+        - nvm use 20 || nvm install 20
+        - node -v
+        - npm -v
+        # Install dependencies — ci for reproducible installs
+        - npm ci
+
+    build:
+      commands:
+        # Type-check before building to catch regressions
+        - npm run type-check
+        # Next.js production build
+        - npm run build
+
+    postBuild:
+      commands:
+        # Copy static assets into the standalone server bundle
+        - cp -r public .next/standalone/public
+        - cp -r .next/static .next/standalone/.next/static
+
+  artifacts:
+    # Serve from the standalone output directory
+    baseDirectory: .next/standalone
+    files:
+      - "**/*"
+
+  cache:
+    paths:
+      # Cache node_modules and Next.js cache between builds
+      - node_modules/**/*
+      - .next/cache/**/*
+
+  # Amplify custom rewrites and headers
+  customHeaders:
+    - pattern: "**/*"
+      headers:
+        - key: X-Content-Type-Options
+          value: nosniff
+        - key: X-Frame-Options
+          value: DENY
+        - key: X-XSS-Protection
+          value: "1; mode=block"
+        - key: Referrer-Policy
+          value: strict-origin-when-cross-origin
+    # Cache static assets aggressively
+    - pattern: "_next/static/**/*"
+      headers:
+        - key: Cache-Control
+          value: "public, max-age=31536000, immutable"
+    - pattern: "*.{ico,png,jpg,webp,avif,svg,woff2}"
+      headers:
+        - key: Cache-Control
+          value: "public, max-age=31536000, immutable"
