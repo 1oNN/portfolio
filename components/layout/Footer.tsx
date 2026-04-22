@@ -17,7 +17,7 @@ export default function Footer() {
     >
       <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          © {year} Hammad Ahmad. Built with Next.js.
+          © {year} Hammad Ahmad. All rights reserved.
         </p>
 
         <div className="flex items-center gap-3">

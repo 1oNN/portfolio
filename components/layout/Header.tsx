@@ -18,7 +18,9 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const sections = NAV_ITEMS.map((item) => item.href.replace("#", ""));
+    const sections = NAV_ITEMS
+      .filter((item) => item.href.startsWith("#"))
+      .map((item) => item.href.replace("#", ""));
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -40,6 +42,10 @@ export default function Header() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
+    if (href.startsWith("/")) {
+      window.location.href = href;
+      return;
+    }
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: "smooth" });
   };
@@ -73,7 +79,9 @@ export default function Header() {
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map((item) => {
-            const isActive = activeSection === item.href.replace("#", "");
+            const isActive = item.href.startsWith("#")
+              ? activeSection === item.href.replace("#", "")
+              : typeof window !== "undefined" && window.location.pathname === item.href;
             return (
               <li key={item.href}>
                 <button
@@ -142,8 +150,14 @@ export default function Header() {
                       onClick={() => handleNavClick(item.href)}
                       className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
                       style={{
-                        color: isActive ? "var(--accent)" : "var(--text-secondary)",
-                        backgroundColor: isActive ? "var(--accent-muted)" : "transparent",
+                        color: (item.href.startsWith("#")
+                          ? activeSection === item.href.replace("#", "")
+                          : typeof window !== "undefined" && window.location.pathname === item.href)
+                          ? "var(--accent)" : "var(--text-secondary)",
+                        backgroundColor: (item.href.startsWith("#")
+                          ? activeSection === item.href.replace("#", "")
+                          : typeof window !== "undefined" && window.location.pathname === item.href)
+                          ? "var(--accent-muted)" : "transparent",
                       }}
                     >
                       {item.label}

@@ -2,6 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Expose ADMIN_PASSWORD to Edge Runtime (middleware) — NOT sent to browser
+  env: {
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+  },
+
   // Image optimization
   images: {
     formats: ["image/avif", "image/webp"],

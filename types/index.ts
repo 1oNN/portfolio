@@ -127,3 +127,18 @@ export interface NavItem {
   label: string;
   href: string;
 }
+
+// ─── Blog ─────────────────────────────────────────────────────────
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string; // Markdown
+  type: "blog" | "case-study";
+  tags: string[];
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

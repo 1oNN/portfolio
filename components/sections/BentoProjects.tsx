@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { PROJECTS } from "@/lib/constants";
 import type { Project } from "@/types";
-import { FiGithub, FiExternalLink, FiPlus } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiPlus, FiArrowRight } from "react-icons/fi";
 
 const statusConfig: Record<Project["category"], { label: string; color: string }> = {
   research:    { label: "Research",        color: "#a78bfa" },
@@ -155,6 +156,8 @@ function PlaceholderCard({ index }: { index: number }) {
   );
 }
 
+const FEATURED = PROJECTS.filter((p) => p.featured);
+
 export default function BentoProjects() {
   return (
     <section id="projects" className="py-24 sm:py-32">
@@ -166,12 +169,33 @@ export default function BentoProjects() {
         />
 
         <div className="flex flex-col gap-4">
-          {PROJECTS.map((project, i) => (
+          {FEATURED.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
-          <PlaceholderCard index={PROJECTS.length} />
-          <PlaceholderCard index={PROJECTS.length + 1} />
+          <PlaceholderCard index={FEATURED.length} />
         </div>
+
+        {/* See all projects link */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-8 flex justify-center"
+        >
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium font-mono transition-all duration-200 hover:scale-105"
+            style={{
+              border: "1px solid var(--accent)",
+              color: "var(--accent)",
+              backgroundColor: "var(--accent-muted)",
+            }}
+          >
+            See all projects
+            <FiArrowRight size={14} />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

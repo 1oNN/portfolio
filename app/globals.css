@@ -11,10 +11,10 @@
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --accent: #0d9488;
-  --accent-secondary: #818cf8;
-  --accent-muted: rgba(13, 148, 136, 0.12);
-  --accent-glow: rgba(13, 148, 136, 0.3);
+  --accent: #7c3aed;
+  --accent-secondary: #f59e0b;
+  --accent-muted: rgba(124, 58, 237, 0.12);
+  --accent-glow: rgba(124, 58, 237, 0.3);
 
   --font-inter: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", Menlo, monospace;
@@ -29,17 +29,17 @@
 }
 
 .dark {
-  --background: #09090d;
-  --surface: #111118;
-  --surface-elevated: #16161f;
-  --border: rgba(255, 255, 255, 0.06);
+  --background: #0a0814;
+  --surface: #110f1e;
+  --surface-elevated: #18162a;
+  --border: rgba(139, 92, 246, 0.1);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
-  --accent: #2dd4bf;
-  --accent-secondary: #818cf8;
-  --accent-muted: rgba(45, 212, 191, 0.1);
-  --accent-glow: rgba(45, 212, 191, 0.25);
+  --accent: #8b5cf6;
+  --accent-secondary: #f59e0b;
+  --accent-muted: rgba(139, 92, 246, 0.1);
+  --accent-glow: rgba(139, 92, 246, 0.25);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -224,8 +224,19 @@ section {
   color: #fff;
 }
 
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
+/* ─── Blog Content ────────────────────────────────────────────────── */
+.blog-content { line-height: 1.8; color: var(--text-secondary); }
+.blog-content h1, .blog-content h2, .blog-content h3 { color: var(--text-primary); font-weight: 700; margin: 1.5rem 0 0.75rem; }
+.blog-content h1 { font-size: 1.875rem; }
+.blog-content h2 { font-size: 1.5rem; }
+.blog-content h3 { font-size: 1.25rem; }
+.blog-content p { margin-bottom: 1rem; }
+.blog-content strong { color: var(--text-primary); font-weight: 600; }
+.blog-content em { font-style: italic; }
+.blog-content code { font-family: var(--font-mono); font-size: 0.875em; background: var(--surface-elevated); color: var(--accent); padding: 0.1em 0.4em; border-radius: 4px; }
+.blog-content pre { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin-bottom: 1rem; }
+.blog-content pre code { background: none; padding: 0; color: var(--text-secondary); }
+.blog-content ul { list-style: none; margin-bottom: 1rem; }
+.blog-content ul li::before { content: "→ "; color: var(--accent); }
+.blog-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+

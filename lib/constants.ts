@@ -10,7 +10,8 @@ import type {
 export const NAV_ITEMS: NavItem[] = [
   { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
+  { label: "Projects", href: "/projects" },
+  { label: "Blog", href: "/blog" },
   { label: "Chat", href: "#agent" },
   { label: "Research", href: "#research" },
   { label: "Contact", href: "#contact" },

@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiArrowDown } from "react-icons/fi";
+import {
+  SiPython, SiPytorch, SiFastapi, SiDocker, SiTypescript, SiReact, SiPostgresql, SiMongodb,
+} from "react-icons/si";
 
 const ROLES = [
   "AI/ML Engineer",
@@ -212,11 +215,7 @@ export default function Hero() {
             Get in touch
           </a>
           <a
-            href="#projects"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-            }}
+            href="/projects"
             className="inline-flex items-center gap-2 rounded-lg border px-6 py-2.5 text-sm font-semibold transition-all hover:bg-[var(--accent-muted)] active:scale-95"
             style={{
               borderColor: "var(--border)",
@@ -261,6 +260,44 @@ export default function Hero() {
               {social.icon}
             </a>
           ))}
+        </motion.div>
+
+        {/* Tech stack icons */}
+        <motion.div variants={item} className="mt-10 pb-4">
+          <p className="text-xs font-mono mb-3" style={{ color: "var(--text-muted)" }}>
+            core stack
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {[
+              { icon: <SiPython size={20} />, label: "Python", color: "#3b82f6" },
+              { icon: <SiPytorch size={20} />, label: "PyTorch", color: "#ef4444" },
+              { icon: <SiFastapi size={20} />, label: "FastAPI", color: "#10b981" },
+              { icon: <SiDocker size={20} />, label: "Docker", color: "#2dd4bf" },
+              { icon: <SiTypescript size={20} />, label: "TypeScript", color: "#818cf8" },
+              { icon: <SiReact size={20} />, label: "React", color: "#38bdf8" },
+              { icon: <SiPostgresql size={20} />, label: "PostgreSQL", color: "#a78bfa" },
+              { icon: <SiMongodb size={20} />, label: "MongoDB", color: "#4ade80" },
+            ].map(({ icon, label, color }) => (
+              <div
+                key={label}
+                className="group relative flex h-10 w-10 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-110"
+                style={{
+                  backgroundColor: "var(--surface-elevated)",
+                  borderColor: "var(--border)",
+                  color,
+                }}
+                title={label}
+              >
+                {icon}
+                <span
+                  className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded px-1.5 py-0.5 text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ backgroundColor: "var(--surface)", color: "var(--text-muted)", border: "1px solid var(--border)" }}
+                >
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </motion.div>
 

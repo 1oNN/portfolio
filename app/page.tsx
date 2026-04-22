@@ -11,7 +11,6 @@ import BentoProjects from "@/components/sections/BentoProjects";
 import TerminalAgent from "@/components/interactive/TerminalAgent";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
-import CustomCursor from "@/components/interactive/CustomCursor";
 import StarField from "@/components/interactive/StarField";
 import Terminal from "@/components/interactive/Terminal";
 
@@ -147,7 +146,6 @@ export default function HomePage() {
     <>
       <LoadingScreen done={loaded} />
       <StarField />
-      <CustomCursor />
 
       <motion.div
         initial={{ opacity: 0 }}
