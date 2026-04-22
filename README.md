@@ -3,7 +3,7 @@
 Personal portfolio for Hammad Ahmad. Built with Next.js, TypeScript, and Tailwind CSS.
 
 ## Live
-[hammadahmad.dev](https://hammadahmad.co.uk) 
+[hammadahmad.co.uk](https://hammadahmad.co.uk) 
 
 ## Features
 - Dark/light theme toggle
