@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,12 +23,11 @@ export default function Header() {
     const sections = NAV_ITEMS
       .filter((item) => item.href.startsWith("#"))
       .map((item) => item.href.replace("#", ""));
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         }
       },
       { rootMargin: "-40% 0px -55% 0px" }
@@ -46,8 +47,19 @@ export default function Header() {
       window.location.href = href;
       return;
     }
+    if (pathname !== "/") {
+      window.location.href = `/${href}`;
+      return;
+    }
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const isNavActive = (href: string) => {
+    if (href.startsWith("#")) {
+      return pathname === "/" && activeSection === href.replace("#", "");
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
@@ -68,32 +80,33 @@ export default function Header() {
           style={{ color: "var(--accent)" }}
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            if (pathname === "/") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              window.location.href = "/";
+            }
           }}
           aria-label="Back to top"
         >
-          ha
-          <span style={{ color: "var(--accent-secondary)" }}>.</span>
+          ha<span style={{ color: "var(--accent-secondary)" }}>.</span>
         </a>
 
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map((item) => {
-            const isActive = item.href.startsWith("#")
-              ? activeSection === item.href.replace("#", "")
-              : typeof window !== "undefined" && window.location.pathname === item.href;
+            const active = isNavActive(item.href);
             return (
               <li key={item.href}>
                 <button
                   onClick={() => handleNavClick(item.href)}
                   className="relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                   style={{
-                    color: isActive ? "var(--accent)" : "var(--text-secondary)",
-                    backgroundColor: isActive ? "var(--accent-muted)" : "transparent",
+                    color: active ? "var(--accent)" : "var(--text-secondary)",
+                    backgroundColor: active ? "var(--accent-muted)" : "transparent",
                   }}
                 >
                   {item.label}
-                  {isActive && (
+                  {active && (
                     <motion.span
                       layoutId="nav-indicator"
                       className="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full"
@@ -109,8 +122,6 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-
-          {/* Mobile menu button */}
           <button
             className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border transition-all"
             style={{
@@ -136,28 +147,19 @@ export default function Header() {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
             className="md:hidden overflow-hidden border-t"
-            style={{
-              backgroundColor: "var(--surface)",
-              borderColor: "var(--border)",
-            }}
+            style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
           >
             <ul className="flex flex-col px-6 py-4 gap-1">
               {NAV_ITEMS.map((item) => {
-                const isActive = activeSection === item.href.replace("#", "");
+                const active = isNavActive(item.href);
                 return (
                   <li key={item.href}>
                     <button
                       onClick={() => handleNavClick(item.href)}
                       className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
                       style={{
-                        color: (item.href.startsWith("#")
-                          ? activeSection === item.href.replace("#", "")
-                          : typeof window !== "undefined" && window.location.pathname === item.href)
-                          ? "var(--accent)" : "var(--text-secondary)",
-                        backgroundColor: (item.href.startsWith("#")
-                          ? activeSection === item.href.replace("#", "")
-                          : typeof window !== "undefined" && window.location.pathname === item.href)
-                          ? "var(--accent-muted)" : "transparent",
+                        color: active ? "var(--accent)" : "var(--text-secondary)",
+                        backgroundColor: active ? "var(--accent-muted)" : "transparent",
                       }}
                     >
                       {item.label}

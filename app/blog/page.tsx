@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/blog-db";
 import BlogListing from "./BlogListing";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Blog & Case Studies | Hammad Ahmad",
@@ -58,7 +58,7 @@ export default async function BlogPage() {
         </div>
       </header>
 
-      <main style={{ maxWidth: "800px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+      <main id="main" style={{ maxWidth: "800px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         {/* Page heading */}
         <div style={{ marginBottom: "3rem" }}>
           <span

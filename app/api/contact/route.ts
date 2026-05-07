@@ -5,17 +5,32 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import type { ApiResponse } from "@/types";
 
+const contactAttempts = new Map<string, { count: number; resetAt: number }>();
+
+function checkContactRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = contactAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    contactAttempts.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count += 1;
+  return true;
+}
+
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function sanitize(str: string): string {
-  return str.replace(/[<>"&]/g, (c) => {
+  return str.replace(/[<>"&']/g, (c) => {
     const map: Record<string, string> = {
       "<": "&lt;",
       ">": "&gt;",
       '"': "&quot;",
       "&": "&amp;",
+      "'": "&#x27;",
     };
     return map[c] ?? c;
   });
@@ -43,6 +58,16 @@ function getDynamoClient(): DynamoDBDocumentClient {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>> {
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+
+  if (!checkContactRateLimit(ip)) {
+    return NextResponse.json(
+      { success: false, message: "Too many messages. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   const contentType = req.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
     return NextResponse.json(
@@ -65,9 +90,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
     return NextResponse.json({ success: false, message: "Invalid JSON body." }, { status: 400 });
   }
 
-  // Honeypot — bots fill this hidden field; real users don't
   if (body.honeypot) {
-    // Return success to fool bots without processing
     return NextResponse.json({ success: true, message: "Message received." });
   }
 
@@ -102,10 +125,10 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
   }
 
   const safeName = sanitize(name);
+  const safeEmail = sanitize(email);
   const safeSubject = sanitize(subject);
   const safeMessage = sanitize(message);
 
-  // Send via SES if configured
   const awsConfigured =
     process.env.AWS_ACCESS_KEY_ID &&
     process.env.AWS_SECRET_ACCESS_KEY &&
@@ -120,7 +143,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         new SendEmailCommand({
           Source: toEmail,
           Destination: { ToAddresses: [toEmail] },
-          ReplyToAddresses: [`${safeName} <${email}>`],
+          ReplyToAddresses: [`${safeName} <${safeEmail}>`],
           Message: {
             Subject: {
               Data: `[Portfolio] ${safeSubject}`,
@@ -138,7 +161,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
                     <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
                       <tr>
                         <td style="padding:6px 0;font-weight:600;width:80px;color:#475569;">From</td>
-                        <td style="padding:6px 0;">${safeName} &lt;${email}&gt;</td>
+                        <td style="padding:6px 0;">${safeName} &lt;${safeEmail}&gt;</td>
                       </tr>
                       <tr>
                         <td style="padding:6px 0;font-weight:600;color:#475569;">Subject</td>
@@ -158,13 +181,15 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
       );
     } catch (err) {
       console.error("[/api/contact] SES send failed:", err);
-      return NextResponse.json(
-        { success: false, message: "Failed to send your message. Please try again later." },
-        { status: 500 }
-      );
+      if (process.env.NODE_ENV === "production") {
+        return NextResponse.json(
+          { success: false, message: "Failed to send your message. Please try again later." },
+          { status: 500 }
+        );
+      }
+      console.warn("[/api/contact] Dev mode: SES failure ignored; treating as success.");
     }
 
-    // Log to DynamoDB — fire-and-forget
     const table = process.env.DYNAMODB_CONTACTS_TABLE;
     if (table) {
       const dynamo = getDynamoClient();
@@ -185,11 +210,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         .catch((e) => console.error("[/api/contact] DynamoDB log failed:", e));
     }
   } else {
-    console.info("[/api/contact] AWS not configured — skipping email send.", {
-      name,
-      email,
-      subject,
-    });
+    console.info("[/api/contact] AWS not configured — email not sent.");
   }
 
   return NextResponse.json({ success: true, message: "Message sent successfully." });

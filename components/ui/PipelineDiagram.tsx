@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import type { PipelineDiagram } from "@/types";
 
 interface PipelineDiagramProps {
@@ -38,7 +37,7 @@ export default function PipelineDiagramView({ diagram }: PipelineDiagramProps) {
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
-        {diagram.edges.map((edge, i) => {
+        {diagram.edges.map((edge) => {
           const from = getNode(diagram, edge.from);
           const to = getNode(diagram, edge.to);
           if (!from || !to) return null;

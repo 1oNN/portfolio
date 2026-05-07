@@ -14,53 +14,6 @@ import Contact from "@/components/sections/Contact";
 import StarField from "@/components/interactive/StarField";
 import Terminal from "@/components/interactive/Terminal";
 
-function LoadingScreen({ done }: { done: boolean }) {
-  return (
-    <AnimatePresence>
-      {!done && (
-        <motion.div
-          key="loader"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex items-center justify-center"
-          style={{ backgroundColor: "var(--background)" }}
-          aria-hidden="true"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <span
-              className="font-mono text-3xl font-bold"
-              style={{ color: "var(--accent)" }}
-            >
-              ha
-              <span style={{ color: "var(--accent-secondary)" }}>.</span>
-            </span>
-            <div
-              className="h-px w-24 overflow-hidden rounded-full"
-              style={{ backgroundColor: "var(--border)" }}
-            >
-              <motion.div
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{ duration: 0.75, ease: "easeInOut" }}
-                className="h-full w-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, var(--accent), transparent)",
-                }}
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
 function TerminalHint({ visible }: { visible: boolean }) {
   return (
     <AnimatePresence>
@@ -96,24 +49,21 @@ function TerminalHint({ visible }: { visible: boolean }) {
 }
 
 export default function HomePage() {
-  const [loaded] = useState(true);
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
-  // Ensure page always starts at the top — prevent hash/autoscroll hijacking
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    if (!loaded) return;
     const show = setTimeout(() => {
       setShowHint(true);
       const hide = setTimeout(() => setShowHint(false), 5000);
       return () => clearTimeout(hide);
     }, 4000);
     return () => clearTimeout(show);
-  }, [loaded]);
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -144,16 +94,14 @@ export default function HomePage() {
 
   return (
     <>
-      <LoadingScreen done={loaded} />
       <StarField />
-
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: loaded ? 1 : 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.35 }}
       >
         <Header />
-        <main>
+        <main id="main">
           <Hero />
           <About />
           <Experience />
@@ -164,8 +112,6 @@ export default function HomePage() {
         </main>
         <Footer />
       </motion.div>
-
-      {/* Ctrl+` mini-terminal easter egg */}
       <Terminal isOpen={terminalOpen} onClose={() => setTerminalOpen(false)} />
       <TerminalHint visible={showHint && !terminalOpen} />
     </>

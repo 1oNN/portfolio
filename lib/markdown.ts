@@ -1,35 +1,43 @@
-/**
- * parseMarkdown — convert a subset of Markdown to HTML.
- * Designed for admin-authored content only (no user input).
- */
 export function parseMarkdown(md: string): string {
-  let html = md;
+  const codeBlocks: string[] = [];
+  const inlineCodes: string[] = [];
 
-  // ── Code blocks (``` ... ```) — must come before inline code ──
-  html = html.replace(/```[\w]*\n?([\s\S]*?)```/g, (_match, code: string) => {
-    const escaped = escapeHtml(code.trimEnd());
-    return `<pre><code>${escaped}</code></pre>`;
+  // Extract code blocks before any escaping
+  let html = md.replace(/```[\w]*\n?([\s\S]*?)```/g, (_match, code: string) => {
+    const idx = codeBlocks.length;
+    codeBlocks.push(`<pre><code>${escapeHtml(code.trimEnd())}</code></pre>`);
+    return `\x00CODE_BLOCK_${idx}\x00`;
   });
 
-  // ── Inline code (`code`) ──
+  // Extract inline code
   html = html.replace(/`([^`]+)`/g, (_match, code: string) => {
-    return `<code>${escapeHtml(code)}</code>`;
+    const idx = inlineCodes.length;
+    inlineCodes.push(`<code>${escapeHtml(code)}</code>`);
+    return `\x00INLINE_${idx}\x00`;
   });
 
-  // ── Headers ──
+  // Escape all remaining HTML so author-typed tags can't inject
+  html = escapeHtml(html);
+
+  // Headers
   html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
   html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
   html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
 
-  // ── Bold / italic ──
+  // Bold / italic
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
 
-  // ── Links ──
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  // Links — only allow http/https/mailto hrefs
+  html = html.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    (_match, text: string, href: string) => {
+      const safe = /^(https?:\/\/|mailto:)/.test(href) ? href : "#";
+      return `<a href="${safe}" rel="noopener noreferrer" target="_blank">${text}</a>`;
+    }
+  );
 
-  // ── Unordered list items ──
-  // Wrap consecutive `- ...` lines in a <ul>
+  // Unordered lists
   html = html.replace(/((?:^- .+\n?)+)/gm, (block) => {
     const items = block
       .trim()
@@ -39,20 +47,25 @@ export function parseMarkdown(md: string): string {
     return `<ul>${items}</ul>`;
   });
 
-  // ── Paragraphs — split on double newlines, wrap non-block elements ──
-  const blocks = html.split(/\n\n+/);
-  html = blocks
+  // Paragraphs
+  html = html
+    .split(/\n\n+/)
     .map((block) => {
       const trimmed = block.trim();
       if (!trimmed) return "";
-      // Don't wrap already-block-level HTML
-      if (/^<(h[1-6]|ul|ol|li|pre|blockquote|div)/i.test(trimmed)) {
-        return trimmed;
-      }
-      // Collapse single newlines within paragraph
+      if (/^<(h[1-6]|ul|ol|li|pre|blockquote|div)/i.test(trimmed)) return trimmed;
+      if (/^\x00CODE_BLOCK_\d+\x00$/.test(trimmed)) return trimmed;
       return `<p>${trimmed.replace(/\n/g, " ")}</p>`;
     })
     .join("\n");
+
+  // Restore code blocks and inline code
+  codeBlocks.forEach((block, i) => {
+    html = html.replace(`\x00CODE_BLOCK_${i}\x00`, block);
+  });
+  inlineCodes.forEach((code, i) => {
+    html = html.replace(`\x00INLINE_${i}\x00`, code);
+  });
 
   return html;
 }
@@ -62,5 +75,6 @@ function escapeHtml(str: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
 }

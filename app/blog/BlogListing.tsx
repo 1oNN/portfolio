@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import type { BlogPost } from "@/types";
+import { readingTime } from "@/lib/reading-time";
 
 type FilterKey = "all" | "blog" | "case-study";
 
@@ -22,6 +23,9 @@ function formatDate(iso: string): string {
 }
 
 function PostCard({ post }: { post: BlogPost }) {
+  const mins = readingTime(post.content);
+  const isCaseStudy = post.type === "case-study";
+
   return (
     <motion.article
       layout
@@ -29,60 +33,36 @@ function PostCard({ post }: { post: BlogPost }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.3 }}
-      style={{
-        backgroundColor: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: "16px",
-        padding: "1.5rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.75rem",
-        transition: "box-shadow 0.25s ease, transform 0.25s ease",
-      }}
-      className="card-glow"
+      className="card-glow group rounded-2xl border p-6 flex flex-col gap-3 transition-all duration-200"
+      style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
     >
-      {/* Header row */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem", flex: 1 }}>
-          {/* Type badge */}
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-2 flex-1">
           <span
+            className="inline-flex self-start text-[0.7rem] font-semibold px-2.5 py-1 rounded-full font-mono"
             style={{
-              display: "inline-flex",
-              alignSelf: "flex-start",
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              padding: "0.2rem 0.6rem",
-              borderRadius: "9999px",
-              fontFamily: "var(--font-mono)",
-              backgroundColor: post.type === "case-study" ? "rgba(245,158,11,0.1)" : "var(--accent-muted)",
-              color: post.type === "case-study" ? "#f59e0b" : "var(--accent)",
-              border: `1px solid ${post.type === "case-study" ? "rgba(245,158,11,0.2)" : "var(--accent-muted)"}`,
+              backgroundColor: isCaseStudy ? "rgba(245,158,11,0.1)" : "var(--accent-muted)",
+              color: isCaseStudy ? "#f59e0b" : "var(--accent)",
+              border: `1px solid ${isCaseStudy ? "rgba(245,158,11,0.2)" : "var(--accent-muted)"}`,
             }}
           >
-            {post.type === "case-study" ? "Case Study" : "Blog Post"}
+            {isCaseStudy ? "Case Study" : "Blog Post"}
           </span>
-
-          <h2
-            style={{
-              fontSize: "1.1rem",
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              lineHeight: 1.35,
-            }}
-          >
+          <h2 className="text-lg font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
             {post.title}
           </h2>
         </div>
       </div>
 
       {/* Excerpt */}
-      <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+      <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
         {post.excerpt}
       </p>
 
       {/* Tags */}
       {post.tags.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem" }}>
+        <div className="flex flex-wrap gap-1.5">
           {post.tags.map((tag) => (
             <span key={tag} className="tag-pill">{tag}</span>
           ))}
@@ -91,30 +71,18 @@ function PostCard({ post }: { post: BlogPost }) {
 
       {/* Footer */}
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingTop: "0.75rem",
-          borderTop: "1px solid var(--border)",
-          marginTop: "0.25rem",
-        }}
+        className="flex items-center justify-between pt-3 mt-1 border-t"
+        style={{ borderColor: "var(--border)" }}
       >
-        <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-          {formatDate(post.createdAt)}
-        </span>
+        <div className="flex items-center gap-3 text-xs" style={{ color: "var(--text-muted)" }}>
+          <span>{formatDate(post.createdAt)}</span>
+          <span>·</span>
+          <span>{mins} min read</span>
+        </div>
         <Link
           href={`/blog/${post.slug}`}
-          style={{
-            fontSize: "0.8rem",
-            fontWeight: 600,
-            color: "var(--accent)",
-            textDecoration: "none",
-            fontFamily: "var(--font-mono)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.25rem",
-          }}
+          className="text-xs font-semibold font-mono inline-flex items-center gap-1 transition-colors hover:opacity-80"
+          style={{ color: "var(--accent)" }}
         >
           Read more →
         </Link>
@@ -138,52 +106,40 @@ export default function BlogListing({ posts }: { posts: BlogPost[] }) {
   return (
     <div>
       {/* Filter tabs */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "2.5rem" }}>
+      <div className="flex flex-wrap gap-2 mb-10">
         {FILTERS.map((f) => (
           <button
             key={f.key}
             onClick={() => setFilter(f.key)}
+            className="px-4 py-1.5 rounded-full text-sm font-medium font-mono transition-all duration-200"
             style={{
-              padding: "0.4rem 1rem",
-              borderRadius: "9999px",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              fontFamily: "var(--font-mono)",
-              cursor: "pointer",
-              transition: "all 0.2s",
               border: `1px solid ${filter === f.key ? "var(--accent)" : "var(--border)"}`,
               backgroundColor: filter === f.key ? "var(--accent)" : "var(--surface-elevated)",
               color: filter === f.key ? "#fff" : "var(--text-secondary)",
+              cursor: "pointer",
             }}
           >
             {f.label}
-            <span style={{ marginLeft: "0.375rem", opacity: 0.65, fontSize: "0.75rem" }}>
-              {counts[f.key]}
-            </span>
+            <span className="ml-1.5 opacity-65 text-xs">{counts[f.key]}</span>
           </button>
         ))}
       </div>
 
-      {/* Posts grid */}
+      {/* Posts */}
       {filtered.length === 0 ? (
         <div
-          style={{
-            textAlign: "center",
-            padding: "4rem 2rem",
-            backgroundColor: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: "16px",
-          }}
+          className="text-center py-16 rounded-2xl border"
+          style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
         >
-          <p style={{ color: "var(--text-secondary)", fontSize: "1rem", marginBottom: "0.5rem" }}>
+          <p className="text-base mb-2" style={{ color: "var(--text-secondary)" }}>
             Coming soon — check back soon!
           </p>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
+          <p className="text-sm" style={{ color: "var(--text-muted)" }}>
             Posts will appear here once published.
           </p>
         </div>
       ) : (
-        <motion.div layout style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <motion.div layout className="flex flex-col gap-5">
           <AnimatePresence mode="popLayout">
             {filtered.map((post) => (
               <PostCard key={post.id} post={post} />

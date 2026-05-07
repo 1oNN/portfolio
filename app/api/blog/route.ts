@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getAllPosts, createPost } from "@/lib/blog-db";
+import { isAdmin } from "@/lib/auth";
 import type { BlogPost } from "@/types";
-
-function isAdmin(request: NextRequest): boolean {
-  const token = request.cookies.get("admin-token")?.value;
-  const expected = btoa((process.env.ADMIN_PASSWORD ?? "admin123").trim());
-  return token === expected;
-}
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = request.nextUrl;
@@ -41,6 +37,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   try {
     const post = await createPost(body);
+    revalidatePath("/blog", "layout");
     return NextResponse.json(post, { status: 201 });
   } catch (err) {
     console.error("[/api/blog] POST error:", err);

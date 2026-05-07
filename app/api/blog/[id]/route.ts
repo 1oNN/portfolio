@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getPostBySlug, getPostById, updatePost, deletePost } from "@/lib/blog-db";
+import { isAdmin } from "@/lib/auth";
 import type { BlogPost } from "@/types";
-
-function isAdmin(request: NextRequest): boolean {
-  const token = request.cookies.get("admin-token")?.value;
-  const expected = btoa((process.env.ADMIN_PASSWORD ?? "admin123").trim());
-  return token === expected;
-}
 
 export async function GET(
   _request: NextRequest,
@@ -14,11 +10,8 @@ export async function GET(
 ): Promise<NextResponse> {
   const { id } = await params;
 
-  // Try slug first, then id
   let post = await getPostBySlug(id);
-  if (!post) {
-    post = await getPostById(id);
-  }
+  if (!post) post = await getPostById(id);
 
   if (!post) {
     return NextResponse.json({ success: false, message: "Post not found." }, { status: 404 });
@@ -46,6 +39,7 @@ export async function PUT(
 
   try {
     const updated = await updatePost(id, body);
+    revalidatePath("/blog", "layout");
     return NextResponse.json(updated);
   } catch (err) {
     console.error("[/api/blog/[id]] PUT error:", err);
@@ -68,6 +62,7 @@ export async function DELETE(
 
   try {
     await deletePost(id);
+    revalidatePath("/blog", "layout");
     return new NextResponse(null, { status: 204 });
   } catch (err) {
     console.error("[/api/blog/[id]] DELETE error:", err);

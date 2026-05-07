@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiArrowDown } from "react-icons/fi";
 import {
@@ -214,7 +215,7 @@ export default function Hero() {
             <FiMail size={15} />
             Get in touch
           </a>
-          <a
+          <Link
             href="/projects"
             className="inline-flex items-center gap-2 rounded-lg border px-6 py-2.5 text-sm font-semibold transition-all hover:bg-[var(--accent-muted)] active:scale-95"
             style={{
@@ -223,7 +224,7 @@ export default function Hero() {
             }}
           >
             View projects
-          </a>
+          </Link>
         </motion.div>
 
         {/* Social links */}

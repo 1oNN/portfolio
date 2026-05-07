@@ -4,32 +4,35 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent-system-prompt";
 
-// Simple in-memory rate limiter: max 20 requests per IP per hour
+// Per-IP rate limit: 20 requests/hour. Resets on cold start — acceptable
+// for a portfolio agent since abuse cost is primarily GROQ quota, not data.
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
-
   if (!entry || now > entry.resetAt) {
     rateLimitMap.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
     return true;
   }
-
   if (entry.count >= 20) return false;
   entry.count += 1;
   return true;
 }
 
+let dynamoClient: DynamoDBDocumentClient | null = null;
 function getDynamoClient(): DynamoDBDocumentClient {
-  const dynamo = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "eu-west-2",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
-  return DynamoDBDocumentClient.from(dynamo);
+  if (!dynamoClient) {
+    const dynamo = new DynamoDBClient({
+      region: process.env.AWS_REGION ?? "eu-west-2",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
+    dynamoClient = DynamoDBDocumentClient.from(dynamo);
+  }
+  return dynamoClient;
 }
 
 export async function POST(req: NextRequest) {
@@ -41,7 +44,7 @@ export async function POST(req: NextRequest) {
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
       { error: "Rate limit exceeded. Please try again later." },
-      { status: 429 },
+      { status: 429 }
     );
   }
 
@@ -55,32 +58,43 @@ export async function POST(req: NextRequest) {
     history = body.history ?? [];
     sessionId = typeof body.sessionId === "string" ? body.sessionId : "";
   } catch {
-    return NextResponse.json(
-      { error: "Invalid request body." },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
   if (!message || typeof message !== "string") {
+    return NextResponse.json({ error: "message is required." }, { status: 400 });
+  }
+  if (message.length > 2000) {
     return NextResponse.json(
-      { error: "message is required." },
-      { status: 400 },
+      { error: "Message too long (max 2000 characters)." },
+      { status: 400 }
     );
   }
+  if (!Array.isArray(history)) history = [];
+  history = history
+    .filter(
+      (m): m is { role: string; content: string } =>
+        m != null &&
+        typeof m === "object" &&
+        typeof (m as { role?: unknown }).role === "string" &&
+        typeof (m as { content?: unknown }).content === "string"
+    )
+    .filter((m) => m.role === "user" || m.role === "assistant")
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 2000) }))
+    .slice(-20);
+  if (sessionId.length > 128) sessionId = sessionId.slice(0, 128);
 
   const groqKey = process.env.GROQ_API_KEY;
   if (!groqKey) {
     return NextResponse.json(
       { error: "Agent not configured. Please contact Hammad directly." },
-      { status: 503 },
+      { status: 503 }
     );
   }
 
   const groqMessages = [
     { role: "system", content: AGENT_SYSTEM_PROMPT },
-    ...history
-      .filter((m) => m.role === "user" || m.role === "assistant")
-      .map((m) => ({ role: m.role, content: m.content })),
+    ...history,
     { role: "user", content: message },
   ];
 
@@ -106,7 +120,7 @@ export async function POST(req: NextRequest) {
       console.error("[/api/agent] Groq error:", res.status, errBody);
       return NextResponse.json(
         { error: "Failed to get a response. Please try again." },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -118,17 +132,12 @@ export async function POST(req: NextRequest) {
     console.error("[/api/agent] Fetch error:", err);
     return NextResponse.json(
       { error: "Failed to get a response. Please try again." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
-  // Log to DynamoDB — fire-and-forget
   const table = process.env.DYNAMODB_AGENT_TABLE;
-  if (
-    table &&
-    process.env.AWS_ACCESS_KEY_ID &&
-    process.env.AWS_SECRET_ACCESS_KEY
-  ) {
+  if (table && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
     getDynamoClient()
       .send(
         new PutCommand({
@@ -140,7 +149,7 @@ export async function POST(req: NextRequest) {
             userQuestion: message,
             agentResponse: text.slice(0, 200),
           },
-        }),
+        })
       )
       .catch((e) => console.error("[/api/agent] DynamoDB log failed:", e));
   }

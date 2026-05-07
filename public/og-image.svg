@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0814"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#8b5cf6"/>
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1428" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- Monogram -->
+  <text x="100" y="260" font-family="monospace" font-size="120" font-weight="bold" fill="#8b5cf6">ha</text>
+  <text x="340" y="260" font-family="monospace" font-size="120" font-weight="bold" fill="#f59e0b">.</text>
+  <!-- Name -->
+  <text x="100" y="340" font-family="system-ui, sans-serif" font-size="40" font-weight="700" fill="#f8fafc">Hammad Ahmad</text>
+  <!-- Title -->
+  <text x="100" y="400" font-family="system-ui, sans-serif" font-size="24" fill="#94a3b8">AI/ML Engineer &amp; Researcher</text>
+  <!-- Tags -->
+  <rect x="100" y="440" width="80" height="32" rx="16" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="140" y="461" font-family="monospace" font-size="13" fill="#8b5cf6" text-anchor="middle">LLMs</text>
+  <rect x="196" y="440" width="80" height="32" rx="16" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="236" y="461" font-family="monospace" font-size="13" fill="#8b5cf6" text-anchor="middle">RAG</text>
+  <rect x="292" y="440" width="110" height="32" rx="16" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="347" y="461" font-family="monospace" font-size="13" fill="#8b5cf6" text-anchor="middle">FastAPI</text>
+  <rect x="418" y="440" width="110" height="32" rx="16" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="473" y="461" font-family="monospace" font-size="13" fill="#8b5cf6" text-anchor="middle">PyTorch</text>
+  <!-- URL -->
+  <text x="100" y="560" font-family="monospace" font-size="18" fill="#475569">hammadahmad.dev</text>
+</svg>

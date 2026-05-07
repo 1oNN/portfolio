@@ -12,10 +12,6 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import type { BlogPost } from "@/types";
 
-// ── Storage mode ──────────────────────────────────────────────────
-// If AWS credentials are present → DynamoDB
-// Otherwise → local JSON file (dev fallback)
-
 const TABLE_NAME = process.env.DYNAMODB_BLOG_TABLE ?? "portfolio-blog";
 const LOCAL_FILE = path.join(process.cwd(), "data", "blog-posts.json");
 
@@ -23,27 +19,36 @@ function isDynamoConfigured(): boolean {
   return !!(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY);
 }
 
+function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
 function isAuthError(err: unknown): boolean {
   if (!err || typeof err !== "object") return false;
   const name = (err as { name?: string; __type?: string }).__type ?? (err as { name?: string }).name ?? "";
-  return name.includes("UnrecognizedClientException") ||
+  return (
+    name.includes("UnrecognizedClientException") ||
     name.includes("InvalidSignatureException") ||
     name.includes("AuthFailure") ||
-    name.includes("AccessDenied");
+    name.includes("AccessDenied")
+  );
 }
 
+let dynamoClient: DynamoDBDocumentClient | null = null;
 function getDynamo(): DynamoDBDocumentClient {
-  const dynamo = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "eu-west-2",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
-  return DynamoDBDocumentClient.from(dynamo);
+  if (!dynamoClient) {
+    const dynamo = new DynamoDBClient({
+      region: process.env.AWS_REGION ?? "eu-west-2",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
+    dynamoClient = DynamoDBDocumentClient.from(dynamo);
+  }
+  return dynamoClient;
 }
 
-// ── Local JSON helpers ────────────────────────────────────────────
 function readLocal(): BlogPost[] {
   try {
     const dir = path.dirname(LOCAL_FILE);
@@ -61,15 +66,22 @@ function writeLocal(posts: BlogPost[]): void {
   fs.writeFileSync(LOCAL_FILE, JSON.stringify(posts, null, 2), "utf-8");
 }
 
-// ── Public API ────────────────────────────────────────────────────
+function shouldUseLocalFallback(operation: string): boolean {
+  if (isProduction()) {
+    console.error(
+      `[blog-db] ${operation}: DynamoDB not configured in production — returning empty result`
+    );
+    return false;
+  }
+  return true;
+}
 
 export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
   if (!isDynamoConfigured()) {
+    if (!shouldUseLocalFallback("getAllPosts")) return [];
     const posts = readLocal();
     const filtered = publishedOnly ? posts.filter((p) => p.published) : posts;
-    return filtered.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   try {
@@ -86,12 +98,11 @@ export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
       })
     );
     const items = (result.Items ?? []) as BlogPost[];
-    return items.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    return items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   } catch (err) {
     if (isAuthError(err)) {
       console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) return [];
       const posts = readLocal();
       const filtered = publishedOnly ? posts.filter((p) => p.published) : posts;
       return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -103,6 +114,7 @@ export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   if (!isDynamoConfigured()) {
+    if (!shouldUseLocalFallback("getPostBySlug")) return null;
     return readLocal().find((p) => p.slug === slug) ?? null;
   }
 
@@ -118,7 +130,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     return ((result.Items ?? []) as BlogPost[])[0] ?? null;
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) return null;
       return readLocal().find((p) => p.slug === slug) ?? null;
     }
     console.error("[blog-db] getPostBySlug error:", err);
@@ -128,6 +140,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
 export async function getPostById(id: string): Promise<BlogPost | null> {
   if (!isDynamoConfigured()) {
+    if (!shouldUseLocalFallback("getPostById")) return null;
     return readLocal().find((p) => p.id === id) ?? null;
   }
 
@@ -138,7 +151,7 @@ export async function getPostById(id: string): Promise<BlogPost | null> {
     return (result.Item as BlogPost) ?? null;
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) return null;
       return readLocal().find((p) => p.id === id) ?? null;
     }
     console.error("[blog-db] getPostById error:", err);
@@ -153,6 +166,7 @@ export async function createPost(
   const post: BlogPost = { ...data, id: uuidv4(), createdAt: now, updatedAt: now };
 
   if (!isDynamoConfigured()) {
+    if (isProduction()) throw new Error("DynamoDB is required to create posts in production");
     const posts = readLocal();
     posts.unshift(post);
     writeLocal(posts);
@@ -163,7 +177,7 @@ export async function createPost(
     await getDynamo().send(new PutCommand({ TableName: TABLE_NAME, Item: post }));
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) throw new Error("DynamoDB credentials invalid in production");
       const posts = readLocal();
       posts.unshift(post);
       writeLocal(posts);
@@ -178,6 +192,7 @@ export async function updatePost(id: string, data: Partial<BlogPost>): Promise<B
   const now = new Date().toISOString();
 
   if (!isDynamoConfigured()) {
+    if (isProduction()) throw new Error("DynamoDB is required to update posts in production");
     const posts = readLocal();
     const idx = posts.findIndex((p) => p.id === id);
     if (idx === -1) throw new Error("Post not found");
@@ -214,7 +229,7 @@ export async function updatePost(id: string, data: Partial<BlogPost>): Promise<B
     return result.Attributes as BlogPost;
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) throw new Error("DynamoDB credentials invalid in production");
       const posts = readLocal();
       const idx = posts.findIndex((p) => p.id === id);
       if (idx === -1) throw new Error("Post not found");
@@ -228,8 +243,8 @@ export async function updatePost(id: string, data: Partial<BlogPost>): Promise<B
 
 export async function deletePost(id: string): Promise<void> {
   if (!isDynamoConfigured()) {
-    const posts = readLocal().filter((p) => p.id !== id);
-    writeLocal(posts);
+    if (isProduction()) throw new Error("DynamoDB is required to delete posts in production");
+    writeLocal(readLocal().filter((p) => p.id !== id));
     return;
   }
 
@@ -239,7 +254,7 @@ export async function deletePost(id: string): Promise<void> {
     );
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      if (isProduction()) throw new Error("DynamoDB credentials invalid in production");
       writeLocal(readLocal().filter((p) => p.id !== id));
       return;
     }

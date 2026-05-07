@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/blog-db";
 import { parseMarkdown } from "@/lib/markdown";
+import { readingTime } from "@/lib/reading-time";
+
+export const revalidate = 60;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -13,12 +14,21 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post || !post.published) {
-    return { title: "Post Not Found" };
-  }
+  if (!post || !post.published) return { title: "Post Not Found" };
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
   return {
     title: `${post.title} | Hammad Ahmad`,
     description: post.excerpt,
+    alternates: { canonical: `${siteUrl}/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      url: `${siteUrl}/blog/${post.slug}`,
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      tags: post.tags,
+    },
   };
 }
 
@@ -34,14 +44,31 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
-  if (!post || !post.published) {
-    notFound();
-  }
+  if (!post || !post.published) notFound();
 
   const contentHtml = parseMarkdown(post.content);
+  const mins = readingTime(post.content);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt,
+    author: { "@type": "Person", name: "Hammad Ahmad", url: siteUrl },
+    url: `${siteUrl}/blog/${post.slug}`,
+    keywords: post.tags.join(", "),
+  };
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Top bar */}
       <header
         className="sticky top-0 z-40 border-b backdrop-blur-md"
@@ -85,7 +112,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </header>
 
-      <main style={{ maxWidth: "760px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+      <main id="main" style={{ maxWidth: "760px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         {/* Meta */}
         <div style={{ marginBottom: "2.5rem" }}>
           {/* Type badge */}
@@ -120,10 +147,14 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
 
-          {/* Date + tags */}
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem" }}>
+          {/* Date + reading time + tags */}
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
             <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
               {formatDate(post.createdAt)}
+            </span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>·</span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+              {mins} min read
             </span>
             {post.tags.map((tag) => (
               <span key={tag} className="tag-pill">{tag}</span>

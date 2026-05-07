@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { FiArrowLeft, FiGithub, FiExternalLink, FiCheckCircle } from "react-icons/fi";
+import { FiArrowLeft, FiGithub, FiExternalLink, FiCheckCircle, FiArrowUpRight } from "react-icons/fi";
 import {
   SiPython, SiPytorch, SiFastapi, SiDocker, SiTypescript, SiReact,
   SiPostgresql, SiMongodb, SiScikitlearn, SiFlask,
@@ -11,6 +11,7 @@ import {
 import { PROJECTS } from "@/lib/constants";
 import type { Project } from "@/types";
 import StarField from "@/components/interactive/StarField";
+import PipelineDiagramView from "@/components/ui/PipelineDiagram";
 
 const TECH_ICONS: Record<string, React.ReactNode> = {
   Python: <SiPython size={13} />,
@@ -34,10 +35,10 @@ const CATEGORIES = [
 ] as const;
 
 const STATUS: Record<Project["category"], { label: string; color: string }> = {
-  research: { label: "Research", color: "#a78bfa" },
-  engineering: { label: "In Production", color: "#2dd4bf" },
-  ml: { label: "Machine Learning", color: "#f59e0b" },
-  fullstack: { label: "Full Stack", color: "#10b981" },
+  research: { label: "Research", color: "var(--status-research)" },
+  engineering: { label: "In Production", color: "var(--status-engineering)" },
+  ml: { label: "Machine Learning", color: "var(--status-ml)" },
+  fullstack: { label: "Full Stack", color: "var(--status-fullstack)" },
 };
 
 function ProjectCard({ project }: { project: Project }) {
@@ -57,6 +58,12 @@ function ProjectCard({ project }: { project: Project }) {
         borderLeft: `3px solid ${status.color}`,
       }}
     >
+      {/* Pipeline diagram — revealed on hover */}
+      {project.pipeline && (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
+          <PipelineDiagramView diagram={project.pipeline} />
+        </div>
+      )}
       {/* Top accent */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
@@ -71,9 +78,9 @@ function ProjectCard({ project }: { project: Project }) {
               <span
                 className="rounded-full px-2.5 py-0.5 text-xs font-semibold font-mono"
                 style={{
-                  backgroundColor: `${status.color}18`,
+                  backgroundColor: `color-mix(in srgb, ${status.color} 9%, transparent)`,
                   color: status.color,
-                  border: `1px solid ${status.color}35`,
+                  border: `1px solid color-mix(in srgb, ${status.color} 21%, transparent)`,
                 }}
               >
                 {status.label}
@@ -115,6 +122,13 @@ function ProjectCard({ project }: { project: Project }) {
                 <FiExternalLink size={14} />
               </a>
             )}
+            <Link
+              href={`/projects/${project.id}`}
+              className="flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium font-mono transition-all hover:scale-105"
+              style={{ color: "var(--accent)", borderColor: "rgba(139,92,246,0.3)", backgroundColor: "var(--accent-muted)" }}
+            >
+              Details <FiArrowUpRight size={11} />
+            </Link>
           </div>
         </div>
 
@@ -204,7 +218,7 @@ export default function ProjectsView() {
           </div>
         </header>
 
-        <main className="mx-auto max-w-5xl px-6 py-16">
+        <main id="main" className="mx-auto max-w-5xl px-6 py-16">
           {/* Page title */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

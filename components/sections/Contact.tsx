@@ -142,10 +142,9 @@ export default function Contact() {
                 Let&apos;s work together
               </h3>
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                {/* TODO: Update or remove PhD/postdoc October 2026 timeline once date passes */}
                 I&apos;m currently open to full-time AI/ML engineering roles and research
                 positions. I&apos;m also MSCA-eligible and interested in PhD/postdoc opportunities
-                in the EU from October 2026.
+                in the EU later this year.
               </p>
             </div>
 
