@@ -13,34 +13,12 @@ export interface Project {
   featured: boolean;
   highlights: string[];
   metrics?: ProjectMetric[];
-  pipeline?: PipelineDiagram;
   bentoSize: "large" | "medium" | "small";
 }
 
 export interface ProjectMetric {
   value: string;
   label: string;
-}
-
-export interface PipelineNode {
-  id: string;
-  label: string;
-  sublabel?: string;
-  color: string;
-  x: number; // percentage 0–100
-  y: number; // percentage 0–100
-}
-
-export interface PipelineEdge {
-  from: string;
-  to: string;
-  label?: string;
-  animated?: boolean;
-}
-
-export interface PipelineDiagram {
-  nodes: PipelineNode[];
-  edges: PipelineEdge[];
 }
 
 export interface Experience {

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PROJECTS } from "@/lib/constants";
-import PipelineDiagramView from "@/components/ui/PipelineDiagram";
 import { FiArrowLeft, FiGithub, FiExternalLink, FiCheckCircle } from "react-icons/fi";
 
 interface Props {
@@ -132,25 +131,6 @@ export default async function ProjectPage({ params }: Props) {
                   </span>
                 </div>
               ))}
-            </div>
-          </section>
-        )}
-
-        {/* Architecture diagram */}
-        {project.pipeline && (
-          <section>
-            <h2 className="text-xs font-semibold uppercase tracking-widest font-mono mb-4" style={{ color: "var(--text-muted)" }}>
-              Architecture
-            </h2>
-            <div
-              className="relative rounded-2xl border overflow-hidden"
-              style={{
-                height: "320px",
-                backgroundColor: "var(--surface)",
-                borderColor: "var(--border)",
-              }}
-            >
-              <PipelineDiagramView diagram={project.pipeline} />
             </div>
           </section>
         )}

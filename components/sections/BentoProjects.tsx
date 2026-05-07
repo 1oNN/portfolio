@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
-import PipelineDiagramView from "@/components/ui/PipelineDiagram";
 import { PROJECTS } from "@/lib/constants";
 import type { Project } from "@/types";
 import { FiGithub, FiExternalLink, FiArrowRight, FiArrowUpRight } from "react-icons/fi";
@@ -32,14 +31,7 @@ function LargeCard({ project }: { project: Project }) {
         style={{ background: `linear-gradient(90deg, transparent, ${status.color}, transparent)` }}
       />
 
-      {/* Pipeline diagram — right half background */}
-      {project.pipeline && (
-        <div className="absolute right-0 top-0 bottom-0 w-2/5 opacity-[0.18] group-hover:opacity-[0.30] transition-opacity duration-500 pointer-events-none">
-          <PipelineDiagramView diagram={project.pipeline} />
-        </div>
-      )}
-
-      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-5 h-full max-w-[65%]">
+      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-5 h-full">
         {/* Badge + title */}
         <div className="flex flex-wrap items-center gap-2">
           <span
@@ -144,13 +136,6 @@ function MediumCard({ project, index }: { project: Project; index: number }) {
         className="absolute top-0 left-0 right-0 h-px"
         style={{ background: `linear-gradient(90deg, transparent, ${status.color}, transparent)` }}
       />
-
-      {/* Pipeline diagram — full background, revealed on hover */}
-      {project.pipeline && (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.15] transition-opacity duration-500 pointer-events-none">
-          <PipelineDiagramView diagram={project.pipeline} />
-        </div>
-      )}
 
       <div className="relative z-10 p-5 flex flex-col gap-3 h-full">
         {/* Badge + title */}

@@ -79,23 +79,6 @@ export const PROJECTS: Project[] = [
       "Achieved faithfulness score of 0.76 and answer relevance of 0.74 via RAGAS evaluation",
       "Built end-to-end: ingestion pipeline, graph construction, API, and evaluation harness",
     ],
-    pipeline: {
-      nodes: [
-        { id: "query", label: "User Query", color: "#818cf8", x: 15, y: 45 },
-        { id: "embed", label: "Sentence", sublabel: "Transformer", color: "#22d3ee", x: 28, y: 25 },
-        { id: "neo4j", label: "Neo4j", sublabel: "Knowledge Graph", color: "#a78bfa", x: 55, y: 25 },
-        { id: "mistral", label: "Mistral 7B", sublabel: "Instruct", color: "#f59e0b", x: 75, y: 45 },
-        { id: "ragas", label: "RAGAS", sublabel: "Evaluation", color: "#10b981", x: 55, y: 70 },
-        { id: "answer", label: "Answer +", sublabel: "Citations", color: "#818cf8", x: 85, y: 45 },
-      ],
-      edges: [
-        { from: "query", to: "embed" },
-        { from: "embed", to: "neo4j" },
-        { from: "neo4j", to: "mistral" },
-        { from: "mistral", to: "answer" },
-        { from: "mistral", to: "ragas", animated: true },
-      ],
-    },
   },
   {
     id: "ai-voice-agent",
@@ -120,23 +103,6 @@ export const PROJECTS: Project[] = [
       "Built gatekeeper-detection classifier to avoid wasted inference cycles",
       "Automated contact-sync pipeline saving 100+ staff hours/week",
     ],
-    pipeline: {
-      nodes: [
-        { id: "caller", label: "Caller", color: "#94a3b8", x: 15, y: 50 },
-        { id: "retell", label: "Retell AI", sublabel: "Voice Layer", color: "#22d3ee", x: 28, y: 30 },
-        { id: "fastapi", label: "FastAPI", sublabel: "Inference", color: "#818cf8", x: 55, y: 50 },
-        { id: "gate", label: "Gatekeeper", sublabel: "Classifier", color: "#f59e0b", x: 55, y: 70 },
-        { id: "crm", label: "CRM", sublabel: "Sync", color: "#10b981", x: 80, y: 30 },
-        { id: "callback", label: "Callback", sublabel: "Scheduler", color: "#a78bfa", x: 80, y: 70 },
-      ],
-      edges: [
-        { from: "caller", to: "retell" },
-        { from: "retell", to: "fastapi" },
-        { from: "fastapi", to: "gate" },
-        { from: "fastapi", to: "crm" },
-        { from: "gate", to: "callback", animated: true },
-      ],
-    },
   },
   {
     id: "diabetes-risk",
@@ -161,24 +127,6 @@ export const PROJECTS: Project[] = [
       "Full-stack: Flask API + React.js frontend for real-time clinical risk scoring",
       "Presented at ICSMAI 2024, Casablanca, Morocco",
     ],
-    pipeline: {
-      nodes: [
-        { id: "data", label: "Clinical", sublabel: "Dataset", color: "#94a3b8", x: 15, y: 50 },
-        { id: "feat", label: "Feature", sublabel: "Engineering", color: "#22d3ee", x: 28, y: 50 },
-        { id: "rf", label: "Random", sublabel: "Forest", color: "#818cf8", x: 55, y: 25 },
-        { id: "gb", label: "Gradient", sublabel: "Boosting", color: "#a78bfa", x: 55, y: 70 },
-        { id: "shap", label: "SHAP", sublabel: "Explainer", color: "#f59e0b", x: 78, y: 50 },
-        { id: "api", label: "REST API", sublabel: "+ UI", color: "#10b981", x: 85, y: 50 },
-      ],
-      edges: [
-        { from: "data", to: "feat" },
-        { from: "feat", to: "rf" },
-        { from: "feat", to: "gb" },
-        { from: "rf", to: "shap" },
-        { from: "gb", to: "shap" },
-        { from: "shap", to: "api", animated: true },
-      ],
-    },
   },
   {
     id: "jobzyl",
@@ -206,24 +154,6 @@ export const PROJECTS: Project[] = [
       "Application tracker with Kanban board, status pipeline, and side-by-side job comparison",
       "Admin dashboard with persistent audit log, search analytics, and manual scrape triggers",
     ],
-    pipeline: {
-      nodes: [
-        { id: "user",     label: "User",     sublabel: "Search Query", color: "#94a3b8", x: 12, y: 50 },
-        { id: "next",     label: "Next.js",  sublabel: "+ SSE Stream", color: "#22d3ee", x: 30, y: 28 },
-        { id: "fastapi",  label: "FastAPI",  sublabel: "Rate-limited", color: "#818cf8", x: 50, y: 50 },
-        { id: "jobspy",   label: "JobSpy",   sublabel: "4 Boards //",  color: "#f59e0b", x: 72, y: 28 },
-        { id: "supabase", label: "Supabase", sublabel: "RLS + Cache",  color: "#10b981", x: 50, y: 75 },
-        { id: "ats",      label: "ATS Match",sublabel: "Client-side",  color: "#a78bfa", x: 88, y: 50 },
-      ],
-      edges: [
-        { from: "user", to: "next" },
-        { from: "next", to: "fastapi" },
-        { from: "fastapi", to: "jobspy" },
-        { from: "jobspy", to: "supabase", animated: true },
-        { from: "fastapi", to: "supabase" },
-        { from: "supabase", to: "ats" },
-      ],
-    },
   },
 ];
 

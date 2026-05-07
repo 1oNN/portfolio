@@ -11,7 +11,6 @@ import {
 import { PROJECTS } from "@/lib/constants";
 import type { Project } from "@/types";
 import StarField from "@/components/interactive/StarField";
-import PipelineDiagramView from "@/components/ui/PipelineDiagram";
 
 const TECH_ICONS: Record<string, React.ReactNode> = {
   Python: <SiPython size={13} />,
@@ -58,12 +57,6 @@ function ProjectCard({ project }: { project: Project }) {
         borderLeft: `3px solid ${status.color}`,
       }}
     >
-      {/* Pipeline diagram — revealed on hover */}
-      {project.pipeline && (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
-          <PipelineDiagramView diagram={project.pipeline} />
-        </div>
-      )}
       {/* Top accent */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
