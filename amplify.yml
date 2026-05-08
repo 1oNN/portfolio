@@ -21,6 +21,7 @@ frontend:
     build:
       commands:
         - npm run type-check
+        - export NODE_ENV=production
         - npm run build
 
   artifacts:
