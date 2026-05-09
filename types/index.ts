@@ -21,6 +21,32 @@ export interface ProjectMetric {
   label: string;
 }
 
+export interface CaseStudyDecision {
+  title: string;
+  body: string;
+}
+
+export interface CaseStudy {
+  projectId: string;
+  accent: string;
+  status: string;
+  timeline: string;
+  role: string;
+  primaryStack: string[];
+  links: {
+    github?: string;
+    live?: string;
+    paper?: string;
+    docs?: string;
+  };
+  problem: string[];
+  approach: string[];
+  decisions: CaseStudyDecision[];
+  results: string[];
+  reflections: string[];
+  related: string[];
+}
+
 export interface Experience {
   id: string;
   company: string;
