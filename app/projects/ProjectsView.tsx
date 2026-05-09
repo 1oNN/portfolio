@@ -118,7 +118,7 @@ function ProjectCard({ project }: { project: Project }) {
             <Link
               href={`/projects/${project.id}`}
               className="flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium font-mono transition-all hover:scale-105"
-              style={{ color: "var(--accent)", borderColor: "rgba(139,92,246,0.3)", backgroundColor: "var(--accent-muted)" }}
+              style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}
             >
               Details <FiArrowUpRight size={11} />
             </Link>

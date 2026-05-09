@@ -94,7 +94,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.liveUrl && (
               <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium transition-all hover:scale-105"
-                style={{ color: "var(--accent)", borderColor: "rgba(139,92,246,0.3)", backgroundColor: "var(--accent-muted)" }}>
+                style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}>
                 <FiExternalLink size={13} /> Live demo
               </a>
             )}
@@ -165,7 +165,7 @@ export default async function ProjectPage({ params }: Props) {
                 style={{
                   backgroundColor: "var(--accent-muted)",
                   color: "var(--accent)",
-                  border: "1px solid rgba(139,92,246,0.2)",
+                  border: "1px solid rgba(99,102,241,0.2)",
                 }}
               >
                 {t}

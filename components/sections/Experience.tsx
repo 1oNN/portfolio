@@ -18,7 +18,7 @@ const typeConfig: Record<
   },
   research: {
     label: "Research",
-    color: "#a78bfa",
+    color: "#818cf8",
     icon: <FiSearch size={12} />,
   },
   internship: {
@@ -29,7 +29,7 @@ const typeConfig: Record<
 };
 
 function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
-  const [open, setOpen] = useState(index === 0);
+  const [open, setOpen] = useState(true);
   const cfg = typeConfig[exp.type];
 
   return (

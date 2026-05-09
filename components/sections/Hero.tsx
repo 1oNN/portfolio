@@ -276,7 +276,7 @@ export default function Hero() {
               { icon: <SiDocker size={20} />, label: "Docker", color: "#2dd4bf" },
               { icon: <SiTypescript size={20} />, label: "TypeScript", color: "#818cf8" },
               { icon: <SiReact size={20} />, label: "React", color: "#38bdf8" },
-              { icon: <SiPostgresql size={20} />, label: "PostgreSQL", color: "#a78bfa" },
+              { icon: <SiPostgresql size={20} />, label: "PostgreSQL", color: "#818cf8" },
               { icon: <SiMongodb size={20} />, label: "MongoDB", color: "#4ade80" },
             ].map(({ icon, label, color }) => (
               <div

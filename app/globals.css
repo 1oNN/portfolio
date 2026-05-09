@@ -11,10 +11,10 @@
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --accent: #7c3aed;
+  --accent: #4f46e5;
   --accent-secondary: #f59e0b;
-  --accent-muted: rgba(124, 58, 237, 0.12);
-  --accent-glow: rgba(124, 58, 237, 0.3);
+  --accent-muted: rgba(79, 70, 229, 0.12);
+  --accent-glow: rgba(79, 70, 229, 0.3);
 
   --font-inter: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", Menlo, monospace;
@@ -27,7 +27,7 @@
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
 
-  --status-research: #a78bfa;
+  --status-research: #818cf8;
   --status-engineering: #2dd4bf;
   --status-ml: #f59e0b;
   --status-fullstack: #10b981;
@@ -37,14 +37,14 @@
   --background: #0a0814;
   --surface: #110f1e;
   --surface-elevated: #18162a;
-  --border: rgba(139, 92, 246, 0.1);
+  --border: rgba(99, 102, 241, 0.1);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
-  --accent: #8b5cf6;
+  --accent: #6366f1;
   --accent-secondary: #f59e0b;
-  --accent-muted: rgba(139, 92, 246, 0.1);
-  --accent-glow: rgba(139, 92, 246, 0.25);
+  --accent-muted: rgba(99, 102, 241, 0.1);
+  --accent-glow: rgba(99, 102, 241, 0.25);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);

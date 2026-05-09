@@ -109,7 +109,7 @@ function LargeCard({ project }: { project: Project }) {
             <Link
               href={`/projects/${project.id}`}
               className="flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium font-mono transition-all hover:scale-105"
-              style={{ color: "var(--accent)", borderColor: "rgba(139,92,246,0.3)", backgroundColor: "var(--accent-muted)" }}
+              style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}
             >
               Deep dive <FiArrowUpRight size={11} />
             </Link>
@@ -191,7 +191,7 @@ function MediumCard({ project, index }: { project: Project; index: number }) {
             )}
             <Link href={`/projects/${project.id}`}
               className="flex h-7 items-center gap-1 rounded-lg border px-2 text-[11px] font-medium font-mono transition-all hover:scale-105"
-              style={{ color: "var(--accent)", borderColor: "rgba(139,92,246,0.3)", backgroundColor: "var(--accent-muted)" }}>
+              style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}>
               Details <FiArrowUpRight size={10} />
             </Link>
           </div>
@@ -219,22 +219,6 @@ export default function BentoProjects() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {LARGE.map((p) => <LargeCard key={p.id} project={p} />)}
           {MEDIUM.map((p, i) => <MediumCard key={p.id} project={p} index={i} />)}
-
-          {/* Placeholder — spans 1 col to pair with odd medium count, full-width when medium count is even */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.12 }}
-            className={`relative overflow-hidden rounded-2xl border-2 border-dashed flex items-center justify-center py-10 ${
-              MEDIUM.length % 2 === 0 ? "col-span-1 md:col-span-2" : "col-span-1"
-            }`}
-            style={{ borderColor: "var(--border)", minHeight: "240px" }}
-          >
-            <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
-              More coming soon...
-            </p>
-          </motion.div>
         </div>
 
         {/* See all projects */}

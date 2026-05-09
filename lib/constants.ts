@@ -243,7 +243,7 @@ export const PUBLICATIONS: Publication[] = [
     venue:
       "International Conference on Smart Medical, IoT & Artificial Intelligence (ICSMAI 2024), Morocco",
     year: "2024",
-    doi: "10.1007/978-3-031-668544-8_1",
+    doi: "10.1007/978-3-031-66854-8_1",
     type: "conference",
   },
 ];

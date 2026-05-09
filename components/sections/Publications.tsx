@@ -8,7 +8,7 @@ import { FiExternalLink, FiFileText, FiUsers, FiMapPin } from "react-icons/fi";
 const typeStyles: Record<string, { label: string; color: string }> = {
   conference: { label: "Conference Paper", color: "#22d3ee" },
   journal: { label: "Journal Article", color: "#10b981" },
-  chapter: { label: "Book Chapter", color: "#a78bfa" },
+  chapter: { label: "Book Chapter", color: "#818cf8" },
 };
 
 export default function Publications() {
