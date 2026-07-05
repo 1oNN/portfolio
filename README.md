@@ -3,7 +3,7 @@
 Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher. Built with Next.js 15 App Router, TypeScript, and Tailwind CSS.
 
 ## Live
-[hammadahmad.dev](https://hammadahmad.dev)
+[hammadahmad.co.uk](https://hammadahmad.co.uk)
 
 ## Features
 - Dark/light theme toggle
@@ -47,7 +47,7 @@ DYNAMODB_CONTACTS_TABLE=portfolio-contacts
 DYNAMODB_AGENT_TABLE=portfolio-agent-logs
 
 GROQ_API_KEY=
-NEXT_PUBLIC_SITE_URL=https://hammadahmad.dev
+NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 ```
 
 ## AWS Setup

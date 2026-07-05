@@ -86,7 +86,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Hammad Ahmad",
-  url: "https://hammadahmad.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev",
   jobTitle: "AI/ML Engineer & Researcher",
   description:
     "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
