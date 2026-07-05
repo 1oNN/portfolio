@@ -1,153 +1,97 @@
-"use client";
-
-import { motion } from "framer-motion";
-import SectionTitle from "@/components/ui/SectionTitle";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { PUBLICATIONS } from "@/lib/constants";
-import { FiExternalLink, FiFileText, FiUsers, FiMapPin } from "react-icons/fi";
+import type { Publication } from "@/types";
 
-const typeStyles: Record<string, { label: string; color: string }> = {
-  conference: { label: "Conference Paper", color: "var(--status-research)" },
-  journal: { label: "Journal Article", color: "var(--status-research)" },
-  chapter: { label: "Book Chapter", color: "var(--status-research)" },
+const TYPE_LABEL: Record<Publication["type"], string> = {
+  conference: "Conference paper",
+  journal: "Journal article",
+  chapter: "Book chapter",
 };
 
 export default function Publications() {
   return (
-    <section
-      id="research"
-      className="py-24 sm:py-32"
-      style={{ backgroundColor: "var(--surface)" }}
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionTitle
-          label="Research"
+    <section id="research" className="border-t" style={{ borderColor: "var(--border)" }}>
+      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+        <SectionHeader
+          number="05"
+          eyebrow="Research"
           title="Publications"
           description="Peer-reviewed work presented at international venues."
         />
 
-        <div className="max-w-3xl mx-auto space-y-6">
-          {PUBLICATIONS.map((pub, i) => {
-            const style = typeStyles[pub.type];
-            return (
-              <motion.article
-                key={pub.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.45, delay: i * 0.1 }}
-                className="rounded-xl border p-6 card-glow"
-                style={{
-                  backgroundColor: "var(--background)",
-                  borderColor: "var(--border)",
-                }}
-              >
-                {/* Type badge */}
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-                    style={{
-                      backgroundColor: `color-mix(in srgb, ${style.color} 8%, transparent)`,
-                      color: style.color,
-                      border: `1px solid color-mix(in srgb, ${style.color} 19%, transparent)`,
-                    }}
-                  >
-                    <FiFileText size={11} />
-                    {style.label}
-                  </span>
-                  <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
-                    {pub.year}
-                  </span>
-                </div>
+        <div className="mt-4 divide-y divide-[var(--border)]">
+          {PUBLICATIONS.map((pub) => (
+            <div key={pub.id} className="py-8 sm:grid sm:grid-cols-[88px_1fr] sm:gap-6">
+              {/* Year */}
+              <div>
+                <span
+                  className="font-mono text-[11px] uppercase tracking-wider"
+                  style={{ color: "var(--text-muted)" }}
+                >
+                  {pub.year}
+                </span>
+              </div>
 
-                {/* Title */}
+              {/* Details */}
+              <div className="mt-3 sm:mt-0">
+                <span
+                  className="inline-flex w-fit items-center rounded-full px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest"
+                  style={{
+                    color: "var(--status-research)",
+                    backgroundColor: "color-mix(in srgb, var(--status-research) 10%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--status-research) 25%, transparent)",
+                  }}
+                >
+                  {TYPE_LABEL[pub.type]}
+                </span>
+
                 <h3
-                  className="text-base font-semibold leading-snug mb-3"
+                  className="mt-3 text-base font-semibold leading-tight sm:text-lg"
                   style={{ color: "var(--text-primary)" }}
                 >
                   {pub.title}
                 </h3>
-
-                {/* Authors */}
-                <div
-                  className="flex items-center gap-2 text-sm mb-2"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  <FiUsers size={13} className="shrink-0" style={{ color: "var(--accent)" }} />
+                <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
                   {pub.authors}
-                </div>
-
-                {/* Venue */}
-                <div
-                  className="flex items-center gap-2 text-sm"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  <FiMapPin size={13} className="shrink-0" style={{ color: "var(--accent)" }} />
+                </p>
+                <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
                   {pub.venue}
-                </div>
+                </p>
 
-                {/* DOI */}
                 {pub.doi && (
-                  <div className="mt-4 pt-4 border-t flex items-center justify-between gap-4"
-                    style={{ borderColor: "var(--border)" }}>
-                    <div>
-                      <span
-                        className="text-xs font-mono"
-                        style={{ color: "var(--text-muted)" }}
-                      >
-                        DOI:{" "}
-                      </span>
-                      <span
-                        className="text-xs font-mono"
-                        style={{ color: "var(--text-secondary)" }}
-                      >
-                        {pub.doi}
-                      </span>
-                    </div>
-                    <a
-                      href={`https://doi.org/${pub.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium border transition-all hover:scale-105"
-                      style={{
-                        color: "var(--accent)",
-                        borderColor: "color-mix(in srgb, var(--accent) 25%, transparent)",
-                        backgroundColor: "var(--accent-muted)",
-                      }}
-                      aria-label={`View publication: ${pub.title}`}
-                    >
-                      <FiExternalLink size={11} />
-                      View
-                    </a>
-                  </div>
+                  <a
+                    href={`https://doi.org/${pub.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-[var(--accent)] underline-offset-2 hover:underline focus-visible:underline"
+                  >
+                    doi:{pub.doi}
+                    <span aria-hidden="true">↗</span>
+                  </a>
                 )}
-              </motion.article>
-            );
-          })}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Research interests callout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-12 max-w-3xl mx-auto rounded-xl border p-6"
-          style={{
-            backgroundColor: "var(--background)",
-            borderColor: "var(--border)",
-            background: "linear-gradient(135deg, var(--accent-muted), transparent)",
-          }}
+        {/* Research interests */}
+        <div
+          className="mt-10 rounded-xl border p-6"
+          style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
         >
-          <h4 className="text-sm font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
-            Research Interests
-          </h4>
-          <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <h3
+            className="font-mono text-[10px] font-semibold uppercase tracking-widest"
+            style={{ color: "var(--accent)" }}
+          >
+            Research interests
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Graph-augmented retrieval, LLM faithfulness evaluation, systems optimisation for
             high-throughput ML pipelines, and interpretable predictive modelling for clinical
             applications. Currently exploring MSCA-eligible opportunities — earliest start date
             October 2026.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
