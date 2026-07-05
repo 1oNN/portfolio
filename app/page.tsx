@@ -8,7 +8,7 @@ import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import HomeProjects from "@/components/sections/HomeProjects";
-import TerminalAgent from "@/components/interactive/TerminalAgent";
+import AgentSection from "@/components/sections/AgentSection";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
 import StarField from "@/components/interactive/StarField";
@@ -106,7 +106,7 @@ export default function HomePage() {
           <About />
           <Experience />
           <HomeProjects />
-          <TerminalAgent />
+          <AgentSection />
           <Publications />
           <Contact />
         </main>

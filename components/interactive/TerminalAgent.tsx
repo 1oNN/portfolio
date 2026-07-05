@@ -7,7 +7,6 @@ import {
   useCallback,
   KeyboardEvent,
 } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTerminalAgent } from "@/hooks/useTerminalAgent";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { AGENT_SUGGESTIONS } from "@/lib/constants";
@@ -43,6 +42,8 @@ function renderMarkdown(text: string): React.ReactNode[] {
 }
 
 // ─── Message that types itself in ─────────────────────────────────
+// The caret is the agent's voice → amber. The sr-only span carries the full
+// content so assistive tech reads the complete answer, not the animation.
 
 interface StreamingMessageProps {
   content: string;
@@ -58,7 +59,7 @@ function StreamingMessage({ content, onDone }: StreamingMessageProps) {
         {renderMarkdown(displayed)}
         {!done && (
           <span
-            className="inline-block w-1.5 h-3.5 ml-0.5 align-middle rounded-sm animate-pulse"
+            className="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse rounded-sm align-middle"
             style={{ backgroundColor: "var(--accent-secondary)" }}
           />
         )}
@@ -69,6 +70,8 @@ function StreamingMessage({ content, onDone }: StreamingMessageProps) {
 }
 
 // ─── Individual message bubble ─────────────────────────────────────
+// Colour roles: agent voice = amber (avatar/accents), user = indigo
+// (avatar, bubble tint + border). Assistant bubble sits on --surface-elevated.
 
 interface MessageBubbleProps {
   message: TerminalMessage;
@@ -81,56 +84,58 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
 
   if (isSystem) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-start gap-2"
-      >
+      <div className="animate-message-in flex items-start gap-2">
         <div
           className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded"
-          style={{ backgroundColor: "color-mix(in srgb, var(--accent-secondary) 10%, transparent)", color: "var(--accent-secondary)" }}
+          style={{
+            backgroundColor: "color-mix(in srgb, var(--accent-secondary) 12%, transparent)",
+            color: "var(--accent-secondary)",
+          }}
         >
           <FiInfo size={11} />
         </div>
-        <p className="terminal-text text-xs leading-relaxed pt-0.5"
-          style={{ color: "color-mix(in srgb, var(--accent-secondary) 70%, transparent)" }}>
+        <p
+          className="terminal-text pt-0.5 text-xs leading-relaxed"
+          style={{ color: "var(--text-muted)" }}
+        >
           {message.content}
         </p>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
-      className={`flex items-start gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}
+    <div
+      className={`animate-message-in flex items-start gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}
     >
-      {/* Avatar */}
+      {/* Avatar — indigo for the user, amber for the agent */}
       <div
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: isUser ? "var(--accent-muted)" : "color-mix(in srgb, var(--accent-secondary) 10%, transparent)",
+          backgroundColor: isUser
+            ? "var(--accent-muted)"
+            : "color-mix(in srgb, var(--accent-secondary) 12%, transparent)",
           color: isUser ? "var(--accent)" : "var(--accent-secondary)",
-          border: `1px solid ${isUser ? "var(--accent-muted)" : "color-mix(in srgb, var(--accent-secondary) 20%, transparent)"}`,
+          border: `1px solid ${
+            isUser
+              ? "color-mix(in srgb, var(--accent) 25%, transparent)"
+              : "color-mix(in srgb, var(--accent-secondary) 25%, transparent)"
+          }`,
         }}
       >
         {isUser ? <FiUser size={13} /> : <FiCpu size={13} />}
       </div>
 
       {/* Bubble */}
-      <div
-        className={`flex flex-col gap-2 max-w-[85%] ${isUser ? "items-end" : "items-start"}`}
-      >
+      <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
         <div
-          className="rounded-xl px-4 py-3 terminal-text text-sm leading-relaxed"
+          className="terminal-text rounded-xl px-4 py-3 text-sm leading-relaxed"
           style={{
-            backgroundColor: isUser
-              ? "var(--accent-muted)"
-              : "var(--surface-elevated)",
-            border: `1px solid ${isUser ? "color-mix(in srgb, var(--accent) 25%, transparent)" : "var(--border)"}`,
-            color: isUser ? "var(--accent)" : "var(--text-primary)",
+            backgroundColor: isUser ? "var(--accent-muted)" : "var(--surface-elevated)",
+            border: `1px solid ${
+              isUser ? "color-mix(in srgb, var(--accent) 25%, transparent)" : "var(--border)"
+            }`,
+            color: "var(--text-primary)",
           }}
         >
           {!isUser && isLatest ? (
@@ -140,57 +145,49 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 // ─── Thinking animation ────────────────────────────────────────────
+// Amber agent avatar + amber dots (CSS keyframe, staggered by delay).
 
 function ThinkingIndicator() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      className="flex items-start gap-3"
-    >
+    <div className="animate-message-in flex items-start gap-3">
       <div
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: "color-mix(in srgb, var(--accent-secondary) 10%, transparent)",
+          backgroundColor: "color-mix(in srgb, var(--accent-secondary) 12%, transparent)",
           color: "var(--accent-secondary)",
-          border: "1px solid color-mix(in srgb, var(--accent-secondary) 20%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--accent-secondary) 25%, transparent)",
         }}
       >
         <FiCpu size={13} />
       </div>
       <div
         className="flex items-center gap-1.5 rounded-xl px-4 py-3"
-        style={{
-          backgroundColor: "var(--surface-elevated)",
-          border: "1px solid var(--border)",
-        }}
+        style={{ backgroundColor: "var(--surface-elevated)", border: "1px solid var(--border)" }}
       >
-        <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
+        <span className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>
           Thinking…
         </span>
-        <div className="flex items-center gap-1 ml-1">
+        <div className="ml-1 flex items-center gap-1">
           {[0, 1, 2].map((i) => (
-            <motion.div
+            <span
               key={i}
-              className="h-1 w-1 rounded-full"
-              style={{ backgroundColor: "var(--accent-secondary)" }}
-              animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
-              transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+              className="animate-thinking-dot h-1 w-1 rounded-full"
+              style={{ backgroundColor: "var(--accent-secondary)", animationDelay: `${i * 0.16}s` }}
             />
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-// ─── Main component ────────────────────────────────────────────────
+// ─── Main component — the terminal window only (section shell lives in
+// AgentSection). "use client" + the full useTerminalAgent behaviour stay. ──
 
 export default function TerminalAgent() {
   const { messages, isThinking, send, clear, inputHistory, historyIndex, setHistoryIndex, isAtLimit } =
@@ -243,193 +240,113 @@ export default function TerminalAgent() {
   };
 
   return (
-    <section
-      id="agent"
-      className="py-24 sm:py-32"
-      style={{ backgroundColor: "var(--surface)" }}
+    <div
+      className="overflow-hidden rounded-xl border"
+      style={{
+        backgroundColor: "var(--surface)",
+        borderColor: "var(--border)",
+        boxShadow: "var(--shadow-sm)",
+      }}
     >
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Section header */}
-        <div className="mb-12 text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest font-mono"
+      {/* Title bar */}
+      <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "var(--border)" }}>
+        <div className="flex gap-1.5 opacity-70">
+          <span className="h-3 w-3 rounded-full bg-red-500" />
+          <span className="h-3 w-3 rounded-full bg-yellow-500" />
+          <span className="h-3 w-3 rounded-full bg-green-500" />
+        </div>
+        <div className="flex-1 text-center">
+          <span className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>
+            ~/hammad/agent
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={clear}
+          className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)] focus-visible:bg-[var(--surface-elevated)] focus-visible:text-[var(--text-primary)]"
+          style={{ color: "var(--text-muted)" }}
+          aria-label="Clear conversation"
+          title="Clear conversation"
+        >
+          <FiTrash2 size={12} />
+        </button>
+      </div>
+
+      {/* Messages */}
+      <div
+        ref={messagesRef}
+        className="max-h-[460px] space-y-5 overflow-y-auto p-5"
+        role="log"
+        aria-live="polite"
+        aria-label="Conversation with resume agent"
+      >
+        {messages.map((msg, i) => (
+          <MessageBubble
+            key={msg.id}
+            message={msg}
+            isLatest={i === messages.length - 1 && msg.role === "assistant"}
+          />
+        ))}
+
+        {isThinking && <ThinkingIndicator />}
+
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Suggestions — tech-chip-like buttons */}
+      <div className="flex flex-wrap gap-2 border-t px-5 py-3" style={{ borderColor: "var(--border)" }}>
+        {AGENT_SUGGESTIONS.slice(0, 3).map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => handleSuggestion(s)}
+            disabled={isThinking}
+            className="rounded-md border px-2.5 py-1 font-mono text-xs transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)] disabled:opacity-40"
             style={{
-              color: "var(--accent-secondary)",
-              backgroundColor: "color-mix(in srgb, var(--accent-secondary) 8%, transparent)",
-              border: "1px solid color-mix(in srgb, var(--accent-secondary) 20%, transparent)",
+              backgroundColor: "var(--surface-elevated)",
+              borderColor: "var(--border)",
+              color: "var(--text-secondary)",
             }}
           >
-            AI Assistant
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.08 }}
-            className="text-3xl sm:text-4xl font-bold tracking-tight"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Chat with my Portfolio
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="mt-4 max-w-xl mx-auto text-base leading-relaxed"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            An AI assistant that knows about my experience, projects, and research. Ask it anything about my work.
-          </motion.p>
-        </div>
-
-        {/* Terminal window */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mx-auto max-w-3xl overflow-hidden rounded-2xl"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            boxShadow: "var(--shadow-lg)",
-            backdropFilter: "blur(24px)",
-          }}
-        >
-          {/* Title bar */}
-          <div
-            className="flex items-center gap-2 px-5 py-3.5 border-b"
-            style={{ borderColor: "var(--border)" }}
-          >
-            <div className="flex gap-1.5">
-              <div className="h-3 w-3 rounded-full bg-red-500/80" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-              <div className="h-3 w-3 rounded-full bg-green-500/80" />
-            </div>
-            <div className="flex-1 text-center">
-              <span
-                className="text-xs font-mono"
-                style={{ color: "var(--text-muted)" }}
-              >
-                ha. assistant
-              </span>
-            </div>
-            <button
-              onClick={clear}
-              className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--surface-elevated)]"
-              style={{ color: "var(--text-muted)" }}
-              aria-label="Clear conversation"
-              title="Clear conversation"
-            >
-              <FiTrash2 size={12} />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div
-            ref={messagesRef}
-            className="max-h-[500px] overflow-y-auto p-5 space-y-5"
-            role="log"
-            aria-live="polite"
-            aria-label="Conversation with resume agent"
-          >
-            {messages.map((msg, i) => (
-              <MessageBubble
-                key={msg.id}
-                message={msg}
-                isLatest={i === messages.length - 1 && msg.role === "assistant"}
-              />
-            ))}
-
-            <AnimatePresence>{isThinking && <ThinkingIndicator />}</AnimatePresence>
-
-            <div ref={bottomRef} />
-          </div>
-
-          {/* Suggestions */}
-          <div
-            className="border-t px-5 py-3 flex flex-wrap gap-2"
-            style={{ borderColor: "var(--border)" }}
-          >
-            {AGENT_SUGGESTIONS.slice(0, 3).map((s) => (
-              <button
-                key={s}
-                onClick={() => handleSuggestion(s)}
-                disabled={isThinking}
-                className="rounded-full px-3 py-1 text-xs font-mono transition-all hover:scale-[1.02] disabled:opacity-40"
-                style={{
-                  backgroundColor: "var(--accent-muted)",
-                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-
-          {/* Input row */}
-          <div
-            className="flex items-center gap-3 border-t px-5 py-4"
-            style={{ borderColor: "var(--border)" }}
-          >
-            <span
-              className="terminal-text text-xs shrink-0"
-              style={{ color: "var(--accent-secondary)" }}
-            >
-              you:
-            </span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={
-                isAtLimit
-                  ? "Session limit reached — refresh to start over"
-                  : "Ask anything about my experience, skills, or projects..."
-              }
-              disabled={isThinking || isAtLimit}
-              className="flex-1 bg-transparent terminal-text text-sm outline-none disabled:opacity-50"
-              style={{ color: "var(--text-primary)" }}
-              aria-label="Ask the resume agent a question"
-              spellCheck={false}
-              autoComplete="off"
-            />
-            <button
-              type="button"
-              onClick={handleSend}
-              disabled={!input.trim() || isThinking || isAtLimit}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{
-                backgroundColor: "var(--accent-muted)",
-                color: "var(--accent)",
-                border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
-              }}
-              aria-label="Send message"
-            >
-              <FiSend size={14} />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Disclaimer */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="text-center mt-6 text-xs font-mono"
-          style={{ color: "var(--text-muted)" }}
-        >
-          Powered by AI · Responses based on Hammad&apos;s CV
-        </motion.p>
+            {s}
+          </button>
+        ))}
       </div>
-    </section>
+
+      {/* Input row — indigo you: glyph, solid-accent send button */}
+      <div className="flex items-center gap-3 border-t px-5 py-4" style={{ borderColor: "var(--border)" }}>
+        <span className="shrink-0 font-mono text-xs" style={{ color: "var(--accent)" }}>
+          you:
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={
+            isAtLimit
+              ? "Session limit reached — refresh to start over"
+              : "Ask anything about my experience, skills, or projects..."
+          }
+          disabled={isThinking || isAtLimit}
+          className="input-field flex-1 bg-transparent font-mono text-sm outline-none disabled:opacity-50"
+          style={{ color: "var(--text-primary)" }}
+          aria-label="Ask the resume agent a question"
+          spellCheck={false}
+          autoComplete="off"
+        />
+        <button
+          type="button"
+          onClick={handleSend}
+          disabled={!input.trim() || isThinking || isAtLimit}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-white transition-opacity hover:opacity-90 focus-visible:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+          style={{ backgroundColor: "var(--accent)" }}
+          aria-label="Send message"
+        >
+          <FiSend size={14} />
+        </button>
+      </div>
+    </div>
   );
 }
