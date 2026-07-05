@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { TERMINAL_COMMANDS } from "@/lib/constants";
 
 interface TerminalLine {
@@ -24,7 +23,10 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  // Element that had focus before the terminal opened, restored on close.
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,11 +36,30 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
     scrollToBottom();
   }, [lines, scrollToBottom]);
 
+  // Focus management: snapshot the previously-focused element on open, move
+  // focus into the input, and restore focus to the snapshot on close/unmount.
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (!isOpen) return;
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    const id = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => {
+      clearTimeout(id);
+      previouslyFocused.current?.focus?.();
+    };
   }, [isOpen]);
+
+  // Escape-to-close lives inside the terminal (its own keydown while open).
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
 
   const runCommand = useCallback(
     (cmd: string) => {
@@ -108,96 +129,112 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
       setHistoryIndex(nextIndex);
       setInput(nextIndex === -1 ? "" : history[nextIndex]);
     } else if (e.key === "Tab") {
-      e.preventDefault();
+      // Precedence: Tab completion takes priority over the focus trap. When the
+      // input holds text and a known command starts with it, Tab completes the
+      // command and focus stays in the input (completion consumes the event).
+      // In every other case — empty input, no matching command, or Shift+Tab —
+      // completion does not consume the event and Tab drives the 2-element
+      // focus trap instead, moving focus to the close button.
       const cmds = Object.keys(TERMINAL_COMMANDS);
       const match = cmds.find((c) => c.startsWith(input.toLowerCase()));
-      if (match) setInput(match);
+      if (!e.shiftKey && input.trim() !== "" && match) {
+        e.preventDefault();
+        setInput(match);
+        return;
+      }
+      e.preventDefault();
+      closeButtonRef.current?.focus();
     }
   };
 
+  // Focus trap: the input and the close button are the only two focusables, so
+  // Tab/Shift+Tab from the close button always cycles back to the input.
+  const handleCloseKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      inputRef.current?.focus();
+    }
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed bottom-6 right-6 z-50 w-full max-w-lg rounded-xl overflow-hidden shadow-2xl"
-          style={{
-            background: "rgba(9, 9, 18, 0.96)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            backdropFilter: "blur(20px)",
-          }}
-          role="dialog"
-          aria-label="Terminal"
+    <div
+      className="animate-rise fixed bottom-6 right-6 z-50 w-full max-w-lg rounded-xl overflow-hidden shadow-2xl"
+      style={{
+        background: "rgba(9, 9, 18, 0.96)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        backdropFilter: "blur(20px)",
+      }}
+      role="dialog"
+      aria-label="Terminal"
+    >
+      {/* Title bar */}
+      <div
+        className="flex items-center gap-2 px-4 py-3 border-b"
+        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+      >
+        <button
+          ref={closeButtonRef}
+          onClick={onClose}
+          onKeyDown={handleCloseKeyDown}
+          className="h-3 w-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+          aria-label="Close terminal"
+        />
+        <div className="h-3 w-3 rounded-full bg-yellow-500" />
+        <div className="h-3 w-3 rounded-full bg-green-500" />
+        <span
+          className="ml-auto text-xs font-mono"
+          style={{ color: "rgba(255,255,255,0.4)" }}
         >
-          {/* Title bar */}
-          <div
-            className="flex items-center gap-2 px-4 py-3 border-b"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}
-          >
-            <button
-              onClick={onClose}
-              className="h-3 w-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
-              aria-label="Close terminal"
-            />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-500" />
-            <span
-              className="ml-auto text-xs font-mono"
-              style={{ color: "rgba(255,255,255,0.4)" }}
-            >
-              hammad@portfolio — terminal
-            </span>
-          </div>
+          hammad@portfolio — terminal
+        </span>
+      </div>
 
-          {/* Output */}
-          <div className="h-72 overflow-y-auto p-4 space-y-0.5">
-            {lines.map((line, i) => (
-              <div
-                key={i}
-                className="terminal-text text-sm leading-relaxed"
-                style={{
-                  color:
-                    line.type === "system"
-                      ? "color-mix(in srgb, var(--accent-secondary) 70%, transparent)"
-                      : line.type === "input"
-                      ? "rgba(255,255,255,0.9)"
-                      : "rgba(255,255,255,0.6)",
-                  whiteSpace: "pre-wrap",
-                }}
-              >
-                {line.content}
-              </div>
-            ))}
-            <div ref={bottomRef} />
-          </div>
-
-          {/* Input */}
+      {/* Output */}
+      <div className="h-72 overflow-y-auto p-4 space-y-0.5">
+        {lines.map((line, i) => (
           <div
-            className="flex items-center gap-2 px-4 py-3 border-t"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}
+            key={i}
+            className="terminal-text text-sm leading-relaxed"
+            style={{
+              color:
+                line.type === "system"
+                  ? "color-mix(in srgb, var(--accent-secondary) 70%, transparent)"
+                  : line.type === "input"
+                  ? "rgba(255,255,255,0.9)"
+                  : "rgba(255,255,255,0.6)",
+              whiteSpace: "pre-wrap",
+            }}
           >
-            <span className="terminal-text text-sm" style={{ color: "var(--accent-secondary)" }}>
-              hammad@portfolio:~$
-            </span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent terminal-text text-sm outline-none"
-              style={{ color: "rgba(255,255,255,0.9)" }}
-              spellCheck={false}
-              autoComplete="off"
-              aria-label="Terminal input"
-            />
-            <span className="terminal-cursor" />
+            {line.content}
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        ))}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div
+        className="flex items-center gap-2 px-4 py-3 border-t"
+        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+      >
+        <span className="terminal-text text-sm" style={{ color: "var(--accent-secondary)" }}>
+          hammad@portfolio:~$
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-1 bg-transparent terminal-text text-sm outline-none"
+          style={{ color: "rgba(255,255,255,0.9)" }}
+          spellCheck={false}
+          autoComplete="off"
+          aria-label="Terminal input"
+        />
+        <span className="terminal-cursor" />
+      </div>
+    </div>
   );
 }
