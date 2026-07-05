@@ -263,8 +263,7 @@ export default function TerminalAgent() {
         <button
           type="button"
           onClick={clear}
-          className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)] focus-visible:bg-[var(--surface-elevated)] focus-visible:text-[var(--text-primary)]"
-          style={{ color: "var(--text-muted)" }}
+          className="flex h-6 w-6 items-center justify-center rounded transition-colors text-[var(--text-muted)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)] focus-visible:bg-[var(--surface-elevated)] focus-visible:text-[var(--text-primary)]"
           aria-label="Clear conversation"
           title="Clear conversation"
         >
@@ -301,12 +300,7 @@ export default function TerminalAgent() {
             type="button"
             onClick={() => handleSuggestion(s)}
             disabled={isThinking}
-            className="rounded-md border px-2.5 py-1 font-mono text-xs transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)] disabled:opacity-40"
-            style={{
-              backgroundColor: "var(--surface-elevated)",
-              borderColor: "var(--border)",
-              color: "var(--text-secondary)",
-            }}
+            className="rounded-md border bg-[var(--surface-elevated)] border-[var(--border)] text-[var(--text-secondary)] px-2.5 py-1 font-mono text-xs transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)] disabled:opacity-40"
           >
             {s}
           </button>
