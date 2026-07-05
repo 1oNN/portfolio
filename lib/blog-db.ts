@@ -11,9 +11,28 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import type { BlogPost } from "@/types";
+import { SEED_POSTS } from "./seed-posts";
 
 const TABLE_NAME = process.env.DYNAMODB_BLOG_TABLE ?? "portfolio-blog";
 const LOCAL_FILE = path.join(process.cwd(), "data", "blog-posts.json");
+
+function byCreatedAtDesc(a: BlogPost, b: BlogPost): number {
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+}
+
+/**
+ * Merge bundled seed posts into a PUBLISHED result. Only runs when
+ * `publishedOnly` is true — the admin path (`publishedOnly === false`) is
+ * returned untouched, so admin never sees seeds. A real DB/local post always
+ * wins on a slug collision (that's the owner's override path).
+ */
+function withSeeds(posts: BlogPost[], publishedOnly: boolean): BlogPost[] {
+  if (!publishedOnly) return posts;
+  const dbSlugs = new Set(posts.map((p) => p.slug));
+  const seeds = SEED_POSTS.filter((s) => s.published && !dbSlugs.has(s.slug));
+  if (seeds.length === 0) return posts;
+  return [...posts, ...seeds].sort(byCreatedAtDesc);
+}
 
 function isDynamoConfigured(): boolean {
   return !!(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY);
@@ -78,10 +97,10 @@ function shouldUseLocalFallback(operation: string): boolean {
 
 export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
   if (!isDynamoConfigured()) {
-    if (!shouldUseLocalFallback("getAllPosts")) return [];
+    if (!shouldUseLocalFallback("getAllPosts")) return withSeeds([], publishedOnly);
     const posts = readLocal();
     const filtered = publishedOnly ? posts.filter((p) => p.published) : posts;
-    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return withSeeds(filtered.sort(byCreatedAtDesc), publishedOnly);
   }
 
   try {
@@ -98,24 +117,26 @@ export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
       })
     );
     const items = (result.Items ?? []) as BlogPost[];
-    return items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return withSeeds(items.sort(byCreatedAtDesc), publishedOnly);
   } catch (err) {
     if (isAuthError(err)) {
       console.warn("[blog-db] AWS credentials invalid — using local fallback");
-      if (isProduction()) return [];
+      if (isProduction()) return withSeeds([], publishedOnly);
       const posts = readLocal();
       const filtered = publishedOnly ? posts.filter((p) => p.published) : posts;
-      return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      return withSeeds(filtered.sort(byCreatedAtDesc), publishedOnly);
     }
     console.error("[blog-db] getAllPosts error:", err);
-    return [];
+    return withSeeds([], publishedOnly);
   }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+  const seed = (): BlogPost | null => SEED_POSTS.find((p) => p.slug === slug) ?? null;
+
   if (!isDynamoConfigured()) {
-    if (!shouldUseLocalFallback("getPostBySlug")) return null;
-    return readLocal().find((p) => p.slug === slug) ?? null;
+    if (!shouldUseLocalFallback("getPostBySlug")) return seed();
+    return readLocal().find((p) => p.slug === slug) ?? seed();
   }
 
   try {
@@ -127,14 +148,14 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         ExpressionAttributeValues: { ":slug": slug },
       })
     );
-    return ((result.Items ?? []) as BlogPost[])[0] ?? null;
+    return ((result.Items ?? []) as BlogPost[])[0] ?? seed();
   } catch (err) {
     if (isAuthError(err)) {
-      if (isProduction()) return null;
-      return readLocal().find((p) => p.slug === slug) ?? null;
+      if (isProduction()) return seed();
+      return readLocal().find((p) => p.slug === slug) ?? seed();
     }
     console.error("[blog-db] getPostBySlug error:", err);
-    return null;
+    return seed();
   }
 }
 
