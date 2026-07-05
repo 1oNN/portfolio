@@ -63,3 +63,4 @@ amplify/
 # Local development
 data/
 .env.example
+.gstack/
