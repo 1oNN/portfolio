@@ -31,7 +31,7 @@ export default function Error({
           fontFamily: "var(--font-mono)",
           fontSize: "3rem",
           fontWeight: 800,
-          color: "#f59e0b",
+          color: "var(--accent-secondary)",
           lineHeight: 1,
         }}
       >

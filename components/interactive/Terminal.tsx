@@ -161,7 +161,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
                 style={{
                   color:
                     line.type === "system"
-                      ? "rgba(34, 211, 238, 0.7)"
+                      ? "color-mix(in srgb, var(--accent-secondary) 70%, transparent)"
                       : line.type === "input"
                       ? "rgba(255,255,255,0.9)"
                       : "rgba(255,255,255,0.6)",

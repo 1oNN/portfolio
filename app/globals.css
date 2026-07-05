@@ -4,15 +4,15 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────── */
 :root {
-  --background: #fafafa;
+  --background: #f7f7fb;
   --surface: #ffffff;
-  --surface-elevated: #f4f4f5;
-  --border: rgba(0, 0, 0, 0.08);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --surface-elevated: #efeff7;
+  --border: rgba(79, 70, 229, 0.14);
+  --text-primary: #16142e;
+  --text-secondary: #4b4e69;
+  --text-muted: #666a87;
   --accent: #4f46e5;
-  --accent-secondary: #f59e0b;
+  --accent-secondary: #b45309;
   --accent-muted: rgba(79, 70, 229, 0.12);
   --accent-glow: rgba(79, 70, 229, 0.3);
 
@@ -24,10 +24,12 @@
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
 
-  --status-research: #818cf8;
-  --status-engineering: #2dd4bf;
-  --status-ml: #f59e0b;
-  --status-fullstack: #10b981;
+  --success: #047857;
+  --danger: #dc2626;
+  --status-research: #4f46e5;
+  --status-engineering: #047857;
+  --status-ml: #b45309;
+  --status-fullstack: #0f766e;
 }
 
 .dark {
@@ -37,7 +39,7 @@
   --border: rgba(99, 102, 241, 0.1);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
-  --text-muted: #475569;
+  --text-muted: #7d88a3;
   --accent: #6366f1;
   --accent-secondary: #f59e0b;
   --accent-muted: rgba(99, 102, 241, 0.1);
@@ -46,6 +48,13 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  --success: #34d399;
+  --danger: #f87171;
+  --status-research: #818cf8;
+  --status-engineering: #10b981;
+  --status-ml: #f59e0b;
+  --status-fullstack: #2dd4bf;
 }
 
 /* ─── Base Reset & Typography ────────────────────────────────────── */

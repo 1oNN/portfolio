@@ -6,9 +6,9 @@ import { PUBLICATIONS } from "@/lib/constants";
 import { FiExternalLink, FiFileText, FiUsers, FiMapPin } from "react-icons/fi";
 
 const typeStyles: Record<string, { label: string; color: string }> = {
-  conference: { label: "Conference Paper", color: "#22d3ee" },
-  journal: { label: "Journal Article", color: "#10b981" },
-  chapter: { label: "Book Chapter", color: "#818cf8" },
+  conference: { label: "Conference Paper", color: "var(--status-research)" },
+  journal: { label: "Journal Article", color: "var(--status-research)" },
+  chapter: { label: "Book Chapter", color: "var(--status-research)" },
 };
 
 export default function Publications() {
@@ -46,9 +46,9 @@ export default function Publications() {
                   <span
                     className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
                     style={{
-                      backgroundColor: `${style.color}15`,
+                      backgroundColor: `color-mix(in srgb, ${style.color} 8%, transparent)`,
                       color: style.color,
-                      border: `1px solid ${style.color}30`,
+                      border: `1px solid color-mix(in srgb, ${style.color} 19%, transparent)`,
                     }}
                   >
                     <FiFileText size={11} />
@@ -110,7 +110,7 @@ export default function Publications() {
                       className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium border transition-all hover:scale-105"
                       style={{
                         color: "var(--accent)",
-                        borderColor: "rgba(99,102,241,0.25)",
+                        borderColor: "color-mix(in srgb, var(--accent) 25%, transparent)",
                         backgroundColor: "var(--accent-muted)",
                       }}
                       aria-label={`View publication: ${pub.title}`}

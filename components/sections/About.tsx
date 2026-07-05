@@ -160,7 +160,7 @@ export default function About() {
                         primary
                           ? {
                               backgroundColor: "var(--accent-muted)",
-                              borderColor: "rgba(99,102,241,0.25)",
+                              borderColor: "color-mix(in srgb, var(--accent) 25%, transparent)",
                               color: "var(--accent)",
                             }
                           : {

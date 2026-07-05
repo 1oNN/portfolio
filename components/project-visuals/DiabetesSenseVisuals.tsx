@@ -129,7 +129,7 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
     <g>
       <rect
         x={x} y={y} width={w} height={h} rx="6" ry="6"
-        fill={highlight ? `${accent}20` : surface}
+        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
         stroke={highlight ? accent : border}
         strokeWidth="1.25"
       />

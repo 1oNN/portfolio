@@ -125,9 +125,9 @@ export default async function BlogPostPage({ params }: Props) {
               padding: "0.2rem 0.6rem",
               borderRadius: "9999px",
               fontFamily: "var(--font-mono)",
-              backgroundColor: post.type === "case-study" ? "rgba(245,158,11,0.1)" : "var(--accent-muted)",
-              color: post.type === "case-study" ? "#f59e0b" : "var(--accent)",
-              border: `1px solid ${post.type === "case-study" ? "rgba(245,158,11,0.2)" : "var(--accent-muted)"}`,
+              backgroundColor: post.type === "case-study" ? "color-mix(in srgb, var(--accent-secondary) 10%, transparent)" : "var(--accent-muted)",
+              color: post.type === "case-study" ? "var(--accent-secondary)" : "var(--accent)",
+              border: `1px solid ${post.type === "case-study" ? "color-mix(in srgb, var(--accent-secondary) 20%, transparent)" : "var(--accent-muted)"}`,
             }}
           >
             {post.type === "case-study" ? "Case Study" : "Blog Post"}

@@ -120,7 +120,7 @@ export function JobzylHero({ accent, className }: Props) {
             </g>
             {/* Status pill */}
             <g transform={`translate(640, ${y + 18})`}>
-              <rect width="86" height="22" rx="11" ry="11" fill={`${statusColor(j.statusKind)}22`} stroke={statusColor(j.statusKind)} strokeWidth="1" />
+              <rect width="86" height="22" rx="11" ry="11" fill={`color-mix(in srgb, ${statusColor(j.statusKind)} 13%, transparent)`} stroke={statusColor(j.statusKind)} strokeWidth="1" />
               <text x="43" y="15" textAnchor="middle" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="10" fontWeight="600" fill={statusColor(j.statusKind)}>
                 {j.status}
               </text>
@@ -149,7 +149,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
     <g>
       <rect
         x={x} y={y} width={w} height={h} rx="6" ry="6"
-        fill={highlight ? `${accent}20` : surface}
+        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
         stroke={highlight ? accent : border}
         strokeWidth="1.25"
       />

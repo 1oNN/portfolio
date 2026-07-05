@@ -109,7 +109,7 @@ function LargeCard({ project }: { project: Project }) {
             <Link
               href={`/projects/${project.id}`}
               className="flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium font-mono transition-all hover:scale-105"
-              style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}
+              style={{ color: "var(--accent)", borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)", backgroundColor: "var(--accent-muted)" }}
             >
               Deep dive <FiArrowUpRight size={11} />
             </Link>
@@ -142,7 +142,7 @@ function MediumCard({ project, index }: { project: Project; index: number }) {
         <div className="flex flex-wrap items-center gap-2">
           <span
             className="rounded-full px-2.5 py-0.5 text-xs font-semibold font-mono shrink-0"
-            style={{ backgroundColor: `${status.color}18`, color: status.color, border: `1px solid ${status.color}35` }}
+            style={{ backgroundColor: `color-mix(in srgb, ${status.color} 9%, transparent)`, color: status.color, border: `1px solid color-mix(in srgb, ${status.color} 21%, transparent)` }}
           >
             {status.label}
           </span>
@@ -191,7 +191,7 @@ function MediumCard({ project, index }: { project: Project; index: number }) {
             )}
             <Link href={`/projects/${project.id}`}
               className="flex h-7 items-center gap-1 rounded-lg border px-2 text-[11px] font-medium font-mono transition-all hover:scale-105"
-              style={{ color: "var(--accent)", borderColor: "rgba(99,102,241,0.3)", backgroundColor: "var(--accent-muted)" }}>
+              style={{ color: "var(--accent)", borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)", backgroundColor: "var(--accent-muted)" }}>
               Details <FiArrowUpRight size={10} />
             </Link>
           </div>

@@ -119,7 +119,7 @@ export default function Hero() {
             </div>
             <span
               className="absolute bottom-1.5 right-1.5 h-3.5 w-3.5 rounded-full border-2 animate-pulse"
-              style={{ backgroundColor: "#22c55e", borderColor: "var(--background)" }}
+              style={{ backgroundColor: "var(--success)", borderColor: "var(--background)" }}
             />
           </div>
         </motion.div>
@@ -136,7 +136,7 @@ export default function Hero() {
           >
             <span
               className="h-1.5 w-1.5 rounded-full animate-pulse"
-              style={{ backgroundColor: "#22d3ee" }}
+              style={{ backgroundColor: "var(--accent-secondary)" }}
             />
             Open to research & engineering roles
           </span>
@@ -208,7 +208,7 @@ export default function Hero() {
             }}
             className="inline-flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg active:scale-95"
             style={{
-              background: "linear-gradient(135deg, var(--accent), #0f766e)",
+              backgroundColor: "var(--accent)",
               boxShadow: "0 4px 20px var(--accent-glow)",
             }}
           >

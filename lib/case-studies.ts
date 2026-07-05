@@ -3,7 +3,7 @@ import type { CaseStudy } from "@/types";
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   "finlaw-uk": {
     projectId: "finlaw-uk",
-    accent: "#6366f1",
+    accent: "var(--status-research)",
     status: "Research",
     timeline: "Sep 2024 — Sep 2025",
     role: "Solo MSc dissertation, University of Bradford",
@@ -50,7 +50,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
 
   "ai-voice-agent": {
     projectId: "ai-voice-agent",
-    accent: "#10b981",
+    accent: "var(--status-engineering)",
     status: "In Production",
     timeline: "Oct 2025 — Mar 2026",
     role: "ML Engineer @ Outlyst",
@@ -97,7 +97,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
 
   "diabetes-risk": {
     projectId: "diabetes-risk",
-    accent: "#f59e0b",
+    accent: "var(--status-ml)",
     status: "Published",
     timeline: "Jan — Jul 2024",
     role: "Solo ML capstone, COMSATS University Islamabad",
@@ -143,7 +143,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
 
   jobzyl: {
     projectId: "jobzyl",
-    accent: "#14b8a6",
+    accent: "var(--status-fullstack)",
     status: "Shipped",
     timeline: "",
     role: "Solo full-stack project",

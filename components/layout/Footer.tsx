@@ -28,19 +28,9 @@ export default function Footer() {
               target={link.platform !== "Email" ? "_blank" : undefined}
               rel="noopener noreferrer"
               aria-label={link.platform}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-200 hover:scale-105"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-200 hover:scale-105 text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--accent)] hover:border-[var(--accent-muted)] focus-visible:text-[var(--accent)] focus-visible:border-[var(--accent-muted)]"
               style={{
-                color: "var(--text-secondary)",
-                borderColor: "var(--border)",
                 backgroundColor: "var(--surface-elevated)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--accent-muted)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-secondary)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--border)";
               }}
             >
               {iconMap[link.icon]}

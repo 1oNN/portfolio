@@ -45,7 +45,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
             style={{
               backgroundColor: "var(--surface)",
               color: accent,
-              border: `1px solid ${accent}40`,
+              border: `1px solid color-mix(in srgb, ${accent} 25%, transparent)`,
               fontFamily: "var(--font-mono)",
             }}
           >

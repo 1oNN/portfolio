@@ -42,9 +42,9 @@ function PostCard({ post }: { post: BlogPost }) {
           <span
             className="inline-flex self-start text-[0.7rem] font-semibold px-2.5 py-1 rounded-full font-mono"
             style={{
-              backgroundColor: isCaseStudy ? "rgba(245,158,11,0.1)" : "var(--accent-muted)",
-              color: isCaseStudy ? "#f59e0b" : "var(--accent)",
-              border: `1px solid ${isCaseStudy ? "rgba(245,158,11,0.2)" : "var(--accent-muted)"}`,
+              backgroundColor: isCaseStudy ? "color-mix(in srgb, var(--accent-secondary) 10%, transparent)" : "var(--accent-muted)",
+              color: isCaseStudy ? "var(--accent-secondary)" : "var(--accent)",
+              border: `1px solid ${isCaseStudy ? "color-mix(in srgb, var(--accent-secondary) 20%, transparent)" : "var(--accent-muted)"}`,
             }}
           >
             {isCaseStudy ? "Case Study" : "Blog Post"}

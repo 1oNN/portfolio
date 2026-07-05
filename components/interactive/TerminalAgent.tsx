@@ -85,12 +85,12 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
       >
         <div
           className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded"
-          style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22d3ee" }}
+          style={{ backgroundColor: "color-mix(in srgb, var(--accent-secondary) 10%, transparent)", color: "var(--accent-secondary)" }}
         >
           <FiInfo size={11} />
         </div>
         <p className="terminal-text text-xs leading-relaxed pt-0.5"
-          style={{ color: "rgba(34,211,238,0.7)" }}>
+          style={{ color: "color-mix(in srgb, var(--accent-secondary) 70%, transparent)" }}>
           {message.content}
         </p>
       </motion.div>
@@ -108,9 +108,9 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
       <div
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: isUser ? "var(--accent-muted)" : "rgba(34,211,238,0.1)",
-          color: isUser ? "var(--accent)" : "#22d3ee",
-          border: `1px solid ${isUser ? "var(--accent-muted)" : "rgba(34,211,238,0.2)"}`,
+          backgroundColor: isUser ? "var(--accent-muted)" : "color-mix(in srgb, var(--accent-secondary) 10%, transparent)",
+          color: isUser ? "var(--accent)" : "var(--accent-secondary)",
+          border: `1px solid ${isUser ? "var(--accent-muted)" : "color-mix(in srgb, var(--accent-secondary) 20%, transparent)"}`,
         }}
       >
         {isUser ? <FiUser size={13} /> : <FiCpu size={13} />}
@@ -126,7 +126,7 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
             backgroundColor: isUser
               ? "var(--accent-muted)"
               : "var(--surface-elevated)",
-            border: `1px solid ${isUser ? "rgba(129,140,248,0.2)" : "var(--border)"}`,
+            border: `1px solid ${isUser ? "color-mix(in srgb, var(--accent) 25%, transparent)" : "var(--border)"}`,
             color: isUser ? "var(--accent)" : "var(--text-primary)",
           }}
         >
@@ -155,7 +155,7 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
                 className="rounded-lg px-3 py-2 text-xs"
                 style={{
                   backgroundColor: "var(--accent-muted)",
-                  border: "1px solid rgba(129,140,248,0.1)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
                 }}
               >
                 <p className="font-semibold mb-0.5" style={{ color: "var(--accent)" }}>
@@ -186,9 +186,9 @@ function ThinkingIndicator() {
       <div
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
         style={{
-          backgroundColor: "rgba(34,211,238,0.1)",
-          color: "#22d3ee",
-          border: "1px solid rgba(34,211,238,0.2)",
+          backgroundColor: "color-mix(in srgb, var(--accent-secondary) 10%, transparent)",
+          color: "var(--accent-secondary)",
+          border: "1px solid color-mix(in srgb, var(--accent-secondary) 20%, transparent)",
         }}
       >
         <FiCpu size={13} />
@@ -208,7 +208,7 @@ function ThinkingIndicator() {
             <motion.div
               key={i}
               className="h-1 w-1 rounded-full"
-              style={{ backgroundColor: "#22d3ee" }}
+              style={{ backgroundColor: "var(--accent-secondary)" }}
               animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
               transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
             />
@@ -286,9 +286,9 @@ export default function TerminalAgent() {
             viewport={{ once: true }}
             className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest font-mono"
             style={{
-              color: "#22d3ee",
-              backgroundColor: "rgba(34,211,238,0.08)",
-              border: "1px solid rgba(34,211,238,0.2)",
+              color: "var(--accent-secondary)",
+              backgroundColor: "color-mix(in srgb, var(--accent-secondary) 8%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--accent-secondary) 20%, transparent)",
             }}
           >
             AI Assistant
@@ -392,7 +392,7 @@ export default function TerminalAgent() {
                 className="rounded-full px-3 py-1 text-xs font-mono transition-all hover:scale-[1.02] disabled:opacity-40"
                 style={{
                   backgroundColor: "var(--accent-muted)",
-                  border: "1px solid rgba(129,140,248,0.2)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
                   color: "var(--text-secondary)",
                 }}
               >
@@ -408,7 +408,7 @@ export default function TerminalAgent() {
           >
             <span
               className="terminal-text text-xs shrink-0"
-              style={{ color: "#22d3ee" }}
+              style={{ color: "var(--accent-secondary)" }}
             >
               you:
             </span>
@@ -436,9 +436,9 @@ export default function TerminalAgent() {
               disabled={!input.trim() || isThinking || isAtLimit}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: "rgba(129,140,248,0.15)",
+                backgroundColor: "var(--accent-muted)",
                 color: "var(--accent)",
-                border: "1px solid rgba(129,140,248,0.25)",
+                border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
               }}
               aria-label="Send message"
             >

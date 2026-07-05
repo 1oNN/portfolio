@@ -76,8 +76,8 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                 className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest"
                 style={{
                   color: accent,
-                  backgroundColor: `${accent}18`,
-                  border: `1px solid ${accent}40`,
+                  backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                  border: `1px solid color-mix(in srgb, ${accent} 25%, transparent)`,
                   fontFamily: "var(--font-mono)",
                 }}
               >

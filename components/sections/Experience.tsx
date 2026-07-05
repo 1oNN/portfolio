@@ -13,17 +13,17 @@ const typeConfig: Record<
 > = {
   engineering: {
     label: "Engineering",
-    color: "#f59e0b",
+    color: "var(--status-engineering)",
     icon: <FiZap size={12} />,
   },
   research: {
     label: "Research",
-    color: "#818cf8",
+    color: "var(--status-research)",
     icon: <FiSearch size={12} />,
   },
   internship: {
     label: "Internship",
-    color: "#22d3ee",
+    color: "var(--status-engineering)",
     icon: <FiCode size={12} />,
   },
 };
@@ -52,7 +52,7 @@ function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
         style={{
           backgroundColor: "var(--surface)",
           borderColor: cfg.color,
-          boxShadow: `0 0 10px ${cfg.color}50`,
+          boxShadow: `0 0 10px color-mix(in srgb, ${cfg.color} 31%, transparent)`,
         }}
       >
         <span style={{ color: cfg.color }}>{cfg.icon}</span>
@@ -77,9 +77,9 @@ function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
               <span
                 className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
                 style={{
-                  backgroundColor: `${cfg.color}15`,
+                  backgroundColor: `color-mix(in srgb, ${cfg.color} 8%, transparent)`,
                   color: cfg.color,
-                  border: `1px solid ${cfg.color}30`,
+                  border: `1px solid color-mix(in srgb, ${cfg.color} 19%, transparent)`,
                 }}
               >
                 {cfg.icon}
@@ -185,7 +185,7 @@ export default function Experience() {
             <div key={key} className="flex items-center gap-2 text-xs" style={{ color: "var(--text-muted)" }}>
               <span
                 className="flex h-4 w-4 items-center justify-center rounded-full"
-                style={{ backgroundColor: `${cfg.color}20`, color: cfg.color }}
+                style={{ backgroundColor: `color-mix(in srgb, ${cfg.color} 13%, transparent)`, color: cfg.color }}
               >
                 {cfg.icon}
               </span>

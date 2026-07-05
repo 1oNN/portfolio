@@ -119,7 +119,7 @@ function InputField({
         }}
       />
       {error && (
-        <p id={errorId} className="text-xs" style={{ color: "#ef4444" }}>
+        <p id={errorId} className="text-xs" style={{ color: "var(--danger)" }}>
           {error}
         </p>
       )}
@@ -237,7 +237,7 @@ export default function Contact() {
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border"
                     style={{
                       backgroundColor: "var(--accent-muted)",
-                      borderColor: "rgba(99,102,241,0.2)",
+                      borderColor: "color-mix(in srgb, var(--accent) 20%, transparent)",
                       color: "var(--accent)",
                     }}
                   >
@@ -370,7 +370,7 @@ export default function Contact() {
                   }}
                 />
                 {errors.message && (
-                  <p id="message-error" className="text-xs" style={{ color: "#ef4444" }}>
+                  <p id="message-error" className="text-xs" style={{ color: "var(--danger)" }}>
                     {errors.message}
                   </p>
                 )}
@@ -397,9 +397,9 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
                     style={{
-                      backgroundColor: "rgba(16, 185, 129, 0.1)",
-                      border: "1px solid rgba(16, 185, 129, 0.3)",
-                      color: "#10b981",
+                      backgroundColor: "color-mix(in srgb, var(--success) 10%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--success) 30%, transparent)",
+                      color: "var(--success)",
                     }}
                   >
                     <FiCheck size={15} />
@@ -413,9 +413,9 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
                     style={{
-                      backgroundColor: "rgba(239, 68, 68, 0.1)",
-                      border: "1px solid rgba(239, 68, 68, 0.3)",
-                      color: "#ef4444",
+                      backgroundColor: "color-mix(in srgb, var(--danger) 10%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--danger) 30%, transparent)",
+                      color: "var(--danger)",
                     }}
                   >
                     <FiAlertCircle size={15} />
@@ -429,7 +429,7 @@ export default function Contact() {
                 disabled={status === "submitting"}
                 className="w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
-                  background: "linear-gradient(135deg, var(--accent), #4f46e5)",
+                  backgroundColor: "var(--accent)",
                   boxShadow: "0 4px 16px var(--accent-glow)",
                 }}
               >
