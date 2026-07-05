@@ -126,7 +126,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
         >
           <div className="mx-auto max-w-5xl px-6 py-6">
             <dl className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4">
-              <Fact icon={<FiCalendar size={13} />} label="Timeline" value={caseStudy.timeline} />
+              {caseStudy.timeline && (
+                <Fact icon={<FiCalendar size={13} />} label="Timeline" value={caseStudy.timeline} />
+              )}
               <Fact icon={<FiUser size={13} />} label="Role" value={caseStudy.role} />
               <Fact icon={<FiActivity size={13} />} label="Status" value={caseStudy.status} accent={accent} />
               <Fact

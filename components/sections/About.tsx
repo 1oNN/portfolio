@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { EDUCATION } from "@/lib/constants";
+import { AVAILABLE_CVS } from "@/lib/cv-config";
 import { FiDownload, FiMapPin, FiCalendar, FiBookOpen } from "react-icons/fi";
 
 const SKILL_GROUPS = [
@@ -140,58 +141,41 @@ export default function About() {
               </div>
 
               {/* CV downloads */}
-              <div className="mt-6 flex flex-wrap gap-3">
-                {[
-                  {
-                    label: "CV — AI/ML Engineer",
-                    href: "/cv/Hammad_Ahmad_AI_CV.pdf",
-                    cvType: "ai-ml" as const,
-                    primary: true,
-                  },
-                  {
-                    label: "CV — Software Engineer",
-                    href: "/cv/Hammad_Ahmad_SE_CV.pdf",
-                    cvType: "software-engineer" as const,
-                    primary: false,
-                  },
-                  {
-                    label: "CV — Research / PhD",
-                    href: "/cv/Hammad_Ahmad_CV.pdf",
-                    cvType: "research-phd" as const,
-                    primary: false,
-                  },
-                ].map(({ label, href, cvType, primary }) => (
-                  <a
-                    key={cvType}
-                    href={href}
-                    download
-                    onClick={() => {
-                      fetch("/api/track-download", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ cvType }),
-                      }).catch(() => {});
-                    }}
-                    className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border transition-all hover:scale-[1.02] active:scale-[0.98]"
-                    style={
-                      primary
-                        ? {
-                            backgroundColor: "var(--accent-muted)",
-                            borderColor: "rgba(99,102,241,0.25)",
-                            color: "var(--accent)",
-                          }
-                        : {
-                            backgroundColor: "var(--surface-elevated)",
-                            borderColor: "var(--border)",
-                            color: "var(--text-secondary)",
-                          }
-                    }
-                  >
-                    <FiDownload size={14} />
-                    {label}
-                  </a>
-                ))}
-              </div>
+              {AVAILABLE_CVS.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {AVAILABLE_CVS.map(({ label, href, cvType, primary }) => (
+                    <a
+                      key={cvType}
+                      href={href}
+                      download
+                      onClick={() => {
+                        fetch("/api/track-download", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ cvType }),
+                        }).catch(() => {});
+                      }}
+                      className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium border transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      style={
+                        primary
+                          ? {
+                              backgroundColor: "var(--accent-muted)",
+                              borderColor: "rgba(99,102,241,0.25)",
+                              color: "var(--accent)",
+                            }
+                          : {
+                              backgroundColor: "var(--surface-elevated)",
+                              borderColor: "var(--border)",
+                              color: "var(--text-secondary)",
+                            }
+                      }
+                    >
+                      <FiDownload size={14} />
+                      {label}
+                    </a>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             {/* Education */}
