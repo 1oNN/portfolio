@@ -53,8 +53,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm transition-colors hover:text-[var(--text-primary)]"
-            style={{ color: "var(--text-secondary)" }}
+            className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
           >
             <FiArrowLeft size={15} />
             Back to home

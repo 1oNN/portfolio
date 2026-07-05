@@ -56,8 +56,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm transition-colors"
-            style={{ color: "var(--text-secondary)" }}
+            className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
           >
             <FiArrowLeft size={15} />
             All projects
@@ -251,8 +250,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             <div className="mt-10">
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 text-sm font-medium"
-                style={{ color: accent }}
+                className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
               >
                 <FiArrowLeft size={14} />
                 All projects

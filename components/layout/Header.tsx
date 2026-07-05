@@ -88,7 +88,7 @@ export default function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="font-mono text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
+          className="font-mono text-sm font-semibold tracking-tight transition-opacity hover:opacity-70 focus-visible:opacity-70"
           style={{ color: "var(--accent)" }}
           onClick={(e) => {
             if (pathname === "/") {

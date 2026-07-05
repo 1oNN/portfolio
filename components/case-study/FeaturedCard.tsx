@@ -29,7 +29,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
           backgroundColor: "var(--surface-elevated)",
         }}
       >
-        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.02]">
+        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.02] group-focus-within:scale-[1.02]">
           {Hero ? (
             <Hero accent={accent} className="h-full w-full" />
           ) : (
