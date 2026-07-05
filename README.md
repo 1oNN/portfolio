@@ -7,7 +7,7 @@ Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher. Built with 
 
 ## Features
 - Dark/light theme toggle
-- Bento grid project cards with architecture diagrams
+- Featured case-study card + listing grid for projects, with architecture diagrams
 - AI chat assistant (Groq API — Llama 3.1 8B Instant)
 - Blog & case studies with admin panel (DynamoDB-backed)
 - Contact form with AWS SES email delivery
@@ -76,7 +76,7 @@ components/
   interactive/    → Theme toggle, chat agent, terminal
   layout/         → Header, footer
   project-visuals/→ Per-project Hero/Architecture visuals
-  sections/       → Hero, About, Experience, Projects, Publications, Contact
+  sections/       → Hero, About, Experience, HomeProjects, Publications, Contact
   ui/             → SectionHeader
 lib/              → Constants, case studies, CV config, seed posts, auth,
                     blog-db, markdown, agent system prompt

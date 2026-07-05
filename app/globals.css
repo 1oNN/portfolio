@@ -119,8 +119,10 @@ body {
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0.001ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -212,7 +214,10 @@ body {
   display: inline-block;
   width: 8px;
   height: 1em;
-  background-color: var(--accent-secondary);
+  /* Only consumer is the always-dark Terminal chrome (see Terminal.tsx) — use
+     the dark-theme amber literally instead of the theme-dependent var, which
+     would resolve to amber-700 (light-mode tuned, ~3:1) on this dark bg. */
+  background-color: #f59e0b;
   vertical-align: text-bottom;
   animation: cursorBlink 1s step-end infinite;
 }

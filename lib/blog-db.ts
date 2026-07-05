@@ -131,12 +131,18 @@ export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
   }
 }
 
+// Rule: an unpublished DB/local hit falls back to a same-slug published seed (so a listed seed link never 404s); a published hit still wins over the seed immediately.
+function resolveSlugHit(hit: BlogPost | undefined, seed: () => BlogPost | null): BlogPost | null {
+  if (hit && !hit.published) return seed() ?? hit;
+  return hit ?? seed();
+}
+
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   const seed = (): BlogPost | null => SEED_POSTS.find((p) => p.slug === slug) ?? null;
 
   if (!isDynamoConfigured()) {
     if (!shouldUseLocalFallback("getPostBySlug")) return seed();
-    return readLocal().find((p) => p.slug === slug) ?? seed();
+    return resolveSlugHit(readLocal().find((p) => p.slug === slug), seed);
   }
 
   try {
@@ -148,7 +154,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         ExpressionAttributeValues: { ":slug": slug },
       })
     );
-    return ((result.Items ?? []) as BlogPost[])[0] ?? seed();
+    return resolveSlugHit(((result.Items ?? []) as BlogPost[])[0], seed);
   } catch (err) {
     if (isAuthError(err)) {
       if (isProduction()) return seed();

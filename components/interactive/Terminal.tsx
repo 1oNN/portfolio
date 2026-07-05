@@ -3,6 +3,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { TERMINAL_COMMANDS } from "@/lib/constants";
 
+// This chrome is permanently dark (see the `background` below), regardless of
+// site theme. `--accent-secondary` is theme-dependent and resolves to
+// amber-700 in light mode (tuned for white surfaces), which only hits ~3:1 on
+// this dark background. Use the dark-theme amber literally instead.
+const TERMINAL_ACCENT = "#f59e0b"; // always-dark chrome; theme var would go amber-700 in light
+
 interface TerminalLine {
   type: "input" | "output" | "system";
   content: string;
@@ -200,7 +206,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
             style={{
               color:
                 line.type === "system"
-                  ? "color-mix(in srgb, var(--accent-secondary) 70%, transparent)"
+                  ? `color-mix(in srgb, ${TERMINAL_ACCENT} 70%, transparent)`
                   : line.type === "input"
                   ? "rgba(255,255,255,0.9)"
                   : "rgba(255,255,255,0.6)",
@@ -218,7 +224,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
         className="flex items-center gap-2 px-4 py-3 border-t"
         style={{ borderColor: "rgba(255,255,255,0.08)" }}
       >
-        <span className="terminal-text text-sm" style={{ color: "var(--accent-secondary)" }}>
+        <span className="terminal-text text-sm" style={{ color: TERMINAL_ACCENT }}>
           hammad@portfolio:~$
         </span>
         <input
