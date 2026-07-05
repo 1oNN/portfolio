@@ -34,8 +34,11 @@ export default async function ProjectsPage({ searchParams }: Props) {
   const filtered: Project[] =
     active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
-  const featured = filtered[0];
-  const rest = filtered.slice(1);
+  // Every category has exactly one project today, so a category filter must never
+  // fall back to the jumbo FeaturedCard treatment — that reads as a lone-card bug.
+  // FeaturedCard is reserved for the unfiltered "all" view.
+  const featured = active === "all" ? filtered[0] : undefined;
+  const rest = active === "all" ? filtered.slice(1) : filtered;
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
@@ -89,8 +92,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
 
         {/* Filter row — text links, no chunky pills */}
         <nav
-          className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y py-4"
-          style={{ borderColor: "var(--border)" }}
+          className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y border-[var(--border)] py-4"
           aria-label="Filter projects by category"
         >
           {FILTERS.map((f) => {
@@ -104,29 +106,22 @@ export default async function ProjectsPage({ searchParams }: Props) {
               <Link
                 key={f.key}
                 href={href}
-                className="group relative inline-flex items-baseline gap-1.5 text-sm transition-colors"
-                style={{
-                  color: isActive ? "var(--text-primary)" : "var(--text-muted)",
-                }}
+                className={
+                  isActive
+                    ? "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-primary)] transition-colors"
+                    : "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+                }
               >
                 <span
                   className={
                     isActive
-                      ? "font-semibold underline decoration-2 underline-offset-[6px]"
-                      : "group-hover:underline group-hover:underline-offset-[6px]"
+                      ? "font-semibold underline decoration-2 decoration-[var(--accent)] underline-offset-[6px]"
+                      : "underline decoration-2 decoration-transparent underline-offset-[6px] transition-colors group-hover:decoration-[var(--text-secondary)] group-focus-visible:decoration-[var(--text-secondary)]"
                   }
-                  style={{
-                    textDecorationColor: isActive ? "var(--accent)" : "transparent",
-                  }}
                 >
                   {f.label}
                 </span>
-                <span
-                  className="text-[11px]"
-                  style={{ color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}
-                >
-                  {count}
-                </span>
+                <span className="font-mono text-[11px] text-[var(--text-muted)]">{count}</span>
               </Link>
             );
           })}
@@ -148,9 +143,10 @@ export default async function ProjectsPage({ searchParams }: Props) {
               </div>
             )}
 
-            {/* Grid */}
+            {/* Grid — mt-12 when it's the first block after the filter row (filtered view,
+                no FeaturedCard above it), mt-10 when it follows the FeaturedCard */}
             {rest.length > 0 && (
-              <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${featured ? "mt-10" : "mt-12"}`}>
                 {rest.map((p) => (
                   <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} />
                 ))}

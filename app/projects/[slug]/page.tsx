@@ -37,9 +37,42 @@ export default async function ProjectPage({ params }: Props) {
 
   const caseStudy = getCaseStudy(project.id);
   if (!caseStudy) {
-    // Project exists but no case study yet — render a graceful fallback rather than 404
+    // Project exists but has no case study written yet — 404 until one is added
     notFound();
   }
 
-  return <CaseStudyLayout project={project} caseStudy={caseStudy} />;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const canonicalUrl = `${siteUrl}/projects/${project.id}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: project.title,
+    description: project.tagline,
+    author: { "@type": "Person", name: "Hammad Ahmad", url: siteUrl },
+    url: canonicalUrl,
+    keywords: project.tech.join(", "),
+  };
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Projects", item: `${siteUrl}/projects` },
+      { "@type": "ListItem", position: 3, name: project.title, item: canonicalUrl },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <CaseStudyLayout project={project} caseStudy={caseStudy} />
+    </>
+  );
 }
