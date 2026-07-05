@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, type MouseEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/constants";
@@ -77,15 +76,15 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
+      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300 ${
+        scrolled ? "backdrop-blur-md" : ""
+      }`}
       style={{
-        backgroundColor: scrolled ? "var(--surface)" : "transparent",
-        boxShadow: scrolled ? "var(--shadow-sm)" : "none",
-        borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
+        backgroundColor: scrolled ? "color-mix(in srgb, var(--surface) 80%, transparent)" : "transparent",
+        borderColor: scrolled ? "var(--border)" : "transparent",
       }}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         {/* Logo */}
         <Link
           href="/"
@@ -102,31 +101,29 @@ export default function Header() {
           ha<span style={{ color: "var(--accent-secondary)" }}>.</span>
         </Link>
 
-        {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-1">
+        {/* Desktop nav — filter idiom: color + underline, no pills */}
+        <ul className="hidden md:flex items-center gap-6">
           {NAV_ITEMS.map((item) => {
             const active = isNavActive(item.href);
             return (
-              <li key={item.href}>
+              <li key={item.href} className="relative">
                 <Link
                   href={navHref(item.href)}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="relative inline-block px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
-                  style={{
-                    color: active ? "var(--accent)" : "var(--text-secondary)",
-                    backgroundColor: active ? "var(--accent-muted)" : "transparent",
-                  }}
+                  className={`text-sm transition-colors focus-visible:text-[var(--text-primary)] ${
+                    active
+                      ? "text-[var(--text-primary)]"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  }`}
                 >
                   {item.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full"
-                      style={{ backgroundColor: "var(--accent)" }}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
                 </Link>
+                {/* Active-section indicator: opacity transition, no framer layoutId */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-px left-0 h-0.5 w-full transition-opacity duration-200"
+                  style={{ backgroundColor: "var(--accent)", opacity: active ? 1 : 0 }}
+                />
               </li>
             );
           })}
@@ -136,7 +133,7 @@ export default function Header() {
           <ThemeToggle />
           <button
             ref={menuButtonRef}
-            className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border transition-all"
+            className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border transition-colors"
             style={{
               backgroundColor: "var(--surface-elevated)",
               borderColor: "var(--border)",
@@ -152,41 +149,35 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden overflow-hidden border-t"
-            style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
-          >
-            <ul className="flex flex-col px-6 py-4 gap-1">
-              {NAV_ITEMS.map((item) => {
-                const active = isNavActive(item.href);
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={navHref(item.href)}
-                      onClick={(e) => handleNavClick(e, item.href)}
-                      className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
-                      style={{
-                        color: active ? "var(--accent)" : "var(--text-secondary)",
-                        backgroundColor: active ? "var(--accent-muted)" : "transparent",
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile menu — CSS-only entrance (see .animate-menu-in), no framer */}
+      {menuOpen && (
+        <div
+          id="mobile-menu"
+          className="md:hidden overflow-hidden border-t animate-menu-in"
+          style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
+        >
+          <ul className="flex flex-col gap-1 px-6 py-4">
+            {NAV_ITEMS.map((item) => {
+              const active = isNavActive(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={navHref(item.href)}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`block border-l-2 py-2.5 pl-4 text-sm transition-colors ${
+                      active
+                        ? "border-[var(--accent)] text-[var(--accent)]"
+                        : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </header>
   );
 }
