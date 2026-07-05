@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
-import BentoProjects from "@/components/sections/BentoProjects";
+import HomeProjects from "@/components/sections/HomeProjects";
 import TerminalAgent from "@/components/interactive/TerminalAgent";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
@@ -105,7 +105,7 @@ export default function HomePage() {
           <Hero />
           <About />
           <Experience />
-          <BentoProjects />
+          <HomeProjects />
           <TerminalAgent />
           <Publications />
           <Contact />
