@@ -154,6 +154,8 @@ export default function Contact() {
     const validationErrors = validateForm(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setStatus("idle");
+      setErrorMsg("");
       const firstInvalidField = FIELD_ORDER.find((field) => validationErrors[field]);
       if (firstInvalidField) {
         document.getElementById(firstInvalidField)?.focus();
