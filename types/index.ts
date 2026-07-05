@@ -91,23 +91,11 @@ export interface Skill {
 
 export type TerminalRole = "user" | "assistant" | "system";
 
-export interface TerminalSource {
-  section: string;
-  excerpt: string;
-}
-
 export interface TerminalMessage {
   id: string;
   role: TerminalRole;
   content: string;
-  sources?: TerminalSource[];
   timestamp: Date;
-}
-
-export interface TerminalResponse {
-  answer: string;
-  sources: TerminalSource[];
-  suggestions: string[];
 }
 
 // ─── API Contracts ────────────────────────────────────────────────

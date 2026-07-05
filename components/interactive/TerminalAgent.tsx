@@ -54,13 +54,16 @@ function StreamingMessage({ content, onDone }: StreamingMessageProps) {
 
   return (
     <span>
-      {renderMarkdown(displayed)}
-      {!done && (
-        <span
-          className="inline-block w-1.5 h-3.5 ml-0.5 align-middle rounded-sm animate-pulse"
-          style={{ backgroundColor: "var(--accent-secondary)" }}
-        />
-      )}
+      <span aria-hidden="true">
+        {renderMarkdown(displayed)}
+        {!done && (
+          <span
+            className="inline-block w-1.5 h-3.5 ml-0.5 align-middle rounded-sm animate-pulse"
+            style={{ backgroundColor: "var(--accent-secondary)" }}
+          />
+        )}
+      </span>
+      <span className="sr-only">{content}</span>
     </span>
   );
 }
@@ -136,38 +139,6 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
             renderMarkdown(message.content)
           )}
         </div>
-
-        {/* Source citations */}
-        {!isUser && message.sources && message.sources.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col gap-1.5 w-full"
-          >
-            <p className="text-[10px] font-mono uppercase tracking-widest"
-              style={{ color: "var(--text-muted)" }}>
-              Sources
-            </p>
-            {message.sources.map((src, i) => (
-              <div
-                key={i}
-                className="rounded-lg px-3 py-2 text-xs"
-                style={{
-                  backgroundColor: "var(--accent-muted)",
-                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
-                }}
-              >
-                <p className="font-semibold mb-0.5" style={{ color: "var(--accent)" }}>
-                  {src.section}
-                </p>
-                <p className="leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                  {src.excerpt}
-                </p>
-              </div>
-            ))}
-          </motion.div>
-        )}
       </div>
     </motion.div>
   );
@@ -201,7 +172,7 @@ function ThinkingIndicator() {
         }}
       >
         <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
-          Retrieving from resume
+          Thinking…
         </span>
         <div className="flex items-center gap-1 ml-1">
           {[0, 1, 2].map((i) => (

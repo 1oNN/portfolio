@@ -34,7 +34,6 @@ export function useTerminalAgent(): UseTerminalAgentReturn {
       role: "system",
       content:
         "AI agent ready. Ask me anything about Hammad's experience, skills, or projects. Try: \"What's your strongest ML project?\"",
-      sources: [],
       timestamp: new Date(),
     },
   ]);
@@ -142,7 +141,6 @@ export function useTerminalAgent(): UseTerminalAgentReturn {
         id: makeId(),
         role: "system",
         content: "Session cleared. Ready for new queries.",
-        sources: [],
         timestamp: new Date(),
       },
     ]);
