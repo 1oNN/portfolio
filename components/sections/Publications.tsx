@@ -79,12 +79,12 @@ export default function Publications() {
           className="mt-10 rounded-xl border p-6"
           style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
         >
-          <h3
+          <div
             className="font-mono text-[10px] font-semibold uppercase tracking-widest"
             style={{ color: "var(--accent)" }}
           >
             Research interests
-          </h3>
+          </div>
           <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Graph-augmented retrieval, LLM faithfulness evaluation, systems optimisation for
             high-throughput ML pipelines, and interpretable predictive modelling for clinical

@@ -146,10 +146,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)]"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
                     style={{
                       color: "var(--text-secondary)",
-                      borderColor: "var(--border)",
                       backgroundColor: "var(--surface-elevated)",
                     }}
                   >

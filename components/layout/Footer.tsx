@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="font-mono text-sm font-semibold tracking-tight"
+              className="font-mono text-sm font-semibold tracking-tight transition-opacity hover:opacity-70 focus-visible:opacity-70"
               style={{ color: "var(--accent)" }}
               aria-label="Home"
             >

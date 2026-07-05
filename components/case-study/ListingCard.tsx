@@ -20,10 +20,9 @@ export default function ListingCard({ project, caseStudy }: Props) {
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border transition-colors duration-200 hover:border-[var(--text-secondary)]"
+      className="group flex flex-col overflow-hidden rounded-xl border border-[var(--border)] transition-colors duration-200 hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
       style={{
         backgroundColor: "var(--surface)",
-        borderColor: "var(--border)",
       }}
     >
       {/* Hero visual — 16:9, full bleed */}
@@ -31,7 +30,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
         className="relative w-full overflow-hidden"
         style={{ aspectRatio: "16 / 9", backgroundColor: "var(--surface-elevated)" }}
       >
-        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.04]">
+        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]">
           {Hero ? (
             <Hero accent={accent} className="h-full w-full" />
           ) : (
@@ -120,7 +119,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
           Read case study
           <FiArrowRight
             size={14}
-            className="transition-transform duration-200 group-hover:translate-x-1"
+            className="transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
           />
         </div>
       </div>

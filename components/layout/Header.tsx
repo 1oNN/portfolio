@@ -133,11 +133,9 @@ export default function Header() {
           <ThemeToggle />
           <button
             ref={menuButtonRef}
-            className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border transition-colors"
+            className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
             style={{
               backgroundColor: "var(--surface-elevated)",
-              borderColor: "var(--border)",
-              color: "var(--text-secondary)",
             }}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}

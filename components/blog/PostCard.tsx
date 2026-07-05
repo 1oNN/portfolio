@@ -20,7 +20,7 @@ export default function PostCard({ post }: Props) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col gap-4 rounded-xl border border-[var(--border)] p-6 transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
+      className="group flex flex-col gap-4 rounded-xl border border-[var(--border)] p-6 transition-colors duration-200 hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
       style={{ backgroundColor: "var(--surface)" }}
     >
       {/* Header */}

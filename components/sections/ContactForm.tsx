@@ -102,10 +102,9 @@ function InputField({
         maxLength={maxLength}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className="input-field rounded-lg border px-4 py-2.5 text-sm outline-none transition-all duration-200"
+        className="input-field rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-none transition-all duration-200"
         style={{
           backgroundColor: "var(--background)",
-          borderColor: "var(--border)",
           color: "var(--text-primary)",
         }}
       />
@@ -243,10 +242,9 @@ export default function ContactForm() {
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={errors.message ? "message-error" : undefined}
           placeholder="Tell me about the opportunity or project..."
-          className="input-field resize-none rounded-lg border px-4 py-2.5 text-sm outline-none transition-all duration-200"
+          className="input-field resize-none rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-none transition-all duration-200"
           style={{
             backgroundColor: "var(--background)",
-            borderColor: "var(--border)",
             color: "var(--text-primary)",
           }}
         />
