@@ -108,6 +108,11 @@ export default function About() {
                         Dissertation — {edu.dissertation}
                       </p>
                     )}
+                    {edu.focus && (
+                      <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                        Focus — {edu.focus}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

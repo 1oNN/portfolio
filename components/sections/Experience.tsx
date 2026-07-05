@@ -65,7 +65,7 @@ export default function Experience() {
                         className="flex items-start gap-3 text-sm leading-relaxed"
                         style={{ color: "var(--text-secondary)" }}
                       >
-                        <span className="shrink-0" style={{ color }}>
+                        <span className="shrink-0" style={{ color }} aria-hidden="true">
                           —
                         </span>
                         <span>{r}</span>
