@@ -16,6 +16,7 @@ import { getProjectVisuals } from "@/components/project-visuals";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 import ListingCard from "./ListingCard";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 interface Props {
   project: Project;
@@ -291,33 +292,6 @@ function Fact({
       >
         {value}
       </dd>
-    </div>
-  );
-}
-
-function SectionHeader({
-  eyebrow,
-  title,
-  accent,
-}: {
-  eyebrow: string;
-  title: string;
-  accent: string;
-}) {
-  return (
-    <div className="space-y-3">
-      <span
-        className="text-[10px] font-semibold uppercase tracking-widest"
-        style={{ color: accent, fontFamily: "var(--font-mono)" }}
-      >
-        {eyebrow}
-      </span>
-      <h2
-        className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl"
-        style={{ color: "var(--text-primary)" }}
-      >
-        {title}
-      </h2>
     </div>
   );
 }
