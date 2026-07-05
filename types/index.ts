@@ -81,12 +81,6 @@ export interface Publication {
   type: "conference" | "journal" | "chapter";
 }
 
-export interface Skill {
-  name: string;
-  category: "languages" | "ai" | "infrastructure" | "data" | "frontend";
-  level: number; // 1–5
-}
-
 // ─── Terminal / RAG Agent ─────────────────────────────────────────
 
 export type TerminalRole = "user" | "assistant" | "system";

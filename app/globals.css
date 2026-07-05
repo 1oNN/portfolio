@@ -16,10 +16,6 @@
   --accent-muted: rgba(79, 70, 229, 0.12);
   --accent-glow: rgba(79, 70, 229, 0.3);
 
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-lg: 16px;
-
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -131,13 +127,6 @@ body {
 
 /* ─── Utility Classes ────────────────────────────────────────────── */
 @layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   .surface {
     background-color: var(--surface);
     border: 1px solid var(--border);
@@ -146,10 +135,6 @@ body {
   .surface-elevated {
     background-color: var(--surface-elevated);
     border: 1px solid var(--border);
-  }
-
-  .glow-accent {
-    box-shadow: 0 0 0 1px var(--accent-muted), 0 0 20px var(--accent-glow);
   }
 
   .grid-bg {
@@ -186,51 +171,13 @@ body {
   .animate-thinking-dot {
     animation: thinkingDot 1.2s ease-in-out infinite;
   }
-
-  .noise {
-    position: relative;
-  }
-  .noise::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.4;
-    border-radius: inherit;
-  }
 }
 
 /* ─── Animations ─────────────────────────────────────────────────── */
 @layer base {
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-
   @keyframes cursorBlink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
-  }
-
-  @keyframes scanline {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100vh); }
   }
 
   @keyframes rise {
@@ -273,34 +220,6 @@ body {
 /* ─── Smooth section transitions ─────────────────────────────────── */
 section {
   position: relative;
-}
-
-/* ─── Card hover glow effect ─────────────────────────────────────── */
-.card-glow {
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-.card-glow:hover {
-  box-shadow: 0 0 0 1px var(--accent-muted), 0 8px 32px var(--accent-glow);
-  transform: translateY(-2px);
-}
-
-/* ─── Tag pill ───────────────────────────────────────────────────── */
-.tag-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background-color: var(--accent-muted);
-  color: var(--accent);
-  border: 1px solid var(--accent-muted);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-  white-space: nowrap;
-}
-.tag-pill:hover {
-  background-color: var(--accent);
-  color: #fff;
 }
 
 /* ─── Blog Content ────────────────────────────────────────────────── */
