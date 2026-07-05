@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import type { BlogPost } from "@/types";
 import { readingTime } from "@/lib/reading-time";
 
@@ -27,12 +26,7 @@ function PostCard({ post }: { post: BlogPost }) {
   const isCaseStudy = post.type === "case-study";
 
   return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.3 }}
+    <article
       className="card-glow group rounded-2xl border p-6 flex flex-col gap-3 transition-all duration-200"
       style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
     >
@@ -87,7 +81,7 @@ function PostCard({ post }: { post: BlogPost }) {
           Read more →
         </Link>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -139,13 +133,11 @@ export default function BlogListing({ posts }: { posts: BlogPost[] }) {
           </p>
         </div>
       ) : (
-        <motion.div layout className="flex flex-col gap-5">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="flex flex-col gap-5">
+          {filtered.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
       )}
     </div>
   );
