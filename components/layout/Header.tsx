@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, type MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
@@ -12,6 +13,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -41,18 +43,29 @@ export default function Header() {
     return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = (href: string) => {
+  // Escape closes the mobile menu and returns focus to its toggle button.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  // Section hrefs (e.g. "#about") resolve to "/#about" for the Link's href.
+  const navHref = (href: string) => (href.startsWith("#") ? `/${href}` : href);
+
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     setMenuOpen(false);
-    if (href.startsWith("/")) {
-      window.location.href = href;
-      return;
+    // Already on "/": intercept and smooth-scroll instead of a hash jump.
+    if (href.startsWith("#") && pathname === "/") {
+      e.preventDefault();
+      document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
     }
-    if (pathname !== "/") {
-      window.location.href = `/${href}`;
-      return;
-    }
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
   };
 
   const isNavActive = (href: string) => {
@@ -74,22 +87,20 @@ export default function Header() {
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <a
-          href="#"
+        <Link
+          href="/"
           className="font-mono text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
           style={{ color: "var(--accent)" }}
           onClick={(e) => {
-            e.preventDefault();
             if (pathname === "/") {
+              e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
-            } else {
-              window.location.href = "/";
             }
           }}
           aria-label="Back to top"
         >
           ha<span style={{ color: "var(--accent-secondary)" }}>.</span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
@@ -97,9 +108,10 @@ export default function Header() {
             const active = isNavActive(item.href);
             return (
               <li key={item.href}>
-                <button
-                  onClick={() => handleNavClick(item.href)}
-                  className="relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
+                <Link
+                  href={navHref(item.href)}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className="relative inline-block px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                   style={{
                     color: active ? "var(--accent)" : "var(--text-secondary)",
                     backgroundColor: active ? "var(--accent-muted)" : "transparent",
@@ -114,7 +126,7 @@ export default function Header() {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </button>
+                </Link>
               </li>
             );
           })}
@@ -123,6 +135,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <button
+            ref={menuButtonRef}
             className="flex md:hidden h-9 w-9 items-center justify-center rounded-lg border transition-all"
             style={{
               backgroundColor: "var(--surface-elevated)",
@@ -132,6 +145,7 @@ export default function Header() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
             {menuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
           </button>
@@ -142,6 +156,7 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -154,16 +169,17 @@ export default function Header() {
                 const active = isNavActive(item.href);
                 return (
                   <li key={item.href}>
-                    <button
-                      onClick={() => handleNavClick(item.href)}
-                      className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
+                    <Link
+                      href={navHref(item.href)}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
                       style={{
                         color: active ? "var(--accent)" : "var(--text-secondary)",
                         backgroundColor: active ? "var(--accent-muted)" : "transparent",
                       }}
                     >
                       {item.label}
-                    </button>
+                    </Link>
                   </li>
                 );
               })}
