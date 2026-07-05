@@ -14,6 +14,7 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
+type FormErrors = Partial<Record<keyof ContactFormData, string>>;
 
 const INITIAL_FORM: ContactFormData = {
   name: "",
@@ -24,6 +25,49 @@ const INITIAL_FORM: ContactFormData = {
 
 type FormWithHoneypot = ContactFormData & { honeypot: string };
 
+// Mirrors the validation contract enforced server-side in app/api/contact/route.ts.
+// Keep these in sync with that file — it is the source of truth.
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MESSAGE_MIN_LENGTH = 10;
+const FIELD_MAX_LENGTH: Record<"name" | "subject" | "message", number> = {
+  name: 100,
+  subject: 200,
+  message: 4000,
+};
+const FIELD_ORDER: (keyof ContactFormData)[] = ["name", "email", "subject", "message"];
+
+function validateForm(form: ContactFormData): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!form.name.trim()) {
+    errors.name = "Name is required.";
+  } else if (form.name.length > FIELD_MAX_LENGTH.name) {
+    errors.name = `Name must be ${FIELD_MAX_LENGTH.name} characters or fewer.`;
+  }
+
+  if (!form.email.trim()) {
+    errors.email = "Email is required.";
+  } else if (!EMAIL_REGEX.test(form.email)) {
+    errors.email = "Please provide a valid email address.";
+  }
+
+  if (!form.subject.trim()) {
+    errors.subject = "Subject is required.";
+  } else if (form.subject.length > FIELD_MAX_LENGTH.subject) {
+    errors.subject = `Subject must be ${FIELD_MAX_LENGTH.subject} characters or fewer.`;
+  }
+
+  if (!form.message.trim()) {
+    errors.message = "Message is required.";
+  } else if (form.message.trim().length < MESSAGE_MIN_LENGTH) {
+    errors.message = `Message must be at least ${MESSAGE_MIN_LENGTH} characters.`;
+  } else if (form.message.length > FIELD_MAX_LENGTH.message) {
+    errors.message = `Message must be ${FIELD_MAX_LENGTH.message} characters or fewer.`;
+  }
+
+  return errors;
+}
+
 function InputField({
   label,
   name,
@@ -32,6 +76,8 @@ function InputField({
   onChange,
   required,
   placeholder,
+  maxLength,
+  error,
 }: {
   label: string;
   name: keyof ContactFormData;
@@ -40,7 +86,10 @@ function InputField({
   onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   required?: boolean;
   placeholder?: string;
+  maxLength?: number;
+  error?: string;
 }) {
+  const errorId = `${name}-error`;
   return (
     <div className="flex flex-col gap-1.5">
       <label
@@ -59,22 +108,21 @@ function InputField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="rounded-lg border px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-2"
+        maxLength={maxLength}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
+        className="input-field rounded-lg border px-4 py-2.5 text-sm outline-none transition-all duration-200"
         style={{
           backgroundColor: "var(--surface-elevated)",
           borderColor: "var(--border)",
           color: "var(--text-primary)",
-          // focus ring via outline pseudo
-        }}
-        onFocus={(e) => {
-          e.currentTarget.style.borderColor = "var(--accent)";
-          e.currentTarget.style.boxShadow = "0 0 0 3px var(--accent-muted)";
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.borderColor = "var(--border)";
-          e.currentTarget.style.boxShadow = "none";
         }}
       />
+      {error && (
+        <p id={errorId} className="text-xs" style={{ color: "#ef4444" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -83,9 +131,17 @@ export default function Contact() {
   const [form, setForm] = useState<FormWithHoneypot>({ ...INITIAL_FORM, honeypot: "" });
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => {
+      if (!prev[name as keyof ContactFormData]) return prev;
+      const next = { ...prev };
+      delete next[name as keyof ContactFormData];
+      return next;
+    });
   };
 
   const onHoneypotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +150,18 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validationErrors = validateForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      const firstInvalidField = FIELD_ORDER.find((field) => validationErrors[field]);
+      if (firstInvalidField) {
+        document.getElementById(firstInvalidField)?.focus();
+      }
+      return;
+    }
+
+    setErrors({});
     setStatus("submitting");
     setErrorMsg("");
 
@@ -247,6 +315,8 @@ export default function Contact() {
                   onChange={onChange}
                   required
                   placeholder="Jane Smith"
+                  maxLength={FIELD_MAX_LENGTH.name}
+                  error={errors.name}
                 />
                 <InputField
                   label="Email"
@@ -256,6 +326,7 @@ export default function Contact() {
                   onChange={onChange}
                   required
                   placeholder="jane@example.com"
+                  error={errors.email}
                 />
               </div>
               <InputField
@@ -265,6 +336,8 @@ export default function Contact() {
                 onChange={onChange}
                 required
                 placeholder="Research collaboration / Job opportunity / ..."
+                maxLength={FIELD_MAX_LENGTH.subject}
+                error={errors.subject}
               />
 
               {/* Textarea */}
@@ -283,22 +356,22 @@ export default function Contact() {
                   onChange={onChange}
                   required
                   rows={5}
+                  maxLength={FIELD_MAX_LENGTH.message}
+                  aria-invalid={errors.message ? true : undefined}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   placeholder="Tell me about the opportunity or project..."
-                  className="rounded-lg border px-4 py-2.5 text-sm outline-none resize-none transition-all duration-200"
+                  className="input-field rounded-lg border px-4 py-2.5 text-sm outline-none resize-none transition-all duration-200"
                   style={{
                     backgroundColor: "var(--surface-elevated)",
                     borderColor: "var(--border)",
                     color: "var(--text-primary)",
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "var(--accent)";
-                    e.currentTarget.style.boxShadow = "0 0 0 3px var(--accent-muted)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "var(--border)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
                 />
+                {errors.message && (
+                  <p id="message-error" className="text-xs" style={{ color: "#ef4444" }}>
+                    {errors.message}
+                  </p>
+                )}
               </div>
 
               {/* Honeypot — hidden from real users, traps bots */}
@@ -313,37 +386,41 @@ export default function Contact() {
                 style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
               />
 
-              {/* Status messages */}
-              {status === "success" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
-                  style={{
-                    backgroundColor: "rgba(16, 185, 129, 0.1)",
-                    border: "1px solid rgba(16, 185, 129, 0.3)",
-                    color: "#10b981",
-                  }}
-                >
-                  <FiCheck size={15} />
-                  Message sent! I&apos;ll get back to you within a day or two.
-                </motion.div>
-              )}
-              {status === "error" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
-                  style={{
-                    backgroundColor: "rgba(239, 68, 68, 0.1)",
-                    border: "1px solid rgba(239, 68, 68, 0.3)",
-                    color: "#ef4444",
-                  }}
-                >
-                  <FiAlertCircle size={15} />
-                  {errorMsg}
-                </motion.div>
-              )}
+              {/* Status announcement — persistent in the DOM so assistive tech is
+                  subscribed to this live region before its content ever changes. */}
+              <div role="status" aria-live="polite">
+                {status === "success" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
+                    style={{
+                      backgroundColor: "rgba(16, 185, 129, 0.1)",
+                      border: "1px solid rgba(16, 185, 129, 0.3)",
+                      color: "#10b981",
+                    }}
+                  >
+                    <FiCheck size={15} />
+                    Message sent! I&apos;ll get back to you within a day or two.
+                  </motion.div>
+                )}
+                {status === "error" && (
+                  <motion.div
+                    role="alert"
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
+                    style={{
+                      backgroundColor: "rgba(239, 68, 68, 0.1)",
+                      border: "1px solid rgba(239, 68, 68, 0.3)",
+                      color: "#ef4444",
+                    }}
+                  >
+                    <FiAlertCircle size={15} />
+                    {errorMsg}
+                  </motion.div>
+                )}
+              </div>
 
               <button
                 type="submit"
