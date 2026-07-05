@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.id === slug);
   if (!project) return { title: "Project Not Found" };
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   return {
     title: `${project.title} · Case Study | Hammad Ahmad`,
     description: project.tagline,
@@ -41,7 +41,7 @@ export default async function ProjectPage({ params }: Props) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   const canonicalUrl = `${siteUrl}/projects/${project.id}`;
   const jsonLd = {
     "@context": "https://schema.org",

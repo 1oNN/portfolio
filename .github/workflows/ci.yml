@@ -34,4 +34,4 @@ jobs:
           # These are dummy values — no real credentials in CI.
           ADMIN_PASSWORD: ci-dummy-password
           SESSION_SECRET: ci-dummy-session-secret-32-chars-min
-          NEXT_PUBLIC_SITE_URL: https://hammadahmad.dev
+          NEXT_PUBLIC_SITE_URL: https://hammadahmad.co.uk

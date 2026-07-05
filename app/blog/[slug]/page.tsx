@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post || !post.published) return { title: "Post Not Found" };
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   return {
     title: `${post.title} | Hammad Ahmad`,
     description: post.excerpt,
@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }: Props) {
   const isDeepDive = post.type === "case-study";
   const typeColor = isDeepDive ? "var(--accent-secondary)" : "var(--accent)";
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",

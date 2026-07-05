@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"),
   title: {
     default: "Hammad Ahmad — AI/ML Engineer & Researcher",
     template: "%s | Hammad Ahmad",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
     siteName: "Hammad Ahmad",
     title: "Hammad Ahmad — AI/ML Engineer & Researcher",
     description:
@@ -86,7 +86,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Hammad Ahmad",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
   jobTitle: "AI/ML Engineer & Researcher",
   description:
     "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
