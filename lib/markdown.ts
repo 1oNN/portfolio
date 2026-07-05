@@ -47,6 +47,16 @@ export function parseMarkdown(md: string): string {
     return `<ul>${items}</ul>`;
   });
 
+  // Blockquotes — the ">" marker survives escapeHtml() as "&gt;"
+  html = html.replace(/((?:^&gt; .+\n?)+)/gm, (block) => {
+    const text = block
+      .trim()
+      .split("\n")
+      .map((line) => line.replace(/^&gt; /, "").trim())
+      .join(" ");
+    return `<blockquote>${text}</blockquote>`;
+  });
+
   // Paragraphs
   html = html
     .split(/\n\n+/)
