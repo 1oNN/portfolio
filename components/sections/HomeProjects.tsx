@@ -6,9 +6,9 @@ import ListingCard from "@/components/case-study/ListingCard";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 
-// The old BentoProjects treated the single bentoSize:"large" entry as the
-// hero card; fall back to the first featured project if that field is ever
-// removed or every project is re-sized to "medium".
+// The single bentoSize:"large" entry is the hero card; fall back to the
+// first featured project if that field is ever removed or every project is
+// re-sized to "medium".
 const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
 const featured = FEATURED_PROJECTS.find((p) => p.bentoSize === "large") ?? FEATURED_PROJECTS[0];
 const rest = FEATURED_PROJECTS.filter((p) => p.id !== featured?.id);
