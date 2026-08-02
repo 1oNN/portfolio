@@ -3,7 +3,7 @@ import { getAllPosts } from "@/lib/blog-db";
 import { PROJECTS } from "@/lib/constants";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev";
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },

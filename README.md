@@ -3,20 +3,20 @@
 Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher. Built with Next.js 15 App Router, TypeScript, and Tailwind CSS.
 
 ## Live
-[hammadahmad.dev](https://hammadahmad.dev)
+[hammadahmad.co.uk](https://hammadahmad.co.uk)
 
 ## Features
 - Dark/light theme toggle
-- Bento grid project cards with architecture pipeline diagrams
+- Featured case-study card + listing grid for projects, with architecture diagrams
 - AI chat assistant (Groq API — Llama 3.1 8B Instant)
 - Blog & case studies with admin panel (DynamoDB-backed)
 - Contact form with AWS SES email delivery
 - CV download tracking
-- Responsive design, animated starfield, Ctrl+` terminal easter egg
+- Responsive design, Ctrl+` terminal easter egg
 
 ## Tech Stack
 - **Framework**: Next.js 15 (App Router), TypeScript 5.5
-- **Styling**: Tailwind CSS, Framer Motion
+- **Styling**: Tailwind CSS
 - **AI Agent**: Groq API (Llama 3.1 8B Instant)
 - **Email**: AWS SES
 - **Database**: AWS DynamoDB (blog posts, contacts, agent logs)
@@ -47,7 +47,7 @@ DYNAMODB_CONTACTS_TABLE=portfolio-contacts
 DYNAMODB_AGENT_TABLE=portfolio-agent-logs
 
 GROQ_API_KEY=
-NEXT_PUBLIC_SITE_URL=https://hammadahmad.dev
+NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 ```
 
 ## AWS Setup
@@ -71,14 +71,23 @@ Connect the repo in the Amplify Console and set environment variables. The `ampl
 ```
 app/              → Pages and API routes
 components/
-  interactive/    → StarField, theme toggle, chat agent, terminal
+  blog/           → PostCard
+  case-study/     → CaseStudyLayout, FeaturedCard, ListingCard
+  interactive/    → Theme toggle, chat agent, terminal
   layout/         → Header, footer
-  sections/       → Hero, About, Experience, Projects, Publications, Contact
-  ui/             → SectionTitle, PipelineDiagram
-lib/              → Constants, auth, blog-db, markdown, agent system prompt
+  project-visuals/→ Per-project Hero/Architecture visuals
+  sections/       → Hero, About, Experience, HomeProjects, Publications, Contact
+  ui/             → SectionHeader
+lib/              → Constants, case studies, CV config, seed posts, auth,
+                    blog-db, markdown, agent system prompt
 types/            → TypeScript interfaces
 public/cv/        → Downloadable CVs (add your PDFs here)
 ```
+
+## Notes
+- **CV publishing**: no CVs ship by default. Drop a PDF into `public/cv/` and add a matching entry in `lib/cv-config.ts` — the About section and agent prompt pick it up automatically.
+- **Seed posts**: `lib/seed-posts.ts` ships a couple of posts inside the bundle so the blog has content without a DB write. They're merged into the published read path only; a real DB post always wins on a slug collision.
+- **Fonts**: Inter and JetBrains Mono (`--font-mono`) are self-hosted via `next/font`, no external font requests.
 
 ## Scripts
 ```bash

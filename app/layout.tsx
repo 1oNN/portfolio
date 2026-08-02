@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,8 +9,15 @@ const inter = Inter({
   display: "swap",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"),
   title: {
     default: "Hammad Ahmad — AI/ML Engineer & Researcher",
     template: "%s | Hammad Ahmad",
@@ -34,17 +41,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.dev",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
     siteName: "Hammad Ahmad",
     title: "Hammad Ahmad — AI/ML Engineer & Researcher",
     description:
       "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
     images: [
       {
-        url: "/og-image.svg",
+        url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Hammad Ahmad Portfolio",
+        alt: "Hammad Ahmad — AI/ML Engineer & Researcher",
       },
     ],
   },
@@ -53,6 +60,7 @@ export const metadata: Metadata = {
     title: "Hammad Ahmad — AI/ML Engineer & Researcher",
     description:
       "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
+    images: ["/og.png"],
   },
   robots: {
     index: true,
@@ -67,11 +75,18 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f7fb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0814" },
+  ],
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Hammad Ahmad",
-  url: "https://hammadahmad.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
   jobTitle: "AI/ML Engineer & Researcher",
   description:
     "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
@@ -87,10 +102,8 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

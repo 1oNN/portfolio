@@ -16,6 +16,7 @@ import { getProjectVisuals } from "@/components/project-visuals";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 import ListingCard from "./ListingCard";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 interface Props {
   project: Project;
@@ -55,8 +56,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm transition-colors"
-            style={{ color: "var(--text-secondary)" }}
+            className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
           >
             <FiArrowLeft size={15} />
             All projects
@@ -76,8 +76,8 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                 className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest"
                 style={{
                   color: accent,
-                  backgroundColor: `${accent}18`,
-                  border: `1px solid ${accent}40`,
+                  backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                  border: `1px solid color-mix(in srgb, ${accent} 25%, transparent)`,
                   fontFamily: "var(--font-mono)",
                 }}
               >
@@ -126,7 +126,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
         >
           <div className="mx-auto max-w-5xl px-6 py-6">
             <dl className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4">
-              <Fact icon={<FiCalendar size={13} />} label="Timeline" value={caseStudy.timeline} />
+              {caseStudy.timeline && (
+                <Fact icon={<FiCalendar size={13} />} label="Timeline" value={caseStudy.timeline} />
+              )}
               <Fact icon={<FiUser size={13} />} label="Role" value={caseStudy.role} />
               <Fact icon={<FiActivity size={13} />} label="Status" value={caseStudy.status} accent={accent} />
               <Fact
@@ -143,10 +145,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)]"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
                     style={{
                       color: "var(--text-secondary)",
-                      borderColor: "var(--border)",
                       backgroundColor: "var(--surface-elevated)",
                     }}
                   >
@@ -249,8 +250,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             <div className="mt-10">
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 text-sm font-medium"
-                style={{ color: accent }}
+                className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
               >
                 <FiArrowLeft size={14} />
                 All projects
@@ -289,33 +289,6 @@ function Fact({
       >
         {value}
       </dd>
-    </div>
-  );
-}
-
-function SectionHeader({
-  eyebrow,
-  title,
-  accent,
-}: {
-  eyebrow: string;
-  title: string;
-  accent: string;
-}) {
-  return (
-    <div className="space-y-3">
-      <span
-        className="text-[10px] font-semibold uppercase tracking-widest"
-        style={{ color: accent, fontFamily: "var(--font-mono)" }}
-      >
-        {eyebrow}
-      </span>
-      <h2
-        className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl"
-        style={{ color: "var(--text-primary)" }}
-      >
-        {title}
-      </h2>
     </div>
   );
 }

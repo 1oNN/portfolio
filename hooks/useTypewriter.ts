@@ -37,6 +37,17 @@ export function useTypewriter(
       return;
     }
 
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setDisplayed(text);
+      setDone(true);
+      onCompleteRef.current?.();
+      return;
+    }
+
     let rafId: ReturnType<typeof setTimeout>;
 
     const tick = () => {

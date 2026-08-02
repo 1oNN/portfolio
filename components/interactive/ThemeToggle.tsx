@@ -23,11 +23,9 @@ export default function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      className="relative flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-200 hover:scale-105 active:scale-95"
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg border text-[var(--text-secondary)] border-[var(--border)] transition-colors duration-200 hover:text-[var(--accent)] hover:border-[var(--accent-muted)] focus-visible:text-[var(--accent)] focus-visible:border-[var(--accent-muted)]"
       style={{
         backgroundColor: "var(--surface-elevated)",
-        borderColor: "var(--border)",
-        color: "var(--text-secondary)",
       }}
     >
       <span

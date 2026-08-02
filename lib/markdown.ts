@@ -2,10 +2,13 @@ export function parseMarkdown(md: string): string {
   const codeBlocks: string[] = [];
   const inlineCodes: string[] = [];
 
-  // Extract code blocks before any escaping
-  let html = md.replace(/```[\w]*\n?([\s\S]*?)```/g, (_match, code: string) => {
+  // Extract code blocks before any escaping. Capture the fence language token
+  // and, when it's a valid identifier, emit a `language-<lang>` class; otherwise
+  // fall back to exactly the previous output. Escaping is unchanged.
+  let html = md.replace(/```([\w+-]*)\n?([\s\S]*?)```/g, (_match, lang: string, code: string) => {
     const idx = codeBlocks.length;
-    codeBlocks.push(`<pre><code>${escapeHtml(code.trimEnd())}</code></pre>`);
+    const cls = /^[a-z0-9+-]{1,20}$/.test(lang) ? ` class="language-${lang}"` : "";
+    codeBlocks.push(`<pre><code${cls}>${escapeHtml(code.trimEnd())}</code></pre>`);
     return `\x00CODE_BLOCK_${idx}\x00`;
   });
 
@@ -45,6 +48,16 @@ export function parseMarkdown(md: string): string {
       .map((line) => `<li>${line.replace(/^- /, "").trim()}</li>`)
       .join("");
     return `<ul>${items}</ul>`;
+  });
+
+  // Blockquotes — the ">" marker survives escapeHtml() as "&gt;"
+  html = html.replace(/((?:^&gt; .+\n?)+)/gm, (block) => {
+    const text = block
+      .trim()
+      .split("\n")
+      .map((line) => line.replace(/^&gt; /, "").trim())
+      .join(" ");
+    return `<blockquote>${text}</blockquote>`;
   });
 
   // Paragraphs

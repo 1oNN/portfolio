@@ -29,7 +29,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
           backgroundColor: "var(--surface-elevated)",
         }}
       >
-        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.02]">
+        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.02] group-focus-within:scale-[1.02]">
           {Hero ? (
             <Hero accent={accent} className="h-full w-full" />
           ) : (
@@ -115,7 +115,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
         {/* CTA */}
         <Link
           href={`/projects/${project.id}`}
-          className="inline-flex items-center gap-2 self-start rounded-lg px-5 py-2.5 text-sm font-medium transition-all duration-200 hover:gap-3"
+          className="inline-flex items-center gap-2 self-start rounded-lg px-5 py-2.5 text-sm font-medium transition-all duration-200 hover:gap-3 focus-visible:gap-3"
           style={{
             color: "#fff",
             backgroundColor: accent,

@@ -3,7 +3,6 @@ import type {
   Experience,
   Education,
   Publication,
-  Skill,
   NavItem,
 } from "@/types";
 
@@ -12,48 +11,10 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "/projects" },
   { label: "Blog", href: "/blog" },
-  { label: "Chat", href: "#agent" },
+  { label: "Agent", href: "#agent" },
   { label: "Research", href: "#research" },
   { label: "Contact", href: "#contact" },
 ];
-
-export const SKILLS: Skill[] = [
-  { name: "Python", category: "languages", level: 5 },
-  { name: "TypeScript", category: "languages", level: 4 },
-  { name: "JavaScript", category: "languages", level: 4 },
-  { name: "C++", category: "languages", level: 3 },
-  { name: "SQL", category: "languages", level: 4 },
-  { name: "PyTorch", category: "ai", level: 5 },
-  { name: "TensorFlow", category: "ai", level: 4 },
-  { name: "scikit-learn", category: "ai", level: 5 },
-  { name: "LLMs / NLP", category: "ai", level: 5 },
-  { name: "RAG", category: "ai", level: 5 },
-  { name: "Retell AI", category: "ai", level: 4 },
-  { name: "MLflow", category: "ai", level: 4 },
-  { name: "FastAPI", category: "infrastructure", level: 5 },
-  { name: "Docker", category: "infrastructure", level: 4 },
-  { name: "CI/CD", category: "infrastructure", level: 4 },
-  { name: "AWS", category: "infrastructure", level: 3 },
-  { name: "GCP", category: "infrastructure", level: 3 },
-  { name: "REST APIs", category: "infrastructure", level: 5 },
-  { name: "Neo4j", category: "data", level: 4 },
-  { name: "PostgreSQL", category: "data", level: 4 },
-  { name: "MongoDB", category: "data", level: 3 },
-  { name: "pandas / NumPy", category: "data", level: 5 },
-  { name: "Sentence Transformers", category: "data", level: 4 },
-  { name: "Supabase", category: "data", level: 4 },
-  { name: "React.js", category: "frontend", level: 4 },
-  { name: "Next.js", category: "frontend", level: 4 },
-  { name: "Flask", category: "frontend", level: 4 },
-];
-
-export const SKILL_CATEGORIES = [
-  { key: "languages", label: "Languages" },
-  { key: "ai", label: "AI & ML" },
-  { key: "infrastructure", label: "Infrastructure" },
-  { key: "data", label: "Data Engineering" },
-  { key: "frontend", label: "Frontend & APIs" },
-] as const;
 
 export const PROJECTS: Project[] = [
   {
@@ -68,6 +29,7 @@ export const PROJECTS: Project[] = [
     category: "research",
     featured: true,
     bentoSize: "large",
+    githubUrl: "https://github.com/1oNN/finlaw-uk",
     metrics: [
       { value: "+19%", label: "Answer accuracy" },
       { value: "0.76", label: "RAGAS faithfulness" },
@@ -92,6 +54,7 @@ export const PROJECTS: Project[] = [
     category: "engineering",
     featured: true,
     bentoSize: "medium",
+    githubUrl: "https://github.com/1oNN/VoiceFlow",
     metrics: [
       { value: "54%", label: "Latency reduction" },
       { value: "2,100+", label: "Concurrent sessions" },
@@ -116,6 +79,7 @@ export const PROJECTS: Project[] = [
     category: "ml",
     featured: true,
     bentoSize: "medium",
+    githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
       { value: "93%", label: "Classification accuracy" },
       { value: "SHAP", label: "Interpretability" },

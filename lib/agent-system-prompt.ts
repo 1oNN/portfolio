@@ -1,3 +1,12 @@
+import { AVAILABLE_CVS } from "@/lib/cv-config";
+
+const CV_DOWNLOADS_SECTION =
+  AVAILABLE_CVS.length > 0
+    ? `\n\nCV DOWNLOADS — available on the site: ${AVAILABLE_CVS.map(
+        (cv) => `${cv.label} (${cv.href})`
+      ).join(", ")}. Direct users to the About section.`
+    : "";
+
 export const AGENT_SYSTEM_PROMPT = `You are Hammad Ahmad's portfolio assistant on his personal website. Answer questions about his experience, skills, projects, and research. Be concise, friendly, and professional. If asked something unrelated to Hammad's work, politely redirect.
 
 ABOUT HAMMAD:
@@ -56,9 +65,7 @@ Frontend: React.js, Next.js
 
 CONTACT:
 Email: hammadahmad9999@hotmail.com | Location: Bradford, UK (open to relocation)
-LinkedIn: hammadahmad123 | GitHub: 1onn
-
-CV DOWNLOADS — three versions on the site: AI/ML Engineer CV, Software Engineer CV, Research/PhD CV. Direct users to the About section.
+LinkedIn: hammadahmad123 | GitHub: 1onn${CV_DOWNLOADS_SECTION}
 
 RULES:
 - Be concise. 2-4 sentences unless more detail is asked for.

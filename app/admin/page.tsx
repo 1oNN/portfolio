@@ -264,9 +264,9 @@ export default function AdminDashboard() {
                           padding: "0.2rem 0.5rem",
                           borderRadius: "9999px",
                           fontFamily: "var(--font-mono)",
-                          backgroundColor: post.type === "case-study" ? "rgba(245, 158, 11, 0.1)" : "var(--accent-muted)",
-                          color: post.type === "case-study" ? "#f59e0b" : "var(--accent)",
-                          border: `1px solid ${post.type === "case-study" ? "rgba(245,158,11,0.2)" : "var(--accent-muted)"}`,
+                          backgroundColor: post.type === "case-study" ? "color-mix(in srgb, var(--accent-secondary) 10%, transparent)" : "var(--accent-muted)",
+                          color: post.type === "case-study" ? "var(--accent-secondary)" : "var(--accent)",
+                          border: `1px solid ${post.type === "case-study" ? "color-mix(in srgb, var(--accent-secondary) 20%, transparent)" : "var(--accent-muted)"}`,
                         }}
                       >
                         {post.type === "case-study" ? "Case Study" : "Blog"}
@@ -279,9 +279,9 @@ export default function AdminDashboard() {
                           fontWeight: 600,
                           padding: "0.2rem 0.5rem",
                           borderRadius: "9999px",
-                          backgroundColor: post.published ? "rgba(16,185,129,0.1)" : "rgba(100,116,139,0.1)",
-                          color: post.published ? "#10b981" : "var(--text-muted)",
-                          border: `1px solid ${post.published ? "rgba(16,185,129,0.2)" : "var(--border)"}`,
+                          backgroundColor: post.published ? "color-mix(in srgb, var(--success) 10%, transparent)" : "rgba(100,116,139,0.1)",
+                          color: post.published ? "var(--success)" : "var(--text-muted)",
+                          border: `1px solid ${post.published ? "color-mix(in srgb, var(--success) 20%, transparent)" : "var(--border)"}`,
                         }}
                       >
                         {post.published ? "Published" : "Draft"}

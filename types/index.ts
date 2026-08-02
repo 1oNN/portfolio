@@ -81,33 +81,15 @@ export interface Publication {
   type: "conference" | "journal" | "chapter";
 }
 
-export interface Skill {
-  name: string;
-  category: "languages" | "ai" | "infrastructure" | "data" | "frontend";
-  level: number; // 1–5
-}
-
 // ─── Terminal / RAG Agent ─────────────────────────────────────────
 
 export type TerminalRole = "user" | "assistant" | "system";
-
-export interface TerminalSource {
-  section: string;
-  excerpt: string;
-}
 
 export interface TerminalMessage {
   id: string;
   role: TerminalRole;
   content: string;
-  sources?: TerminalSource[];
   timestamp: Date;
-}
-
-export interface TerminalResponse {
-  answer: string;
-  sources: TerminalSource[];
-  suggestions: string[];
 }
 
 // ─── API Contracts ────────────────────────────────────────────────

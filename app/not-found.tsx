@@ -49,7 +49,7 @@ export default function NotFound() {
           textDecoration: "none",
           fontWeight: 500,
           fontSize: "0.875rem",
-          border: "1px solid rgba(99,102,241,0.25)",
+          border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
         }}
       >
         ← Back to home

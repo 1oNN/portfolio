@@ -3,7 +3,7 @@ import type { CaseStudy } from "@/types";
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   "finlaw-uk": {
     projectId: "finlaw-uk",
-    accent: "#6366f1",
+    accent: "var(--status-research)",
     status: "Research",
     timeline: "Sep 2024 — Sep 2025",
     role: "Solo MSc dissertation, University of Bradford",
@@ -44,14 +44,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     reflections: [
       "If I were continuing this past the dissertation, the next move is two-pronged. First, replace the soft-vote evaluation harness with a structured legal-reasoning benchmark — RAGAS catches faithfulness drift but not legal-specific failure modes like jurisdictional misapplication. Second, ship a confidence-aware UI that surfaces uncertainty when the graph expansion returns sparse adjacency, so users know when the system is reasoning from rich vs thin context.",
-      "/* TODO: Hammad — add a paragraph here about what surprised you in the eval, or what you'd warn the next person doing graph-augmented RAG to budget time for. */",
     ],
     related: ["ai-voice-agent", "diabetes-risk"],
   },
 
   "ai-voice-agent": {
     projectId: "ai-voice-agent",
-    accent: "#10b981",
+    accent: "var(--status-engineering)",
     status: "In Production",
     timeline: "Oct 2025 — Mar 2026",
     role: "ML Engineer @ Outlyst",
@@ -92,19 +91,18 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     reflections: [
       "The next 200ms of latency reduction is going to come from the LLM inference itself, not the surrounding plumbing — speculative decoding, smaller fine-tuned models for the specific tool-call patterns, or moving the gatekeeper classifier to a co-located CPU model. The plumbing is mostly drained.",
-      "/* TODO: Hammad — add a reflection on the operational cost of pool restructuring under load (downtime risk, rollback plan), or what you'd warn someone profiling a production websocket service for the first time. */",
     ],
     related: ["finlaw-uk", "jobzyl"],
   },
 
   "diabetes-risk": {
     projectId: "diabetes-risk",
-    accent: "#f59e0b",
+    accent: "var(--status-ml)",
     status: "Published",
     timeline: "Jan — Jul 2024",
     role: "Solo ML capstone, COMSATS University Islamabad",
     primaryStack: ["scikit-learn", "SHAP", "React.js", "Flask"],
-    links: {},
+    links: { paper: "https://doi.org/10.1007/978-3-031-66854-8_1" },
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
       "Adoption literature on clinical ML is consistent: when clinicians can't trace a prediction back to features they recognise, they reject the tool — even when the tool is more accurate than their own judgement. The interpretability layer isn't optional polish; it's the load-bearing part.",
@@ -139,16 +137,15 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     reflections: [
       "For clinical deployment beyond a paper, the next blockers are calibration and population shift: 93% on a single curated dataset doesn't mean 93% on a different hospital's intake. The model needs Platt-scaled probabilities and a population-shift detector before it's safe at the bedside.",
-      "/* TODO: Hammad — add a reflection on the dataset (Pima or other), what you'd want to redo with hindsight, and how you'd partner with a clinical team to validate properly. */",
     ],
     related: ["finlaw-uk", "jobzyl"],
   },
 
   jobzyl: {
     projectId: "jobzyl",
-    accent: "#14b8a6",
+    accent: "var(--status-fullstack)",
     status: "Shipped",
-    timeline: "/* TODO: Hammad — fill in your project dates */",
+    timeline: "",
     role: "Solo full-stack project",
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
     links: { live: "https://jobzyl.com" },
@@ -186,7 +183,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     reflections: [
       "The interesting next step is shifting some scoring server-side without breaking the privacy promise — federated or homomorphic patterns where the CV embedding stays local but the score computation can use server-side job-side embeddings. Probably not worth it for v1; potentially the next moat.",
-      "/* TODO: Hammad — add a reflection on rate-limit management complexity, what broke first under real user load, or the unexpected cost of full-stack ownership. */",
     ],
     related: ["ai-voice-agent", "finlaw-uk"],
   },
