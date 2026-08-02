@@ -29,6 +29,7 @@ export const PROJECTS: Project[] = [
     category: "research",
     featured: true,
     bentoSize: "large",
+    githubUrl: "https://github.com/1oNN/finlaw-uk",
     metrics: [
       { value: "+19%", label: "Answer accuracy" },
       { value: "0.76", label: "RAGAS faithfulness" },
@@ -53,6 +54,7 @@ export const PROJECTS: Project[] = [
     category: "engineering",
     featured: true,
     bentoSize: "medium",
+    githubUrl: "https://github.com/1oNN/VoiceFlow",
     metrics: [
       { value: "54%", label: "Latency reduction" },
       { value: "2,100+", label: "Concurrent sessions" },
@@ -77,6 +79,7 @@ export const PROJECTS: Project[] = [
     category: "ml",
     featured: true,
     bentoSize: "medium",
+    githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
       { value: "93%", label: "Classification accuracy" },
       { value: "SHAP", label: "Interpretability" },
