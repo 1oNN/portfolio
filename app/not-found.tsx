@@ -16,9 +16,10 @@ export default function NotFound() {
     >
       <span
         style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: "5rem",
-          fontWeight: 800,
+          fontFamily: "var(--font-display)",
+          fontSize: "6rem",
+          fontWeight: 700,
+          letterSpacing: "-0.03em",
           color: "var(--accent)",
           lineHeight: 1,
         }}
@@ -27,6 +28,7 @@ export default function NotFound() {
       </span>
       <h1
         style={{
+          fontFamily: "var(--font-display)",
           fontSize: "1.5rem",
           fontWeight: 700,
           color: "var(--text-primary)",
