@@ -14,17 +14,16 @@ const EMAIL = "hammadahmad.ml@gmail.com";
 export default function Contact() {
   return (
     <section id="contact" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
-          number="06"
           eyebrow="Contact"
           title="Get in touch"
           description="Whether it's a research opportunity, an interesting engineering problem, or just a hello — I'd love to hear from you."
         />
 
-        <div className="mt-10 grid gap-12 lg:grid-cols-5">
+        <div className="mt-10 space-y-12">
           {/* Info */}
-          <div className="lg:col-span-2">
+          <div>
             <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
               I&apos;m open to full-time AI/ML engineering and research roles, and MSCA-eligible for
               PhD or postdoc positions in the EU later this year.
@@ -87,7 +86,7 @@ export default function Contact() {
           </div>
 
           {/* Form island */}
-          <div className="lg:col-span-3">
+          <div>
             <ContactForm />
           </div>
         </div>

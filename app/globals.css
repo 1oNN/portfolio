@@ -3,18 +3,23 @@
 @tailwind utilities;
 
 /* ─── Design Tokens ─────────────────────────────────────────────── */
+/* Light = white paper + deep blue accent (green secondary).
+   Dark  = navy + green accent (periwinkle secondary) — the primary identity.
+   --accent-contrast = text color on accent-filled surfaces: white fails on the
+   dark-mode green (1.92:1), so filled controls must use this token, never #fff. */
 :root {
-  --background: #f7f7fb;
+  --background: #f9fafc;
   --surface: #ffffff;
-  --surface-elevated: #efeff7;
-  --border: rgba(79, 70, 229, 0.14);
-  --text-primary: #16142e;
-  --text-secondary: #4b4e69;
-  --text-muted: #666a87;
-  --accent: #4f46e5;
-  --accent-secondary: #b45309;
-  --accent-muted: rgba(79, 70, 229, 0.12);
-  --accent-glow: rgba(79, 70, 229, 0.3);
+  --surface-elevated: #e9eef5;
+  --border: rgba(14, 31, 56, 0.14);
+  --text-primary: #0e1f38;
+  --text-secondary: #3f5473;
+  --text-muted: #52677f;
+  --accent: #1d4ed8;
+  --accent-contrast: #ffffff;
+  --accent-secondary: #047857;
+  --accent-muted: rgba(29, 78, 216, 0.09);
+  --accent-glow: rgba(29, 78, 216, 0.2);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -22,24 +27,26 @@
 
   --success: #047857;
   --danger: #dc2626;
-  --status-research: #4f46e5;
+  --status-research: #4338ca;
   --status-engineering: #047857;
-  --status-ml: #b45309;
+  --status-ml: #8a5a06;
   --status-fullstack: #0f766e;
 }
 
 .dark {
-  --background: #0a0814;
-  --surface: #110f1e;
-  --surface-elevated: #18162a;
-  --border: rgba(99, 102, 241, 0.1);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #7d88a3;
-  --accent: #6366f1;
-  --accent-secondary: #f59e0b;
-  --accent-muted: rgba(99, 102, 241, 0.1);
-  --accent-glow: rgba(99, 102, 241, 0.25);
+  --background: #0d1b2a;
+  --surface: #13273e;
+  --surface-elevated: #1b3350;
+  --border: rgba(141, 160, 191, 0.16);
+  --text-primary: #dce7f5;
+  --text-secondary: #9db0cd;
+  /* 4.8:1 on --surface-elevated — tight but passing; do not darken further */
+  --text-muted: #8da0bf;
+  --accent: #34d399;
+  --accent-contrast: #0d1b2a;
+  --accent-secondary: #8ab4ff;
+  --accent-muted: rgba(52, 211, 153, 0.1);
+  --accent-glow: rgba(52, 211, 153, 0.18);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -47,9 +54,9 @@
 
   --success: #34d399;
   --danger: #f87171;
-  --status-research: #818cf8;
-  --status-engineering: #10b981;
-  --status-ml: #f59e0b;
+  --status-research: #8ab4ff;
+  --status-engineering: #34d399;
+  --status-ml: #e3b341;
   --status-fullstack: #2dd4bf;
 }
 
@@ -215,9 +222,9 @@ body {
   width: 8px;
   height: 1em;
   /* Only consumer is the always-dark Terminal chrome (see Terminal.tsx) — use
-     the dark-theme amber literally instead of the theme-dependent var, which
-     would resolve to amber-700 (light-mode tuned, ~3:1) on this dark bg. */
-  background-color: #f59e0b;
+     the dark-theme green literally instead of the theme-dependent var, which
+     would resolve to the light-mode blue on this always-dark bg. */
+  background-color: #34d399;
   vertical-align: text-bottom;
   animation: cursorBlink 1s step-end infinite;
 }
@@ -229,7 +236,7 @@ section {
 
 /* ─── Blog Content ────────────────────────────────────────────────── */
 .blog-content { line-height: 1.75; color: var(--text-secondary); }
-.blog-content h1, .blog-content h2, .blog-content h3 { color: var(--text-primary); font-weight: 700; }
+.blog-content h1, .blog-content h2, .blog-content h3 { color: var(--text-primary); font-weight: 700; font-family: var(--font-display); letter-spacing: -0.02em; }
 .blog-content h1 { font-size: 1.875rem; margin: 1.5rem 0 0.75rem; }
 .blog-content h2 { font-size: 1.5rem; letter-spacing: -0.02em; margin: 2.5rem 0 1rem; }
 .blog-content h3 { font-size: 1.25rem; letter-spacing: -0.02em; margin: 2.5rem 0 1rem; }

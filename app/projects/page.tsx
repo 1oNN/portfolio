@@ -74,7 +74,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
             ✦ Selected work
           </span>
           <h1
-            className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+            className="font-display text-[clamp(3rem,2rem+3.5vw,5rem)] font-bold leading-[1.02] tracking-[-0.03em]"
             style={{ color: "var(--text-primary)" }}
           >
             Projects &amp; case studies

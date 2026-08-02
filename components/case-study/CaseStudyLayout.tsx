@@ -91,7 +91,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
               </span>
             </div>
             <h1
-              className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              className="font-display text-[clamp(3rem,2rem+2.6vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em]"
               style={{ color: "var(--text-primary)" }}
             >
               {project.title}

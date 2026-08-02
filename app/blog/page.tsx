@@ -62,7 +62,7 @@ export default async function BlogPage({ searchParams }: Props) {
           <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--accent)]">
             ✦ Writing
           </span>
-          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
+          <h1 className="font-display text-[clamp(3rem,2rem+3.5vw,5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-[var(--text-primary)]">
             Writing &amp; notes
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">

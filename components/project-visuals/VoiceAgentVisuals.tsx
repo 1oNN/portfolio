@@ -81,7 +81,7 @@ export function VoiceAgentHero({ accent, className }: Props) {
         fontFamily="ui-monospace, 'JetBrains Mono', monospace"
         fontSize="14"
         fontWeight="700"
-        fill="#fff"
+        fill="var(--accent-contrast)"
       >
         1.1s
       </text>

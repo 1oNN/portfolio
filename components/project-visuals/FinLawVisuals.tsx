@@ -119,7 +119,7 @@ export function FinLawHero({ accent, className }: Props) {
           fontFamily="ui-monospace, 'JetBrains Mono', monospace"
           fontSize="10"
           fontWeight="700"
-          fill="#fff"
+          fill="var(--accent-contrast)"
         >
           FCA
         </text>
@@ -130,7 +130,7 @@ export function FinLawHero({ accent, className }: Props) {
           fontFamily="ui-monospace, 'JetBrains Mono', monospace"
           fontSize="10"
           fontWeight="700"
-          fill="#fff"
+          fill="var(--accent-contrast)"
         >
           HANDBOOK
         </text>

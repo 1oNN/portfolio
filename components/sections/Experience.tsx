@@ -11,9 +11,8 @@ const STATUS_COLOR: Record<ExperienceEntry["type"], string> = {
 export default function Experience() {
   return (
     <section id="experience" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
-          number="02"
           eyebrow="Experience"
           title="Where I've built"
           description="Research assistantships and engineering roles, most recent first — what I built and shipped at each."
@@ -23,7 +22,7 @@ export default function Experience() {
           {EXPERIENCE.map((exp) => {
             const color = STATUS_COLOR[exp.type];
             return (
-              <div key={exp.id} className="py-8 sm:grid sm:grid-cols-[180px_1fr] sm:gap-6">
+              <div key={exp.id} className="py-8 sm:grid sm:grid-cols-[140px_1fr] sm:gap-5">
                 {/* Meta */}
                 <div className="flex flex-col gap-1.5">
                   <span

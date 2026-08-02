@@ -23,7 +23,7 @@ export default function SectionHeader({
         {eyebrow}
       </span>
       <h2
-        className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl"
+        className="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl"
         style={{ color: "var(--text-primary)" }}
       >
         {title}

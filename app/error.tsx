@@ -28,9 +28,10 @@ export default function Error({
     >
       <span
         style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: "3rem",
-          fontWeight: 800,
+          fontFamily: "var(--font-display)",
+          fontSize: "4rem",
+          fontWeight: 700,
+          letterSpacing: "-0.03em",
           color: "var(--accent-secondary)",
           lineHeight: 1,
         }}
@@ -39,6 +40,7 @@ export default function Error({
       </span>
       <h2
         style={{
+          fontFamily: "var(--font-display)",
           fontSize: "1.5rem",
           fontWeight: 700,
           color: "var(--text-primary)",

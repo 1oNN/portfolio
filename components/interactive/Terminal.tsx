@@ -4,10 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { TERMINAL_COMMANDS } from "@/lib/constants";
 
 // This chrome is permanently dark (see the `background` below), regardless of
-// site theme. `--accent-secondary` is theme-dependent and resolves to
-// amber-700 in light mode (tuned for white surfaces), which only hits ~3:1 on
-// this dark background. Use the dark-theme amber literally instead.
-const TERMINAL_ACCENT = "#f59e0b"; // always-dark chrome; theme var would go amber-700 in light
+// site theme. `--accent` is theme-dependent and resolves to the deep blue in
+// light mode (tuned for white surfaces), which fails on this dark background.
+// Use the dark-theme green literally instead (9.1:1 on the navy chrome).
+const TERMINAL_ACCENT = "#34d399"; // always-dark chrome; theme var would go blue in light
 
 interface TerminalLine {
   type: "input" | "output" | "system";
@@ -168,8 +168,8 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
     <div
       className="animate-rise fixed bottom-6 right-6 z-50 w-full max-w-lg rounded-xl overflow-hidden shadow-2xl"
       style={{
-        background: "rgba(9, 9, 18, 0.96)",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "rgba(13, 27, 42, 0.97)",
+        border: "1px solid rgba(141, 160, 191, 0.15)",
         backdropFilter: "blur(20px)",
       }}
       role="dialog"
@@ -178,7 +178,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
       {/* Title bar */}
       <div
         className="flex items-center gap-2 px-4 py-3 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+        style={{ borderColor: "rgba(141, 160, 191, 0.12)" }}
       >
         <button
           ref={closeButtonRef}
@@ -191,7 +191,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
         <div className="h-3 w-3 rounded-full bg-green-500" />
         <span
           className="ml-auto text-xs font-mono"
-          style={{ color: "rgba(255,255,255,0.4)" }}
+          style={{ color: "rgba(157, 176, 205, 0.55)" }}
         >
           hammad@portfolio — terminal
         </span>
@@ -206,10 +206,10 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
             style={{
               color:
                 line.type === "system"
-                  ? `color-mix(in srgb, ${TERMINAL_ACCENT} 70%, transparent)`
+                  ? `color-mix(in srgb, ${TERMINAL_ACCENT} 80%, transparent)`
                   : line.type === "input"
-                  ? "rgba(255,255,255,0.9)"
-                  : "rgba(255,255,255,0.6)",
+                  ? "rgba(220, 231, 245, 0.92)"
+                  : "rgba(195, 210, 231, 0.7)",
               whiteSpace: "pre-wrap",
             }}
           >
@@ -222,7 +222,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
       {/* Input */}
       <div
         className="flex items-center gap-2 px-4 py-3 border-t"
-        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+        style={{ borderColor: "rgba(141, 160, 191, 0.12)" }}
       >
         <span className="terminal-text text-sm" style={{ color: TERMINAL_ACCENT }}>
           hammad@portfolio:~$
@@ -234,7 +234,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           className="flex-1 bg-transparent terminal-text text-sm outline-none"
-          style={{ color: "rgba(255,255,255,0.9)" }}
+          style={{ color: "rgba(220, 231, 245, 0.92)" }}
           spellCheck={false}
           autoComplete="off"
           aria-label="Terminal input"

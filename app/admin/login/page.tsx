@@ -120,9 +120,9 @@ export default function AdminLoginPage() {
             <p
               style={{
                 fontSize: "0.8rem",
-                color: "#f87171",
-                backgroundColor: "rgba(248, 113, 113, 0.1)",
-                border: "1px solid rgba(248, 113, 113, 0.2)",
+                color: "var(--danger)",
+                backgroundColor: "color-mix(in srgb, var(--danger) 10%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--danger) 20%, transparent)",
                 borderRadius: "6px",
                 padding: "0.5rem 0.75rem",
               }}
@@ -140,7 +140,7 @@ export default function AdminLoginPage() {
               borderRadius: "8px",
               border: "none",
               backgroundColor: loading ? "var(--accent-muted)" : "var(--accent)",
-              color: loading ? "var(--accent)" : "#fff",
+              color: loading ? "var(--accent)" : "var(--accent-contrast)",
               fontSize: "0.875rem",
               fontWeight: 600,
               cursor: loading ? "not-allowed" : "pointer",

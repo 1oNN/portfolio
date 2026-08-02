@@ -334,7 +334,7 @@ export default function TerminalAgent() {
           type="button"
           onClick={handleSend}
           disabled={!input.trim() || isThinking || isAtLimit}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-white transition-opacity hover:opacity-90 focus-visible:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[var(--accent-contrast)] transition-opacity hover:opacity-90 focus-visible:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ backgroundColor: "var(--accent)" }}
           aria-label="Send message"
         >
