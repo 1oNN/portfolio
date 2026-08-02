@@ -236,7 +236,7 @@ section {
 
 /* ─── Blog Content ────────────────────────────────────────────────── */
 .blog-content { line-height: 1.75; color: var(--text-secondary); }
-.blog-content h1, .blog-content h2, .blog-content h3 { color: var(--text-primary); font-weight: 700; }
+.blog-content h1, .blog-content h2, .blog-content h3 { color: var(--text-primary); font-weight: 700; font-family: var(--font-display); letter-spacing: -0.02em; }
 .blog-content h1 { font-size: 1.875rem; margin: 1.5rem 0 0.75rem; }
 .blog-content h2 { font-size: 1.5rem; letter-spacing: -0.02em; margin: 2.5rem 0 1rem; }
 .blog-content h3 { font-size: 1.25rem; letter-spacing: -0.02em; margin: 2.5rem 0 1rem; }
