@@ -74,9 +74,9 @@ components/
   blog/           → PostCard
   case-study/     → CaseStudyLayout, FeaturedCard, ListingCard
   interactive/    → Theme toggle, chat agent, terminal
-  layout/         → Header, footer
-  project-visuals/→ Per-project Hero/Architecture visuals
-  sections/       → Hero, About, Experience, HomeProjects, Publications, Contact
+  layout/         → LeftRail + RailNav (home identity rail), footer
+  project-visuals/→ Per-project hero/architecture visuals
+  sections/       → About, Experience, HomeProjects, Publications, Contact
   ui/             → SectionHeader
 lib/              → Constants, case studies, CV config, seed posts, auth,
                     blog-db, markdown, agent system prompt
@@ -87,7 +87,7 @@ public/cv/        → Downloadable CVs (add your PDFs here)
 ## Notes
 - **CV publishing**: no CVs ship by default. Drop a PDF into `public/cv/` and add a matching entry in `lib/cv-config.ts` — the About section and agent prompt pick it up automatically.
 - **Seed posts**: `lib/seed-posts.ts` ships a couple of posts inside the bundle so the blog has content without a DB write. They're merged into the published read path only; a real DB post always wins on a slug collision.
-- **Fonts**: Inter and JetBrains Mono (`--font-mono`) are self-hosted via `next/font`, no external font requests.
+- **Fonts**: Inter (body), Space Grotesk (`--font-display`, headings), and JetBrains Mono (`--font-mono`, labels/metrics) are self-hosted via `next/font`, no external font requests.
 
 ## Scripts
 ```bash
