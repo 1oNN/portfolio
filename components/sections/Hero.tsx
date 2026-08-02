@@ -93,7 +93,7 @@ export default function Hero() {
           >
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:opacity-90"
+              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-[var(--accent-contrast)] transition-opacity hover:opacity-90 focus-visible:opacity-90"
               style={{ backgroundColor: "var(--accent)" }}
             >
               <FiMail size={15} />

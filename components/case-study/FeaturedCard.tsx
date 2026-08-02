@@ -117,7 +117,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
           href={`/projects/${project.id}`}
           className="inline-flex items-center gap-2 self-start rounded-lg px-5 py-2.5 text-sm font-medium transition-all duration-200 hover:gap-3 focus-visible:gap-3"
           style={{
-            color: "#fff",
+            color: "var(--accent-contrast)",
             backgroundColor: accent,
           }}
         >
