@@ -157,18 +157,18 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
               Html: {
                 Data: `
                   <div style="font-family:system-ui,sans-serif;max-width:600px;padding:24px;">
-                    <h2 style="color:#6366f1;margin:0 0 16px;">New portfolio message</h2>
+                    <h2 style="color:#1d4ed8;margin:0 0 16px;">New portfolio message</h2>
                     <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
                       <tr>
-                        <td style="padding:6px 0;font-weight:600;width:80px;color:#475569;">From</td>
+                        <td style="padding:6px 0;font-weight:600;width:80px;color:#3f5473;">From</td>
                         <td style="padding:6px 0;">${safeName} &lt;${safeEmail}&gt;</td>
                       </tr>
                       <tr>
-                        <td style="padding:6px 0;font-weight:600;color:#475569;">Subject</td>
+                        <td style="padding:6px 0;font-weight:600;color:#3f5473;">Subject</td>
                         <td style="padding:6px 0;">${safeSubject}</td>
                       </tr>
                     </table>
-                    <div style="background:#f8fafc;border-radius:8px;padding:16px;color:#334155;line-height:1.6;">
+                    <div style="background:#f9fafc;border-radius:8px;padding:16px;color:#0e1f38;line-height:1.6;">
                       ${safeMessage.replace(/\n/g, "<br/>")}
                     </div>
                   </div>
