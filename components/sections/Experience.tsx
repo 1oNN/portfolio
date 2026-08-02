@@ -11,7 +11,7 @@ const STATUS_COLOR: Record<ExperienceEntry["type"], string> = {
 export default function Experience() {
   return (
     <section id="experience" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
           number="02"
           eyebrow="Experience"

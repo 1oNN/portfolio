@@ -14,7 +14,7 @@ const EMAIL = "hammadahmad.ml@gmail.com";
 export default function Contact() {
   return (
     <section id="contact" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
           number="06"
           eyebrow="Contact"

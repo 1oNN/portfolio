@@ -16,7 +16,7 @@ const rest = FEATURED_PROJECTS.filter((p) => p.id !== featured?.id);
 export default function HomeProjects() {
   return (
     <section id="projects" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
           number="03"
           eyebrow="Selected work"

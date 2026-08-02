@@ -1,6 +1,5 @@
-import Header from "@/components/layout/Header";
+import LeftRail from "@/components/layout/LeftRail";
 import Footer from "@/components/layout/Footer";
-import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import HomeProjects from "@/components/sections/HomeProjects";
@@ -13,16 +12,31 @@ import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 export default function HomePage() {
   return (
     <>
-      <Header />
-      <main id="main">
-        <Hero />
-        <About />
-        <Experience />
-        <HomeProjects />
-        <AgentSection />
-        <Publications />
-        <Contact />
-      </main>
+      {/* Page-level atmosphere: grid fading from the top-left + accent wash */}
+      <div
+        className="grid-bg pointer-events-none fixed inset-0 opacity-40 [mask-image:radial-gradient(ellipse_70%_50%_at_20%_0%,black,transparent_65%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none fixed inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 40% at 20% -5%, var(--accent-glow), transparent)",
+        }}
+      />
+
+      <div className="relative mx-auto min-h-screen max-w-6xl px-6 md:px-10 lg:flex lg:justify-between lg:gap-10">
+        <LeftRail />
+        <main id="main" className="pb-16 lg:w-[54%] lg:py-24">
+          <About />
+          <Experience />
+          <HomeProjects />
+          <AgentSection />
+          <Publications />
+          <Contact />
+        </main>
+      </div>
       <Footer />
       <TerminalLauncher />
       <AnalyticsBeacon />

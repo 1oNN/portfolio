@@ -37,7 +37,7 @@ const LANGUAGES = [
 export default function About() {
   return (
     <section id="about" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className="py-14 sm:py-16">
         <SectionHeader
           number="01"
           eyebrow="About"
