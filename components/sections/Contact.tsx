@@ -9,7 +9,7 @@ const iconMap: Record<string, React.ReactNode> = {
   FiMail: <FiMail size={18} />,
 };
 
-const EMAIL = "hammadahmad9999@hotmail.com";
+const EMAIL = "hammadahmad.ml@gmail.com";
 
 export default function Contact() {
   return (

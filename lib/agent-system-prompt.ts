@@ -64,7 +64,7 @@ Data: Neo4j, PostgreSQL, MongoDB, pandas/NumPy
 Frontend: React.js, Next.js
 
 CONTACT:
-Email: hammadahmad9999@hotmail.com | Location: Bradford, UK (open to relocation)
+Email: hammadahmad.ml@gmail.com | Location: Bradford, UK (open to relocation)
 LinkedIn: hammadahmad123 | GitHub: 1onn${CV_DOWNLOADS_SECTION}
 
 RULES:

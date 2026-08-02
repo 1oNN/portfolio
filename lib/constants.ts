@@ -215,7 +215,7 @@ export const PUBLICATIONS: Publication[] = [
 export const SOCIAL_LINKS = [
   { platform: "GitHub", url: "https://github.com/1onn", icon: "FiGithub" },
   { platform: "LinkedIn", url: "https://linkedin.com/in/hammadahmad123", icon: "FiLinkedin" },
-  { platform: "Email", url: "mailto:hammadahmad9999@hotmail.com", icon: "FiMail" },
+  { platform: "Email", url: "mailto:hammadahmad.ml@gmail.com", icon: "FiMail" },
 ] as const;
 
 export const AGENT_SUGGESTIONS = [
@@ -237,7 +237,7 @@ export const TERMINAL_COMMANDS: Record<string, string> = {
   experience:
     "→ Outlyst (Oct 2025 – Mar 2026): AI Automation & ML Engineer\n→ University of Bradford (Jan–Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jan–Jul 2024): Research Assistant (Data Science)",
   contact:
-    "Email: hammadahmad9999@hotmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1onn",
+    "Email: hammadahmad.ml@gmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1onn",
   whoami: "hammad@portfolio:~$",
   ls: "about.md  skills.json  projects/  research/  contact.txt",
   pwd: "/home/hammad/portfolio",
