@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return { title: "Project Not Found" };
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   return {
-    title: `${project.title} · Case Study | Hammad Ahmad`,
+    title: `${project.title} · Case Study`,
     description: project.tagline,
     alternates: { canonical: `${siteUrl}/projects/${project.id}` },
     openGraph: {
