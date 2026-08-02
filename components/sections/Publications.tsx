@@ -13,7 +13,6 @@ export default function Publications() {
     <section id="research" className="border-t" style={{ borderColor: "var(--border)" }}>
       <div className="py-14 sm:py-16">
         <SectionHeader
-          number="05"
           eyebrow="Research"
           title="Publications"
           description="Peer-reviewed work presented at international venues."

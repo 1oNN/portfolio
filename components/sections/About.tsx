@@ -39,15 +39,14 @@ export default function About() {
     <section id="about" className="border-t" style={{ borderColor: "var(--border)" }}>
       <div className="py-14 sm:py-16">
         <SectionHeader
-          number="01"
           eyebrow="About"
           title="Background & skills"
           description="ML engineer at heart, researcher by training — I build systems that are fast, explainable, and built to last."
         />
 
-        <div className="mt-10 grid gap-12 lg:grid-cols-5">
-          {/* Left — bio, languages, CV, education */}
-          <div className="lg:col-span-3">
+        <div className="mt-10 space-y-12">
+          {/* Bio, languages, CV, education */}
+          <div>
             <div className="space-y-4 text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
               <p>
                 I&apos;m an AI/ML engineer with an MSc in Applied Artificial Intelligence from the
@@ -119,9 +118,9 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right — skills */}
-          <div className="lg:col-span-2">
-            <div className="space-y-6">
+          {/* Skills — two-column flow under the bio */}
+          <div>
+            <div className="grid gap-6 sm:grid-cols-2">
               {SKILL_GROUPS.map((group) => (
                 <div key={group.label}>
                   <h3
