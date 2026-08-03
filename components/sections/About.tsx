@@ -36,9 +36,11 @@ const LANGUAGES = [
 
 export default function About() {
   return (
-    <section id="about" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="py-14 sm:py-16">
+    <section id="about" className="hairline-accent">
+      <div className="animate-reveal py-14 sm:py-16">
         <SectionHeader
+          size="lg"
+          statement
           eyebrow="About"
           title="Background & skills"
           description="ML engineer at heart, researcher by training - I build systems that are fast, explainable, and built to last."

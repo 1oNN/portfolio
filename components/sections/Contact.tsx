@@ -13,9 +13,10 @@ const EMAIL = "hammadahmad.ml@gmail.com";
 
 export default function Contact() {
   return (
-    <section id="contact" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="py-14 sm:py-16">
+    <section id="contact" className="hairline-accent">
+      <div className="animate-reveal py-14 sm:py-16">
         <SectionHeader
+          size="lg"
           eyebrow="Contact"
           title="Get in touch"
           description="Whether it's a research opportunity, an interesting engineering problem, or just a hello - I'd love to hear from you."

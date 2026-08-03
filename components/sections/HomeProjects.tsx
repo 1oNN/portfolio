@@ -26,9 +26,10 @@ const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
  */
 export default function HomeProjects() {
   return (
-    <section id="projects" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="py-14 sm:py-16">
+    <section id="projects" className="hairline-accent">
+      <div className="animate-reveal py-14 sm:py-16">
         <SectionHeader
+          size="lg"
           eyebrow="Selected work"
           title="Projects & case studies"
           description="Selected projects spanning AI research, ML systems, and full-stack engineering - each backed by a full case study on the architecture and the decisions behind it."
@@ -39,8 +40,13 @@ export default function HomeProjects() {
             <li key={project.id}>
               <Link
                 href={`/projects/${project.id}`}
-                className="group block py-7 sm:grid sm:grid-cols-[140px_1fr] sm:gap-5"
+                className="group relative -mx-4 block rounded-lg px-4 py-7 transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] focus-visible:bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] sm:grid sm:grid-cols-[140px_1fr] sm:gap-5"
               >
+                {/* Accent bar - scales in with the wash */}
+                <span
+                  aria-hidden="true"
+                  className="absolute bottom-7 left-0 top-7 w-0.5 origin-center scale-y-0 rounded-full bg-[var(--accent)] transition-transform duration-200 group-hover:scale-y-100 group-focus-visible:scale-y-100"
+                />
                 <span
                   className="font-mono text-[10px] font-semibold uppercase tracking-widest"
                   style={{ color: CATEGORY_COLOR[project.category] }}
@@ -48,7 +54,7 @@ export default function HomeProjects() {
                   {CATEGORY_LABEL[project.category]}
                 </span>
                 <div className="mt-2 sm:mt-0">
-                  <h3 className="font-display text-xl font-medium leading-snug text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--accent)] group-focus-visible:text-[var(--accent)]">
+                  <h3 className="font-display text-xl font-medium leading-snug text-[var(--text-primary)] transition duration-200 group-hover:translate-x-1 group-hover:text-[var(--accent)] group-focus-visible:translate-x-1 group-focus-visible:text-[var(--accent)]">
                     {project.title}
                     <span
                       aria-hidden="true"

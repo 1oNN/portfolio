@@ -10,9 +10,10 @@ const TYPE_LABEL: Record<Publication["type"], string> = {
 
 export default function Publications() {
   return (
-    <section id="research" className="border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="py-14 sm:py-16">
+    <section id="research" className="hairline-accent">
+      <div className="animate-reveal py-14 sm:py-16">
         <SectionHeader
+          size="lg"
           eyebrow="Research"
           title="Publications"
           description="Peer-reviewed work presented at international venues."

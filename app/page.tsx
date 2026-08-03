@@ -18,11 +18,20 @@ export default function HomePage() {
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none fixed inset-0"
+        className="animate-glow-drift pointer-events-none fixed inset-0"
         aria-hidden="true"
         style={{
           background:
             "radial-gradient(ellipse 55% 40% at 20% -5%, var(--accent-glow), transparent)",
+        }}
+      />
+      {/* Counter-glow: secondary accent, fainter, anchored opposite the primary */}
+      <div
+        className="animate-glow-drift-slow pointer-events-none fixed inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 38% at 85% 105%, color-mix(in srgb, var(--accent-secondary) 10%, transparent), transparent)",
         }}
       />
 

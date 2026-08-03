@@ -63,12 +63,12 @@ export default function LeftRail() {
 
         {/* Stacked display name - the one loud typographic moment on the page */}
         <h1
-          className="animate-rise mt-5 font-display text-[clamp(3.25rem,2.2rem+2.6vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--text-primary)]"
+          className="animate-rise mt-5 font-display text-[clamp(3.5rem,2.4rem+3vw,5.25rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--text-primary)]"
           style={{ animationDelay: "60ms" }}
         >
           Hammad
           <br />
-          Ahmad
+          <span className="text-gradient-accent">Ahmad</span>
         </h1>
 
         <p
@@ -87,7 +87,12 @@ export default function LeftRail() {
         <div className="animate-rise mt-8 flex gap-8" style={{ animationDelay: "180ms" }}>
           {STATS.map((stat) => (
             <div key={stat.label}>
-              <div className="font-mono text-lg font-bold text-[var(--accent)]">{stat.value}</div>
+              <div
+                className="font-mono text-lg font-bold text-[var(--accent)]"
+                style={{ textShadow: "0 0 18px var(--accent-glow)" }}
+              >
+                {stat.value}
+              </div>
               <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                 {stat.label}
               </div>

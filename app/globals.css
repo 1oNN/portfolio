@@ -152,6 +152,22 @@ body {
     background-size: 40px 40px;
   }
 
+  /* Section top rule: accent-warmed at the left, settling into the normal
+     border color, fading out. Replaces flat border-t on home sections only.
+     Relies on the global `section { position: relative }`. */
+  .hairline-accent::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 40%, transparent),
+      var(--border) 45%,
+      transparent
+    );
+  }
+
   /* One-time entrance stagger (hero). Starts hidden; `forwards` + the final
      keyframe keep content visible even when reduced-motion zeroes the duration. */
   .animate-rise {
@@ -180,6 +196,46 @@ body {
   .animate-thinking-dot {
     animation: thinkingDot 1.2s ease-in-out infinite;
   }
+
+  /* Ambient glow drift - two speeds so the atmosphere layers never move in
+     lockstep. No fill-mode: reduced-motion (iteration 1, ~0 duration) leaves
+     the untransformed base state. */
+  .animate-glow-drift {
+    animation: glowDrift 28s ease-in-out infinite alternate;
+  }
+  .animate-glow-drift-slow {
+    animation: glowDrift 38s ease-in-out infinite alternate-reverse;
+  }
+
+  /* Scroll-driven section reveal (reuses the `rise` keyframes). Base state
+     is fully visible: only browsers with scroll-timeline support opt in, and
+     reduced-motion opts back out explicitly - the global duration-zeroing
+     rule cannot reach scroll timelines. Content can never be stuck hidden. */
+  @supports (animation-timeline: view()) {
+    .animate-reveal {
+      animation: rise both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 25%;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-reveal {
+        animation: none;
+      }
+    }
+  }
+
+  /* Hero surname: accent gradient clip. The doubled background slides once
+     on load (shimmer) and settles at accent -> accent-secondary. `both` keeps
+     the rest state; reduced-motion (zeroed duration/delay) lands there
+     instantly. One gradient moment per page - do not reuse elsewhere. */
+  .text-gradient-accent {
+    background-image: linear-gradient(100deg, var(--accent), var(--accent-secondary), var(--accent));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShimmer 1.4s ease-out 0.5s both;
+  }
 }
 
 /* ─── Animations ─────────────────────────────────────────────────── */
@@ -207,6 +263,16 @@ body {
   @keyframes thinkingDot {
     0%, 100% { opacity: 0.25; transform: translateY(0); }
     50% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  @keyframes glowDrift {
+    from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+    to { transform: translate3d(1.5%, 1%, 0) scale(1.04); }
+  }
+
+  @keyframes gradientShimmer {
+    from { background-position: 100% 0%; }
+    to { background-position: 0% 0%; }
   }
 }
 
