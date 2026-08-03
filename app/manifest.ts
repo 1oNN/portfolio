@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Hammad Ahmad — AI/ML Engineer",
+    name: "Hammad Ahmad - AI/ML Engineer",
     short_name: "Hammad Ahmad",
     description:
       "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",

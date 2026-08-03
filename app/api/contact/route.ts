@@ -210,7 +210,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         .catch((e) => console.error("[/api/contact] DynamoDB log failed:", e));
     }
   } else {
-    console.info("[/api/contact] AWS not configured — email not sent.");
+    console.info("[/api/contact] AWS not configured - email not sent.");
   }
 
   return NextResponse.json({ success: true, message: "Message sent successfully." });

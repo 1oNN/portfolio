@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }: Props) {
 
   const caseStudy = getCaseStudy(project.id);
   if (!caseStudy) {
-    // Project exists but has no case study written yet — 404 until one is added
+    // Project exists but has no case study written yet - 404 until one is added
     notFound();
   }
 

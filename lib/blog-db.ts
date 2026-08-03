@@ -22,7 +22,7 @@ function byCreatedAtDesc(a: BlogPost, b: BlogPost): number {
 
 /**
  * Merge bundled seed posts into a PUBLISHED result. Only runs when
- * `publishedOnly` is true — the admin path (`publishedOnly === false`) is
+ * `publishedOnly` is true - the admin path (`publishedOnly === false`) is
  * returned untouched, so admin never sees seeds. A real DB/local post always
  * wins on a slug collision (that's the owner's override path).
  */
@@ -88,7 +88,7 @@ function writeLocal(posts: BlogPost[]): void {
 function shouldUseLocalFallback(operation: string): boolean {
   if (isProduction()) {
     console.error(
-      `[blog-db] ${operation}: DynamoDB not configured in production — returning empty result`
+      `[blog-db] ${operation}: DynamoDB not configured in production - returning empty result`
     );
     return false;
   }
@@ -120,7 +120,7 @@ export async function getAllPosts(publishedOnly = false): Promise<BlogPost[]> {
     return withSeeds(items.sort(byCreatedAtDesc), publishedOnly);
   } catch (err) {
     if (isAuthError(err)) {
-      console.warn("[blog-db] AWS credentials invalid — using local fallback");
+      console.warn("[blog-db] AWS credentials invalid - using local fallback");
       if (isProduction()) return withSeeds([], publishedOnly);
       const posts = readLocal();
       const filtered = publishedOnly ? posts.filter((p) => p.published) : posts;

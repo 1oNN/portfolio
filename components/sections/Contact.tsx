@@ -18,7 +18,7 @@ export default function Contact() {
         <SectionHeader
           eyebrow="Contact"
           title="Get in touch"
-          description="Whether it's a research opportunity, an interesting engineering problem, or just a hello — I'd love to hear from you."
+          description="Whether it's a research opportunity, an interesting engineering problem, or just a hello - I'd love to hear from you."
         />
 
         <div className="mt-10 space-y-12">
@@ -60,7 +60,7 @@ export default function Contact() {
               </div>
             </dl>
 
-            {/* Social links — quiet icon buttons, pure CSS hover/focus twins */}
+            {/* Social links - quiet icon buttons, pure CSS hover/focus twins */}
             <div className="mt-8">
               <p
                 className="font-mono text-[10px] uppercase tracking-widest"

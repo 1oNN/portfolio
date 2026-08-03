@@ -4,7 +4,7 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────── */
 /* Light = white paper + deep blue accent (green secondary).
-   Dark  = navy + green accent (periwinkle secondary) — the primary identity.
+   Dark  = navy + green accent (periwinkle secondary) - the primary identity.
    --accent-contrast = text color on accent-filled surfaces: white fails on the
    dark-mode green (1.92:1), so filled controls must use this token, never #fff. */
 :root {
@@ -40,7 +40,7 @@
   --border: rgba(141, 160, 191, 0.16);
   --text-primary: #dce7f5;
   --text-secondary: #9db0cd;
-  /* 4.8:1 on --surface-elevated — tight but passing; do not darken further */
+  /* 4.8:1 on --surface-elevated - tight but passing; do not darken further */
   --text-muted: #8da0bf;
   --accent: #34d399;
   --accent-contrast: #0d1b2a;
@@ -174,7 +174,7 @@ body {
     animation: messageIn 0.2s ease-out forwards;
   }
 
-  /* Agent "thinking" dots — infinite pulse (replaces framer loop). No
+  /* Agent "thinking" dots - infinite pulse (replaces framer loop). No
      fill-mode: the element's base opacity stays visible, so reduced-motion
      (iteration-count:1, ~0 duration) leaves the dots on screen. */
   .animate-thinking-dot {
@@ -221,7 +221,7 @@ body {
   display: inline-block;
   width: 8px;
   height: 1em;
-  /* Only consumer is the always-dark Terminal chrome (see Terminal.tsx) — use
+  /* Only consumer is the always-dark Terminal chrome (see Terminal.tsx) - use
      the dark-theme green literally instead of the theme-dependent var, which
      would resolve to the light-mode blue on this always-dark bg. */
   background-color: #34d399;

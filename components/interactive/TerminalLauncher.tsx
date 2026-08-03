@@ -10,7 +10,7 @@ const Terminal = dynamic(() => import("./Terminal"), { ssr: false });
 /**
  * Client leaf that owns the terminal `open` state and the document-level
  * Ctrl+` toggle. Escape-to-close lives inside Terminal. The shortcut hint is
- * a static line in the home LeftRail — no timed toast.
+ * a static line in the home LeftRail - no timed toast.
  */
 export default function TerminalLauncher() {
   const [open, setOpen] = useState(false);

@@ -21,7 +21,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
       className="group relative grid overflow-hidden rounded-xl border lg:grid-cols-5"
       style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
     >
-      {/* Visual side — 60% on desktop (3 of 5 cols) */}
+      {/* Visual side - 60% on desktop (3 of 5 cols) */}
       <div
         className="relative order-2 lg:order-2 lg:col-span-3"
         style={{
@@ -38,7 +38,7 @@ export default function FeaturedCard({ project, caseStudy }: Props) {
         </div>
       </div>
 
-      {/* Text side — 40% (2 of 5) */}
+      {/* Text side - 40% (2 of 5) */}
       <div className="order-1 flex flex-col justify-between gap-8 p-8 lg:order-1 lg:col-span-2 lg:p-10">
         <div className="space-y-5">
           {/* Eyebrow */}

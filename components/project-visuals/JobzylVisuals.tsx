@@ -1,5 +1,5 @@
 // TODO: replace with real screenshot when available
-// Jobzyl — dashboard mockup hero (browser frame + job rows + status pills) + scrape pipeline arch.
+// Jobzyl - dashboard mockup hero (browser frame + job rows + status pills) + scrape pipeline arch.
 
 interface Props {
   accent: string;
@@ -215,7 +215,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
         STREAM · CLIENT
       </text>
 
-      {/* Sources stack — 6 boxes vertical */}
+      {/* Sources stack - 6 boxes vertical */}
       {sources.map((s, i) => (
         <Box
           key={s.name}

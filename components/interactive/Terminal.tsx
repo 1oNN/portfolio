@@ -138,7 +138,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
       // Precedence: Tab completion takes priority over the focus trap. When the
       // input holds text and a known command starts with it, Tab completes the
       // command and focus stays in the input (completion consumes the event).
-      // In every other case — empty input, no matching command, or Shift+Tab —
+      // In every other case - empty input, no matching command, or Shift+Tab -
       // completion does not consume the event and Tab drives the 2-element
       // focus trap instead, moving focus to the close button.
       const cmds = Object.keys(TERMINAL_COMMANDS);
@@ -193,7 +193,7 @@ export default function Terminal({ isOpen, onClose }: TerminalProps) {
           className="ml-auto text-xs font-mono"
           style={{ color: "rgba(157, 176, 205, 0.55)" }}
         >
-          hammad@portfolio — terminal
+          hammad@portfolio - terminal
         </span>
       </div>
 

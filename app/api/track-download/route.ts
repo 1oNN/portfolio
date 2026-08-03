@@ -45,7 +45,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const userAgent = req.headers.get("user-agent") ?? "";
     const referrer = req.headers.get("referer") ?? "";
 
-    // Log download — fire-and-forget
+    // Log download - fire-and-forget
     dynamo
       .send(
         new PutCommand({
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
       .catch((e) => console.error("[/api/track-download] DynamoDB log failed:", e));
 
-    // Optional SES email notification — fire-and-forget
+    // Optional SES email notification - fire-and-forget
     const sesEmail = process.env.SES_FROM_EMAIL;
     if (sesEmail) {
       const ses = new SESClient({

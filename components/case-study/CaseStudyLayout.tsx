@@ -221,7 +221,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                   className="text-base font-semibold leading-tight"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  <span style={{ color: accent }}>—&nbsp;</span>
+                  <span style={{ color: accent }}>-&nbsp;</span>
                   {d.title}
                 </h3>
                 <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>

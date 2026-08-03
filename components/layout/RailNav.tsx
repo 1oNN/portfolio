@@ -14,7 +14,7 @@ const SECTIONS = [
 /**
  * Desktop-only section nav for the home left rail. The only client code the
  * two-column home adds: an IntersectionObserver toggling the active section
- * (ported from the deleted Header) — the indicator itself is pure CSS.
+ * (ported from the deleted Header) - the indicator itself is pure CSS.
  */
 export default function RailNav() {
   const [active, setActive] = useState("");

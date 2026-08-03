@@ -26,7 +26,7 @@ const SKILL_GROUPS = [
   },
 ];
 
-// Short mono form of language proficiency — derived from the fuller facts
+// Short mono form of language proficiency - derived from the fuller facts
 // (English fluent/IELTS 7.0, Urdu native, German A1.2 learning).
 const LANGUAGES = [
   { code: "EN", level: "fluent" },
@@ -41,7 +41,7 @@ export default function About() {
         <SectionHeader
           eyebrow="About"
           title="Background & skills"
-          description="ML engineer at heart, researcher by training — I build systems that are fast, explainable, and built to last."
+          description="ML engineer at heart, researcher by training - I build systems that are fast, explainable, and built to last."
         />
 
         <div className="mt-10 space-y-12">
@@ -51,18 +51,18 @@ export default function About() {
               <p>
                 I&apos;m an AI/ML engineer with an MSc in Applied Artificial Intelligence from the
                 University of Bradford. My work sits at the intersection of production systems
-                engineering and applied research — I&apos;ve spent the last two years building
+                engineering and applied research - I&apos;ve spent the last two years building
                 things that ship, not just things that benchmark well.
               </p>
               <p>
                 At Outlyst, I reduced call latency by 54% across 2,100+ concurrent AI voice
                 interactions by profiling async I/O bottlenecks and restructuring connection
-                pooling. For my dissertation, I built FinLaw-UK — a graph-augmented RAG system
+                pooling. For my dissertation, I built FinLaw-UK - a graph-augmented RAG system
                 that improved legal-finance Q&A accuracy by 19% using Mistral 7B and Neo4j.
               </p>
               <p>
                 I&apos;m interested in roles where I can continue pushing the boundary between
-                research and production — whether that&apos;s LLM infrastructure, graph-based
+                research and production - whether that&apos;s LLM infrastructure, graph-based
                 retrieval, or high-throughput ML systems.
               </p>
             </div>
@@ -100,16 +100,16 @@ export default function About() {
                       className="mt-1.5 font-mono text-[11px] uppercase tracking-wider"
                       style={{ color: "var(--text-muted)" }}
                     >
-                      {edu.startDate} — {edu.endDate} · {edu.location}
+                      {edu.startDate} - {edu.endDate} · {edu.location}
                     </p>
                     {edu.dissertation && (
                       <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                        Dissertation — {edu.dissertation}
+                        Dissertation - {edu.dissertation}
                       </p>
                     )}
                     {edu.focus && (
                       <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                        Focus — {edu.focus}
+                        Focus - {edu.focus}
                       </p>
                     )}
                   </div>
@@ -118,7 +118,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Skills — two-column flow under the bio */}
+          {/* Skills - two-column flow under the bio */}
           <div>
             <div className="grid gap-6 sm:grid-cols-2">
               {SKILL_GROUPS.map((group) => (

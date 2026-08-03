@@ -31,7 +31,7 @@ export function parseMarkdown(md: string): string {
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
 
-  // Links — only allow http/https/mailto hrefs
+  // Links - only allow http/https/mailto hrefs
   html = html.replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,
     (_match, text: string, href: string) => {
@@ -50,7 +50,7 @@ export function parseMarkdown(md: string): string {
     return `<ul>${items}</ul>`;
   });
 
-  // Blockquotes — the ">" marker survives escapeHtml() as "&gt;"
+  // Blockquotes - the ">" marker survives escapeHtml() as "&gt;"
   html = html.replace(/((?:^&gt; .+\n?)+)/gm, (block) => {
     const text = block
       .trim()

@@ -21,7 +21,7 @@ const CATEGORY_LABEL: Record<Project["category"], string> = {
 const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
 
 /**
- * Compact editorial rows for the narrow home column — the rich card layouts
+ * Compact editorial rows for the narrow home column - the rich card layouts
  * (FeaturedCard/ListingCard) stay on /projects where they have full width.
  */
 export default function HomeProjects() {
@@ -31,7 +31,7 @@ export default function HomeProjects() {
         <SectionHeader
           eyebrow="Selected work"
           title="Projects & case studies"
-          description="Selected projects spanning AI research, ML systems, and full-stack engineering — each backed by a full case study on the architecture and the decisions behind it."
+          description="Selected projects spanning AI research, ML systems, and full-stack engineering - each backed by a full case study on the architecture and the decisions behind it."
         />
 
         <ul className="mt-6 divide-y divide-[var(--border)]">

@@ -1,5 +1,5 @@
 // TODO: replace with real screenshot when available
-// DiabetesSense — SHAP feature attribution chart hero + ensemble pipeline architecture.
+// DiabetesSense - SHAP feature attribution chart hero + ensemble pipeline architecture.
 
 interface Props {
   accent: string;
@@ -8,7 +8,7 @@ interface Props {
 
 export function DiabetesSenseHero({ accent, className }: Props) {
   // SHAP feature attribution for a synthetic patient. Bars right of zero increase risk;
-  // bars left decrease it. Values are illustrative — labelled as such in the caption.
+  // bars left decrease it. Values are illustrative - labelled as such in the caption.
   const muted = "var(--text-muted)";
   const text = "var(--text-secondary)";
   const surface = "var(--surface-elevated)";
@@ -111,7 +111,7 @@ export function DiabetesSenseHero({ accent, className }: Props) {
         TreeExplainer · exact Shapley values · sub-second per prediction
       </text>
       <text x="40" y="470" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.5">
-        — values illustrative; production explainer uses live patient features
+        - values illustrative; production explainer uses live patient features
       </text>
     </svg>
   );

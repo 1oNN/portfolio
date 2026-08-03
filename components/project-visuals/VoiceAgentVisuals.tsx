@@ -1,5 +1,5 @@
 // TODO: replace with real screenshot when available
-// Autonomous Voice Agent — latency before/after hero + websocket inference architecture.
+// Autonomous Voice Agent - latency before/after hero + websocket inference architecture.
 
 interface Props {
   accent: string;

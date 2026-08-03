@@ -17,7 +17,7 @@ const INITIAL_FORM: ContactFormData = {
 type FormWithHoneypot = ContactFormData & { honeypot: string };
 
 // Mirrors the validation contract enforced server-side in app/api/contact/route.ts.
-// Keep these in sync with that file — it is the source of truth.
+// Keep these in sync with that file - it is the source of truth.
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MESSAGE_MIN_LENGTH = 10;
 const FIELD_MAX_LENGTH: Record<"name" | "subject" | "message", number> = {
@@ -255,7 +255,7 @@ export default function ContactForm() {
         )}
       </div>
 
-      {/* Honeypot — hidden from real users, traps bots */}
+      {/* Honeypot - hidden from real users, traps bots */}
       <input
         type="text"
         name="honeypot"
@@ -267,7 +267,7 @@ export default function ContactForm() {
         style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
       />
 
-      {/* Status announcement — persistent in the DOM so assistive tech is
+      {/* Status announcement - persistent in the DOM so assistive tech is
           subscribed to this live region before its content ever changes. */}
       <div role="status" aria-live="polite">
         {status === "success" && (

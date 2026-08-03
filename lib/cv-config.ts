@@ -6,5 +6,5 @@ export interface CvEntry {
 }
 
 // No CVs are published yet. To publish one: drop the PDF into `public/cv/`
-// and add an entry here — the About section and agent prompt will pick it up.
+// and add an entry here - the About section and agent prompt will pick it up.
 export const AVAILABLE_CVS: CvEntry[] = [];

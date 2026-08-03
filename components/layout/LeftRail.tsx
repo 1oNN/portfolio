@@ -1,8 +1,22 @@
+import fs from "node:fs";
+import path from "node:path";
+import Image from "next/image";
 import Link from "next/link";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
 import RailNav from "./RailNav";
+
+// Drop a portrait at public/profile.jpg (or .jpeg/.png/.webp) and it renders
+// automatically; until then the rail keeps its text-only layout.
+const PHOTO_CANDIDATES = ["profile.jpg", "profile.jpeg", "profile.png", "profile.webp"];
+
+function findProfilePhoto(): string | null {
+  for (const file of PHOTO_CANDIDATES) {
+    if (fs.existsSync(path.join(process.cwd(), "public", file))) return `/${file}`;
+  }
+  return null;
+}
 
 const STATS = [
   { value: "54%", label: "Latency cut" },
@@ -18,12 +32,28 @@ const iconMap: Record<string, React.ReactNode> = {
 
 /**
  * Home identity rail. Sticky full-height column on lg+, normal-flow intro
- * block below that. Server component — the only client child is RailNav.
+ * block below that. Server component - the only client child is RailNav.
  */
 export default function LeftRail() {
+  const photo = findProfilePhoto();
+
   return (
     <header className="pt-16 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-[42%] lg:max-w-md lg:flex-col lg:justify-between lg:overflow-y-auto lg:py-24">
       <div>
+        {photo && (
+          <div className="animate-rise mb-6" style={{ animationDelay: "0ms" }}>
+            <Image
+              src={photo}
+              alt="Portrait of Hammad Ahmad"
+              width={96}
+              height={96}
+              priority
+              className="h-24 w-24 rounded-full border object-cover"
+              style={{ borderColor: "var(--border)", boxShadow: "var(--shadow-sm)" }}
+            />
+          </div>
+        )}
+
         <span
           className="animate-rise inline-block font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--accent)]"
           style={{ animationDelay: "0ms" }}
@@ -31,7 +61,7 @@ export default function LeftRail() {
           ✦ AI/ML engineer &amp; researcher
         </span>
 
-        {/* Stacked display name — the one loud typographic moment on the page */}
+        {/* Stacked display name - the one loud typographic moment on the page */}
         <h1
           className="animate-rise mt-5 font-display text-[clamp(3.25rem,2.2rem+2.6vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--text-primary)]"
           style={{ animationDelay: "60ms" }}
@@ -53,7 +83,7 @@ export default function LeftRail() {
           , and high-throughput ML infrastructure.
         </p>
 
-        {/* Compact metric row — mono, accent numerals */}
+        {/* Compact metric row - mono, accent numerals */}
         <div className="animate-rise mt-8 flex gap-8" style={{ animationDelay: "180ms" }}>
           {STATS.map((stat) => (
             <div key={stat.label}>
@@ -65,7 +95,7 @@ export default function LeftRail() {
           ))}
         </div>
 
-        {/* Cross-page links — this is also the mobile route to /projects and /blog */}
+        {/* Cross-page links - this is also the mobile route to /projects and /blog */}
         <div
           className="animate-rise mt-8 flex items-center gap-5 font-mono text-xs"
           style={{ animationDelay: "240ms" }}
@@ -89,7 +119,7 @@ export default function LeftRail() {
         </div>
       </div>
 
-      {/* Bottom cluster — socials, theme, terminal hint */}
+      {/* Bottom cluster - socials, theme, terminal hint */}
       <div className="animate-rise mt-10 lg:mt-0" style={{ animationDelay: "360ms" }}>
         <div className="flex items-center gap-5">
           {SOCIAL_LINKS.map((link) => (

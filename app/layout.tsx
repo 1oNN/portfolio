@@ -26,7 +26,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"),
   title: {
-    default: "Hammad Ahmad — AI/ML Engineer & Researcher",
+    default: "Hammad Ahmad - AI/ML Engineer & Researcher",
     template: "%s | Hammad Ahmad",
   },
   description:
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
     siteName: "Hammad Ahmad",
-    title: "Hammad Ahmad — AI/ML Engineer & Researcher",
+    title: "Hammad Ahmad - AI/ML Engineer & Researcher",
     description:
       "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
     images: [
@@ -58,13 +58,13 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Hammad Ahmad — AI/ML Engineer & Researcher",
+        alt: "Hammad Ahmad - AI/ML Engineer & Researcher",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hammad Ahmad — AI/ML Engineer & Researcher",
+    title: "Hammad Ahmad - AI/ML Engineer & Researcher",
     description:
       "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
     images: ["/og.png"],

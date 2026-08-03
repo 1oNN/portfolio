@@ -14,7 +14,7 @@ import type { TerminalMessage } from "@/types";
 import { FiSend, FiTrash2, FiCpu, FiUser, FiInfo } from "react-icons/fi";
 
 // ─── Markdown-lite renderer ────────────────────────────────────────
-// Handles **bold**, *italic*, and newlines only — no external dep.
+// Handles **bold**, *italic*, and newlines only - no external dep.
 
 function renderMarkdown(text: string): React.ReactNode[] {
   const lines = text.split("\n");
@@ -108,7 +108,7 @@ function MessageBubble({ message, isLatest }: MessageBubbleProps) {
     <div
       className={`animate-message-in flex items-start gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}
     >
-      {/* Avatar — indigo for the user, amber for the agent */}
+      {/* Avatar - indigo for the user, amber for the agent */}
       <div
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
         style={{
@@ -186,7 +186,7 @@ function ThinkingIndicator() {
   );
 }
 
-// ─── Main component — the terminal window only (section shell lives in
+// ─── Main component - the terminal window only (section shell lives in
 // AgentSection). "use client" + the full useTerminalAgent behaviour stay. ──
 
 export default function TerminalAgent() {
@@ -198,7 +198,7 @@ export default function TerminalAgent() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const mountedRef = useRef(false);
 
-  // Scroll chat container to bottom on new messages — never scrolls the page
+  // Scroll chat container to bottom on new messages - never scrolls the page
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
@@ -292,7 +292,7 @@ export default function TerminalAgent() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Suggestions — tech-chip-like buttons */}
+      {/* Suggestions - tech-chip-like buttons */}
       <div className="flex flex-wrap gap-2 border-t px-5 py-3" style={{ borderColor: "var(--border)" }}>
         {AGENT_SUGGESTIONS.slice(0, 3).map((s) => (
           <button
@@ -307,7 +307,7 @@ export default function TerminalAgent() {
         ))}
       </div>
 
-      {/* Input row — indigo you: glyph, solid-accent send button */}
+      {/* Input row - indigo you: glyph, solid-accent send button */}
       <div className="flex items-center gap-3 border-t px-5 py-4" style={{ borderColor: "var(--border)" }}>
         <span className="shrink-0 font-mono text-xs" style={{ color: "var(--accent)" }}>
           you:
@@ -320,7 +320,7 @@ export default function TerminalAgent() {
           onKeyDown={handleKeyDown}
           placeholder={
             isAtLimit
-              ? "Session limit reached — refresh to start over"
+              ? "Session limit reached - refresh to start over"
               : "Ask anything about my experience, skills, or projects..."
           }
           disabled={isThinking || isAtLimit}

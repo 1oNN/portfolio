@@ -71,7 +71,7 @@ export default async function BlogPage({ searchParams }: Props) {
           </p>
         </div>
 
-        {/* Filter row — text links, no chunky pills */}
+        {/* Filter row - text links, no chunky pills */}
         <nav
           className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y border-[var(--border)] py-4"
           aria-label="Filter posts by type"

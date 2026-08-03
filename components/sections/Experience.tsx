@@ -15,7 +15,7 @@ export default function Experience() {
         <SectionHeader
           eyebrow="Experience"
           title="Where I've built"
-          description="Research assistantships and engineering roles, most recent first — what I built and shipped at each."
+          description="Research assistantships and engineering roles, most recent first - what I built and shipped at each."
         />
 
         <div className="mt-4 divide-y divide-[var(--border)]">
@@ -29,7 +29,7 @@ export default function Experience() {
                     className="font-mono text-[11px] uppercase tracking-wider"
                     style={{ color: "var(--text-muted)" }}
                   >
-                    {exp.startDate} — {exp.endDate}
+                    {exp.startDate} - {exp.endDate}
                   </span>
                   <span
                     className="font-mono text-[11px] uppercase tracking-wider"
@@ -65,7 +65,7 @@ export default function Experience() {
                         style={{ color: "var(--text-secondary)" }}
                       >
                         <span className="shrink-0" style={{ color }} aria-hidden="true">
-                          —
+                          -
                         </span>
                         <span>{r}</span>
                       </li>

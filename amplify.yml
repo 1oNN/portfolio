@@ -1,13 +1,20 @@
 version: 1
 
-# AWS Amplify Hosting — Next.js 15 App Router (SSR)
+# AWS Amplify Hosting - Next.js 15 App Router (SSR)
 # Amplify auto-detects Next.js SSR; no standalone output needed.
 #
 # Required environment variables (set in Amplify Console):
-#   ADMIN_PASSWORD, SESSION_SECRET,
+#   ADMIN_PASSWORD, SESSION_SECRET, ANALYTICS_SECRET,
 #   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION,
 #   SES_FROM_EMAIL, DYNAMODB_BLOG_TABLE, DYNAMODB_CONTACTS_TABLE,
-#   DYNAMODB_AGENT_TABLE, GROQ_API_KEY, NEXT_PUBLIC_SITE_URL
+#   DYNAMODB_AGENT_TABLE, DYNAMODB_DOWNLOADS_TABLE, GROQ_API_KEY,
+#   NEXT_PUBLIC_SITE_URL
+#
+# Amplify Console env vars exist at BUILD time only. The SSR Lambda that
+# serves API routes does not inherit them, so the build must write the
+# runtime-needed ones into .env.production (AWS-documented pattern).
+# AWS_* names are deliberately excluded: Lambda reserves them for the
+# compute role's temporary credentials.
 
 frontend:
   phases:
@@ -22,6 +29,7 @@ frontend:
       commands:
         - npm run type-check
         - export NODE_ENV=production
+        - env | grep -E '^(GROQ_API_KEY|SESSION_SECRET|ADMIN_PASSWORD|ANALYTICS_SECRET|SES_FROM_EMAIL|DYNAMODB_BLOG_TABLE|DYNAMODB_CONTACTS_TABLE|DYNAMODB_AGENT_TABLE|DYNAMODB_DOWNLOADS_TABLE)=' >> .env.production || true
         - npm run build
 
   artifacts:

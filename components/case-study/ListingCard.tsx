@@ -25,7 +25,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
         backgroundColor: "var(--surface)",
       }}
     >
-      {/* Hero visual — 16:9, full bleed */}
+      {/* Hero visual - 16:9, full bleed */}
       <div
         className="relative w-full overflow-hidden"
         style={{ aspectRatio: "16 / 9", backgroundColor: "var(--surface-elevated)" }}
@@ -37,7 +37,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
             <div className="h-full w-full" style={{ backgroundColor: "var(--surface-elevated)" }} />
           )}
         </div>
-        {/* Status pill — overlaid bottom-left */}
+        {/* Status pill - overlaid bottom-left */}
         <div className="absolute left-4 top-4">
           <span
             className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest"

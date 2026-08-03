@@ -1,6 +1,6 @@
-# ha. — Portfolio
+# ha. - Portfolio
 
-Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher. Built with Next.js 15 App Router, TypeScript, and Tailwind CSS.
+Personal portfolio for Hammad Ahmad - AI/ML Engineer & Researcher. Built with Next.js 15 App Router, TypeScript, and Tailwind CSS.
 
 ## Live
 [hammadahmad.co.uk](https://hammadahmad.co.uk)
@@ -8,7 +8,7 @@ Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher. Built with 
 ## Features
 - Dark/light theme toggle
 - Featured case-study card + listing grid for projects, with architecture diagrams
-- AI chat assistant (Groq API — Llama 3.1 8B Instant)
+- AI chat assistant (Groq API - Llama 3.1 8B Instant)
 - Blog & case studies with admin panel (DynamoDB-backed)
 - Contact form with AWS SES email delivery
 - CV download tracking
@@ -65,7 +65,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 
 ## Deployment (AWS Amplify)
 
-Connect the repo in the Amplify Console and set environment variables. The `amplify.yml` handles the build — Amplify auto-detects Next.js SSR.
+Connect the repo in the Amplify Console and set environment variables. The `amplify.yml` handles the build - Amplify auto-detects Next.js SSR.
 
 ## Project Structure
 ```
@@ -85,7 +85,7 @@ public/cv/        → Downloadable CVs (add your PDFs here)
 ```
 
 ## Notes
-- **CV publishing**: no CVs ship by default. Drop a PDF into `public/cv/` and add a matching entry in `lib/cv-config.ts` — the About section and agent prompt pick it up automatically.
+- **CV publishing**: no CVs ship by default. Drop a PDF into `public/cv/` and add a matching entry in `lib/cv-config.ts` - the About section and agent prompt pick it up automatically.
 - **Seed posts**: `lib/seed-posts.ts` ships a couple of posts inside the bundle so the blog has content without a DB write. They're merged into the published read path only; a real DB post always wins on a slug collision.
 - **Fonts**: Inter (body), Space Grotesk (`--font-display`, headings), and JetBrains Mono (`--font-mono`, labels/metrics) are self-hosted via `next/font`, no external font requests.
 

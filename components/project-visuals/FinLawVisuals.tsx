@@ -1,5 +1,5 @@
 // TODO: replace with real screenshot when available
-// FinLaw-UK editorial visuals — knowledge graph hero + ingestion-to-answer architecture.
+// FinLaw-UK editorial visuals - knowledge graph hero + ingestion-to-answer architecture.
 
 interface Props {
   accent: string;
@@ -8,7 +8,7 @@ interface Props {
 
 export function FinLawHero({ accent, className }: Props) {
   // Knowledge-graph constellation. Center hub = FCA Handbook root, inner ring = chapter/regime
-  // anchors, outer ring = individual rule nodes. Dashed lines mark cross-references — the
+  // anchors, outer ring = individual rule nodes. Dashed lines mark cross-references - the
   // structural connections graph expansion exploits beyond pure dense retrieval.
   const muted = "var(--text-muted)";
   const surface = "var(--surface-elevated)";
@@ -30,7 +30,7 @@ export function FinLawHero({ accent, className }: Props) {
 
       <rect width="800" height="500" fill="url(#finlaw-glow)" />
 
-      {/* Cross-reference edges (dashed) — drawn first so they sit behind solid edges */}
+      {/* Cross-reference edges (dashed) - drawn first so they sit behind solid edges */}
       <g stroke={accent} strokeWidth="1" strokeDasharray="3 4" opacity="0.45" fill="none">
         <path d="M 220 130 Q 400 200 580 130" />
         <path d="M 220 130 Q 200 250 200 380" />
@@ -55,7 +55,7 @@ export function FinLawHero({ accent, className }: Props) {
         <line x1="600" y1="380" x2="700" y2="445" />
       </g>
 
-      {/* Outer ring — rule leaves */}
+      {/* Outer ring - rule leaves */}
       <g>
         {[
           { x: 115, y: 65, label: "Rule 3.2.1" },
@@ -83,7 +83,7 @@ export function FinLawHero({ accent, className }: Props) {
         ))}
       </g>
 
-      {/* Inner ring — chapters / regimes */}
+      {/* Inner ring - chapters / regimes */}
       <g>
         {[
           { x: 220, y: 130, label: "MiFID II" },
@@ -108,7 +108,7 @@ export function FinLawHero({ accent, className }: Props) {
         ))}
       </g>
 
-      {/* Hub — FCA Handbook root */}
+      {/* Hub - FCA Handbook root */}
       <g>
         <circle cx="400" cy="250" r="44" fill={accent} fillOpacity="0.25" stroke={accent} strokeWidth="1.75" />
         <circle cx="400" cy="250" r="28" fill={accent} fillOpacity="0.65" />
@@ -146,7 +146,7 @@ export function FinLawHero({ accent, className }: Props) {
         fill={muted}
         opacity="0.7"
       >
-        — — graph expansion follows cross-references — —
+        -- graph expansion follows cross-references --
       </text>
     </svg>
   );

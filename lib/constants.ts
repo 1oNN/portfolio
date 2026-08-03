@@ -24,7 +24,7 @@ export const PROJECTS: Project[] = [
     description:
       "Production-grade RAG system combining Mistral 7B with a Neo4j knowledge graph to deliver faithful, cited answers on UK financial regulation.",
     longDescription:
-      "FinLaw-UK is my MSc dissertation — a graph-augmented RAG pipeline built to tackle the complexity of FCA rulebooks and MiFID II. Dense retrieval + graph expansion significantly outperforms naive vector search on regulatory queries.",
+      "FinLaw-UK is my MSc dissertation - a graph-augmented RAG pipeline built to tackle the complexity of FCA rulebooks and MiFID II. Dense retrieval + graph expansion significantly outperforms naive vector search on regulatory queries.",
     tech: ["Python", "Mistral 7B", "Neo4j", "RAG", "Sentence Transformers", "FastAPI", "RAGAS"],
     category: "research",
     featured: true,
@@ -49,7 +49,7 @@ export const PROJECTS: Project[] = [
     description:
       "High-throughput outbound calling system with a 54% latency reduction achieved by profiling async I/O bottlenecks and restructuring connection pooling.",
     longDescription:
-      "Built at Outlyst — FastAPI inference backend for a Retell AI voice agent. Profiled with py-spy to isolate event-loop blocking, restructured asyncpg connection pools, and parallelised tool calls with asyncio.gather(). 2,100+ concurrent stateful sessions.",
+      "Built at Outlyst - FastAPI inference backend for a Retell AI voice agent. Profiled with py-spy to isolate event-loop blocking, restructured asyncpg connection pools, and parallelised tool calls with asyncio.gather(). 2,100+ concurrent stateful sessions.",
     tech: ["Python", "FastAPI", "Retell AI", "AsyncIO", "PostgreSQL", "Docker", "CI/CD"],
     category: "engineering",
     featured: true,
@@ -72,9 +72,9 @@ export const PROJECTS: Project[] = [
     title: "DiabetesSense",
     tagline: "93% accurate clinical risk scoring with SHAP interpretability",
     description:
-      "Ensemble ML pipeline for diabetes risk prediction with SHAP-based per-prediction explanations and a production REST API — presented at ICSMAI 2024.",
+      "Ensemble ML pipeline for diabetes risk prediction with SHAP-based per-prediction explanations and a production REST API - presented at ICSMAI 2024.",
     longDescription:
-      "Built at COMSATS — Random Forest + Gradient Boosting ensemble on clinical data, with SHAP TreeExplainer surfacing feature attribution to clinicians. React.js + Flask frontend for real-time risk scoring.",
+      "Built at COMSATS - Random Forest + Gradient Boosting ensemble on clinical data, with SHAP TreeExplainer surfacing feature attribution to clinicians. React.js + Flask frontend for real-time risk scoring.",
     tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
@@ -99,7 +99,7 @@ export const PROJECTS: Project[] = [
     description:
       "Production fullstack platform aggregating 6 job boards in parallel with real-time SSE streaming, secure multi-user accounts, application tracking, and 100% client-side ATS scoring.",
     longDescription:
-      "Jobzyl unifies job search across six major boards — four scraped in parallel (Indeed, Google Jobs, Glassdoor, ZipRecruiter) plus Reed and Adzuna via official APIs — with database-backed caching, scheduled re-scrapes every 6 hours, application tracking (Saved → Applied → Interview → Offer → Rejected), and 100% client-side ATS resume matching. Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl unifies job search across six major boards - four scraped in parallel (Indeed, Google Jobs, Glassdoor, ZipRecruiter) plus Reed and Adzuna via official APIs - with database-backed caching, scheduled re-scrapes every 6 hours, application tracking (Saved → Applied → Interview → Offer → Rejected), and 100% client-side ATS resume matching. Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
     tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
@@ -141,7 +141,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "bradford-ra",
     company: "University of Bradford",
-    role: "Research Assistant — Machine Learning",
+    role: "Research Assistant - Machine Learning",
     type: "research",
     location: "Bradford, UK",
     startDate: "Jan 2025",
@@ -157,7 +157,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "comsats-ra",
     company: "COMSATS University Islamabad",
-    role: "Research Assistant — Data Science",
+    role: "Research Assistant - Data Science",
     type: "research",
     location: "Islamabad, Pakistan",
     startDate: "Jan 2024",
@@ -231,11 +231,11 @@ export const AGENT_SUGGESTIONS = [
 export const TERMINAL_COMMANDS: Record<string, string> = {
   help: "Available commands: about, skills, experience, contact, ls, pwd, date, clear, exit",
   about:
-    "Hammad Ahmad — AI/ML Engineer & Researcher.\nMSc Applied AI @ University of Bradford.\nSpecialising in LLMs, RAG systems, and high-performance ML infrastructure.",
+    "Hammad Ahmad - AI/ML Engineer & Researcher.\nMSc Applied AI @ University of Bradford.\nSpecialising in LLMs, RAG systems, and high-performance ML infrastructure.",
   skills:
     "Core: Python · PyTorch · FastAPI · Neo4j · RAG · LLMs\nAlso: TypeScript · React · Docker · AWS · PostgreSQL",
   experience:
-    "→ Outlyst (Oct 2025 – Mar 2026): AI Automation & ML Engineer\n→ University of Bradford (Jan–Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jan–Jul 2024): Research Assistant (Data Science)",
+    "→ Outlyst (Oct 2025 - Mar 2026): AI Automation & ML Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jan-Jul 2024): Research Assistant (Data Science)",
   contact:
     "Email: hammadahmad.ml@gmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1onn",
   whoami: "hammad@portfolio:~$",

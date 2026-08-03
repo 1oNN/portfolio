@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ApiResponse } from "@/types";
 
-// Simple in-memory store — swap for a database or analytics service in production.
+// Simple in-memory store - swap for a database or analytics service in production.
 // This is intentionally minimal: for a real deployment use Plausible, Umami, or Vercel Analytics.
 const pageViews = new Map<string, number>();
 let totalViews = 0;

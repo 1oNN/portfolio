@@ -9,7 +9,7 @@ import type { Project } from "@/types";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected engineering and research projects by Hammad Ahmad — AI/ML Engineer.",
+  description: "Selected engineering and research projects by Hammad Ahmad - AI/ML Engineer.",
 };
 
 const FILTERS = [
@@ -35,7 +35,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
     active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
   // Every category has exactly one project today, so a category filter must never
-  // fall back to the jumbo FeaturedCard treatment — that reads as a lone-card bug.
+  // fall back to the jumbo FeaturedCard treatment - that reads as a lone-card bug.
   // FeaturedCard is reserved for the unfiltered "all" view.
   const featured = active === "all" ? filtered[0] : undefined;
   const rest = active === "all" ? filtered.slice(1) : filtered;
@@ -83,13 +83,13 @@ export default async function ProjectsPage({ searchParams }: Props) {
             className="max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: "var(--text-secondary)" }}
           >
-            Real engineering problems, measurable outcomes, and production results — spanning AI
+            Real engineering problems, measurable outcomes, and production results - spanning AI
             research, ML systems, and full-stack. Each entry has a deeper case study explaining
             the architecture and the decisions behind it.
           </p>
         </div>
 
-        {/* Filter row — text links, no chunky pills */}
+        {/* Filter row - text links, no chunky pills */}
         <nav
           className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y border-[var(--border)] py-4"
           aria-label="Filter projects by category"
@@ -142,7 +142,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
               </div>
             )}
 
-            {/* Grid — mt-12 when it's the first block after the filter row (filtered view,
+            {/* Grid - mt-12 when it's the first block after the filter row (filtered view,
                 no FeaturedCard above it), mt-10 when it follows the FeaturedCard */}
             {rest.length > 0 && (
               <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${featured ? "mt-10" : "mt-12"}`}>

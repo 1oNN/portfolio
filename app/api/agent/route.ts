@@ -4,7 +4,7 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent-system-prompt";
 
-// Per-IP rate limit: 20 requests/hour. Resets on cold start — acceptable
+// Per-IP rate limit: 20 requests/hour. Resets on cold start - acceptable
 // for a portfolio agent since abuse cost is primarily GROQ quota, not data.
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
