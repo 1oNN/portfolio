@@ -4,11 +4,11 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { v4 as uuidv4 } from "uuid";
 
-type CvType = "ai-ml" | "software-engineer" | "research-phd";
+type CvType = "ai-ml" | "data-scientist" | "research-phd";
 
 const CV_LABELS: Record<CvType, string> = {
   "ai-ml": "AI/ML Engineer",
-  "software-engineer": "Software Engineer",
+  "data-scientist": "Data Scientist",
   "research-phd": "Research / PhD",
 };
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  if (!["ai-ml", "software-engineer", "research-phd"].includes(cvType)) {
+  if (!["ai-ml", "data-scientist", "research-phd"].includes(cvType)) {
     return NextResponse.json({ error: "Invalid cvType." }, { status: 400 });
   }
 

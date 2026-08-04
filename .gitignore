@@ -65,3 +65,8 @@ amplify/
 data/
 .env.example
 .gstack/
+
+# Personal documents - NEVER commit or serve these (certificates, transcripts,
+# theses, reference letters). Anything needed by the site gets copied out
+# deliberately, one file at a time.
+private/
