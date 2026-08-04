@@ -3,6 +3,7 @@ import { FinLawHero, FinLawArchitecture } from "./FinLawVisuals";
 import { VoiceAgentHero, VoiceAgentArchitecture } from "./VoiceAgentVisuals";
 import { DiabetesSenseHero, DiabetesSenseArchitecture } from "./DiabetesSenseVisuals";
 import { JobzylHero, JobzylArchitecture } from "./JobzylVisuals";
+import { FinLawResults, DiabetesSenseResults, VoiceAgentResults } from "./ResultsCharts";
 
 interface VisualProps {
   accent: string;
@@ -12,12 +13,15 @@ interface VisualProps {
 interface ProjectVisuals {
   Hero: ComponentType<VisualProps>;
   Architecture: ComponentType<VisualProps>;
+  /** Optional results chart rendered above the Results prose. Jobzyl has no
+      quantitative results worth charting - forcing one would be noise. */
+  Results?: ComponentType<VisualProps>;
 }
 
 export const PROJECT_VISUALS: Record<string, ProjectVisuals> = {
-  "finlaw-uk": { Hero: FinLawHero, Architecture: FinLawArchitecture },
-  "ai-voice-agent": { Hero: VoiceAgentHero, Architecture: VoiceAgentArchitecture },
-  "diabetes-risk": { Hero: DiabetesSenseHero, Architecture: DiabetesSenseArchitecture },
+  "finlaw-uk": { Hero: FinLawHero, Architecture: FinLawArchitecture, Results: FinLawResults },
+  "ai-voice-agent": { Hero: VoiceAgentHero, Architecture: VoiceAgentArchitecture, Results: VoiceAgentResults },
+  "diabetes-risk": { Hero: DiabetesSenseHero, Architecture: DiabetesSenseArchitecture, Results: DiabetesSenseResults },
   jobzyl: { Hero: JobzylHero, Architecture: JobzylArchitecture },
 };
 

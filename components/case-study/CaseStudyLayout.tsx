@@ -29,6 +29,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
   const visuals = getProjectVisuals(project.id);
   const Hero = visuals?.Hero;
   const Architecture = visuals?.Architecture;
+  const Results = visuals?.Results;
   const accent = caseStudy.accent;
 
   const links: { label: string; href: string; icon: React.ReactNode }[] = [];
@@ -256,8 +257,27 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           </div>
         </section>
 
-        {/* 7. RESULTS */}
-        <ProseSection eyebrow="Results" title="What it delivers" accent={accent} paragraphs={caseStudy.results} />
+        {/* 7. RESULTS - measured numbers as a chart first, prose below */}
+        <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
+          <SectionHeader eyebrow="Results" title="What it delivers" accent={accent} />
+          {Results && (
+            <div
+              className="mt-10 overflow-x-auto rounded-xl border p-6 sm:p-8"
+              style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
+            >
+              <VisualFrame style={{ minWidth: "720px" }}>
+                <Results accent={accent} className="w-full" />
+              </VisualFrame>
+            </div>
+          )}
+          <div className="mt-10 max-w-3xl space-y-6">
+            {caseStudy.results.map((p, i) => (
+              <p key={i} className="text-[1.0625rem] leading-[1.85]" style={{ color: "var(--text-secondary)" }}>
+                {p}
+              </p>
+            ))}
+          </div>
+        </section>
 
         {/* 8. REFLECTIONS */}
         <ProseSection eyebrow="Reflections" title="What I'd do next" accent={accent} paragraphs={caseStudy.reflections} />
