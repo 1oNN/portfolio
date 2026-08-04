@@ -120,7 +120,8 @@ export function FinLawHero({ accent, className }: Props) {
               </text>
             </g>
           ))}
-          {/* Regime anchor */}
+          {/* Regime anchor - label sits BELOW the node so it never crosses
+              the circle stroke (text-on-circle read as doubled/unreadable) */}
           <circle
             cx={c.x} cy={c.y} r="18"
             className="pv-node pv-pop"
@@ -129,10 +130,10 @@ export function FinLawHero({ accent, className }: Props) {
           />
           <text
             x={c.x}
-            y={c.y + 4}
+            y={c.y + 36}
             textAnchor="middle"
             fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-            fontSize="10"
+            fontSize="10.5"
             fontWeight="600"
             fill={accent}
           >

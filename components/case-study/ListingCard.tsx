@@ -62,7 +62,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
           >
             {project.title}
           </h3>
-          <p className="text-sm leading-snug" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-[0.9375rem] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             {project.tagline}
           </p>
         </div>

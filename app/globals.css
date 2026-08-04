@@ -331,6 +331,9 @@ svg.pv-interactive:has(.pv-hover-group:hover) .pv-hover-group:not(:hover) {
     display: block;
     offset-rotate: 0deg;
     animation: pvFlow var(--pv-flow-dur, 4s) linear infinite;
+    /* backwards: staggered dots stay invisible during their delay instead
+       of sitting frozen at the path start */
+    animation-fill-mode: backwards;
   }
 }
 @media (prefers-reduced-motion: reduce) {

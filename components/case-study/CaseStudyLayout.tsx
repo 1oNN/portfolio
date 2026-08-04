@@ -63,9 +63,14 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             <FiArrowLeft size={15} />
             All projects
           </Link>
-          <span className="font-mono text-sm font-bold" style={{ color: accent }}>
+          <Link
+            href="/"
+            aria-label="Back to home"
+            className="font-mono text-sm font-bold transition-opacity hover:opacity-75 focus-visible:opacity-75"
+            style={{ color: accent }}
+          >
             ha<span style={{ color: "var(--accent-secondary)" }}>.</span>
-          </span>
+          </Link>
         </div>
       </header>
 
@@ -141,23 +146,40 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             </dl>
             {links.length > 0 && (
               <div className="mt-5 flex flex-wrap items-center gap-2 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
-                {links.map((l) => (
-                  <a
-                    key={l.label}
-                    href={l.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
-                    style={{
-                      color: "var(--text-secondary)",
-                      backgroundColor: "var(--surface-elevated)",
-                    }}
-                  >
-                    {l.icon}
-                    {l.label}
-                    <FiArrowUpRight size={11} style={{ opacity: 0.5 }} />
-                  </a>
-                ))}
+                {links.map((l) => {
+                  // Live demo is the strongest CTA on the page - solid accent fill
+                  const primary = l.label === "Live demo";
+                  return primary ? (
+                    <a
+                      key={l.label}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-semibold transition-opacity hover:opacity-90 focus-visible:opacity-90"
+                      style={{ color: "var(--accent-contrast)", backgroundColor: accent }}
+                    >
+                      {l.icon}
+                      {l.label}
+                      <FiArrowUpRight size={11} style={{ opacity: 0.7 }} />
+                    </a>
+                  ) : (
+                    <a
+                      key={l.label}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
+                      style={{
+                        color: "var(--text-secondary)",
+                        backgroundColor: "var(--surface-elevated)",
+                      }}
+                    >
+                      {l.icon}
+                      {l.label}
+                      <FiArrowUpRight size={11} style={{ opacity: 0.5 }} />
+                    </a>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -206,7 +228,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           )}
           <div className="mt-10 max-w-3xl space-y-5">
             {caseStudy.approach.map((p, i) => (
-              <p key={i} className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              <p key={i} className="text-[1.0625rem] leading-[1.85]" style={{ color: "var(--text-secondary)" }}>
                 {p}
               </p>
             ))}
@@ -226,7 +248,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                   <span style={{ color: accent }}>-&nbsp;</span>
                   {d.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                <p className="text-[0.9375rem] leading-[1.75]" style={{ color: "var(--text-secondary)" }}>
                   {d.body}
                 </p>
               </div>
@@ -311,7 +333,7 @@ function ProseSection({
       <SectionHeader eyebrow={eyebrow} title={title} accent={accent} />
       <div className="mt-10 max-w-3xl space-y-5">
         {paragraphs.map((p, i) => (
-          <p key={i} className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <p key={i} className="text-[1.0625rem] leading-[1.85]" style={{ color: "var(--text-secondary)" }}>
             {p}
           </p>
         ))}

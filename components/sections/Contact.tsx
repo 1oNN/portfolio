@@ -22,47 +22,49 @@ export default function Contact() {
           description="Whether it's a research opportunity, an interesting engineering problem, or just a hello - I'd love to hear from you."
         />
 
-        <div className="mt-10 space-y-12">
+        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
           {/* Info */}
           <div>
-            <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            {/* Availability signal */}
+            <div
+              className="inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5"
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                  style={{ backgroundColor: "var(--success)" }}
+                />
+                <span
+                  className="relative inline-flex h-2 w-2 rounded-full"
+                  style={{ backgroundColor: "var(--success)" }}
+                />
+              </span>
+              <span className="font-mono text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>
+                Available for work
+              </span>
+            </div>
+
+            <p className="mt-6 text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
               I&apos;m open to full-time AI/ML engineering and research roles, and MSCA-eligible for
               PhD or postdoc positions in the EU later this year.
             </p>
 
-            <dl className="mt-8 space-y-5">
-              <div className="space-y-1">
-                <dt
-                  className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  Location
-                </dt>
-                <dd className="text-sm font-medium leading-snug" style={{ color: "var(--text-primary)" }}>
-                  Bradford, UK (open to relocation)
-                </dd>
-              </div>
+            {/* Primary CTA - solid accent, the loudest element in the section */}
+            <a
+              href={`mailto:${EMAIL}`}
+              className="mt-8 inline-flex items-center gap-2.5 rounded-lg bg-[var(--accent)] px-5 py-3 font-mono text-sm font-semibold text-[var(--accent-contrast)] transition-opacity hover:opacity-90 focus-visible:opacity-90"
+            >
+              <FiMail size={15} />
+              {EMAIL}
+            </a>
 
-              <div className="space-y-1">
-                <dt
-                  className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  Email
-                </dt>
-                <dd>
-                  <a
-                    href={`mailto:${EMAIL}`}
-                    className="font-mono text-sm text-[var(--accent)] underline-offset-2 hover:underline focus-visible:underline"
-                  >
-                    {EMAIL}
-                  </a>
-                </dd>
-              </div>
-            </dl>
+            <p className="mt-4 font-mono text-xs" style={{ color: "var(--text-muted)" }}>
+              Bradford, UK · open to relocation · replies within a day
+            </p>
 
             {/* Social links - quiet icon buttons, pure CSS hover/focus twins */}
-            <div className="mt-8">
+            <div className="mt-10">
               <p
                 className="font-mono text-[10px] uppercase tracking-widest"
                 style={{ color: "var(--text-muted)" }}

@@ -192,7 +192,7 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
 
   return (
     <svg
-      viewBox="0 0 900 360"
+      viewBox="0 0 900 300"
       className={`pv-interactive ${className ?? ""}`}
       role="img"
       aria-label="DiabetesSense benchmark-to-deployment architecture"
@@ -204,33 +204,33 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
         </marker>
       </defs>
 
-      <text x="30" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">DATA</text>
-      <text x="210" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BALANCE</text>
-      <text x="400" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BENCHMARK</text>
-      <text x="600" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
-      <text x="780" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
+      <text x="30" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">DATA</text>
+      <text x="220" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BALANCE</text>
+      <text x="410" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BENCHMARK</text>
+      <text x="610" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
+      <text x="785" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
 
-      <Box x={20} y={150} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
-      <Box x={210} y={150} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
-      <Box x={400} y={150} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
-      <Box x={600} y={150} w={140} h={60} title="Random Forest" sub="93.15% acc · 0.9887 AUC" highlight delay={0.45} />
+      <Box x={20} y={120} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
+      <Box x={210} y={120} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
+      <Box x={400} y={120} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
+      <Box x={600} y={120} w={140} h={60} title="Random Forest" sub="93.15% acc · 0.9887 AUC" highlight delay={0.45} />
 
-      <Box x={770} y={70} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
-      <Box x={770} y={230} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />
+      <Box x={770} y={48} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
+      <Box x={770} y={202} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />
 
       {/* Arrows */}
-      <Arrow x1={170} y1={180} x2={210} y2={180} delay={0.1} />
-      <Arrow x1={360} y1={180} x2={400} y2={180} delay={0.25} />
-      <Arrow x1={560} y1={180} x2={600} y2={180} delay={0.4} />
-      <Arrow x1={740} y1={170} x2={770} y2={95} delay={0.55} />
-      <Arrow x1={740} y1={190} x2={770} y2={255} delay={0.55} />
+      <Arrow x1={170} y1={150} x2={210} y2={150} delay={0.1} />
+      <Arrow x1={360} y1={150} x2={400} y2={150} delay={0.25} />
+      <Arrow x1={560} y1={150} x2={600} y2={150} delay={0.4} />
+      <Arrow x1={740} y1={140} x2={770} y2={73} delay={0.55} />
+      <Arrow x1={740} y1={160} x2={770} y2={227} delay={0.55} />
 
       {/* Data packets hopping the pipeline gaps in sequence */}
-      <FlowDot path="M 170 180 L 210 180" dur={2.4} delay={0} />
-      <FlowDot path="M 360 180 L 400 180" dur={2.4} delay={0.8} />
-      <FlowDot path="M 560 180 L 600 180" dur={2.4} delay={1.6} />
-      <FlowDot path="M 740 170 L 770 95" dur={2.4} delay={2.4} />
-      <FlowDot path="M 740 190 L 770 255" dur={2.4} delay={2.4} />
+      <FlowDot path="M 170 150 L 210 150" dur={2.4} delay={0} />
+      <FlowDot path="M 360 150 L 400 150" dur={2.4} delay={0.8} />
+      <FlowDot path="M 560 150 L 600 150" dur={2.4} delay={1.6} />
+      <FlowDot path="M 740 140 L 770 73" dur={2.4} delay={2.4} />
+      <FlowDot path="M 740 160 L 770 227" dur={2.4} delay={2.4} />
     </svg>
   );
 }
