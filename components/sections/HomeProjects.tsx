@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import SectionHeader from "@/components/ui/SectionHeader";
+import CountUp from "@/components/interactive/CountUp";
 import { PROJECTS } from "@/lib/constants";
 import type { Project } from "@/types";
 
@@ -68,10 +69,12 @@ export default function HomeProjects() {
                   </p>
                   {(project.metrics?.length ?? 0) > 0 && (
                     <p className="mt-3 font-mono text-[11px] text-[var(--text-muted)]">
-                      {project.metrics!
-                        .slice(0, 2)
-                        .map((m) => `${m.value} ${m.label.toLowerCase()}`)
-                        .join("  ·  ")}
+                      {project.metrics!.slice(0, 2).map((m, mi) => (
+                        <span key={m.label}>
+                          {mi > 0 && "  ·  "}
+                          <CountUp value={m.value} /> {m.label.toLowerCase()}
+                        </span>
+                      ))}
                     </p>
                   )}
                 </div>

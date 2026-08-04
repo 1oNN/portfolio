@@ -14,6 +14,7 @@ import {
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
 import VisualFrame from "@/components/project-visuals/VisualFrame";
+import CountUp from "@/components/interactive/CountUp";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 import ListingCard from "./ListingCard";
@@ -173,7 +174,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     className="text-5xl font-bold leading-none tracking-tight sm:text-6xl"
                     style={{ color: accent, fontFamily: "var(--font-mono)" }}
                   >
-                    {m.value}
+                    <CountUp value={m.value} />
                   </div>
                   <div
                     className="text-xs uppercase tracking-widest"

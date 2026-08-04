@@ -131,7 +131,7 @@ export function JobzylHero({ accent, className }: Props) {
 
       {/* Footer */}
       <text x="222" y="448" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
-        Streaming via SSE · scrape progress: indeed ✓ · google ✓ · glassdoor ✓ · ziprecruiter ⋯ · reed ✓ · adzuna ✓
+        SSE · indeed ✓ · google ✓ · glassdoor ✓ · ziprecruiter ⋯ · reed ✓ · adzuna ✓
       </text>
     </svg>
   );

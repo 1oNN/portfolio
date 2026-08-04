@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
+import CountUp from "@/components/interactive/CountUp";
 import RailNav from "./RailNav";
 
 // Drop a portrait at public/profile.jpg (or .jpeg/.png/.webp) and it renders
@@ -91,7 +92,7 @@ export default function LeftRail() {
                 className="font-mono text-lg font-bold text-[var(--accent)]"
                 style={{ textShadow: "0 0 18px var(--accent-glow)" }}
               >
-                {stat.value}
+                <CountUp value={stat.value} />
               </div>
               <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                 {stat.label}

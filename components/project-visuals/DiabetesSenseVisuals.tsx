@@ -210,9 +210,9 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
       <text x="600" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
       <text x="780" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
 
-      <Box x={20} y={150} w={150} h={60} title="BRFSS 2015" sub="253,680 records · 22 features" delay={0} />
-      <Box x={210} y={150} w={150} h={60} title="Random Over-Sampling" sub="86/14 → balanced · vs SMOTE/ADASYN" delay={0.15} />
-      <Box x={400} y={150} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · boosting · MLP" delay={0.3} />
+      <Box x={20} y={150} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
+      <Box x={210} y={150} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
+      <Box x={400} y={150} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
       <Box x={600} y={150} w={140} h={60} title="Random Forest" sub="93.15% acc · 0.9887 AUC" highlight delay={0.45} />
 
       <Box x={770} y={70} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
