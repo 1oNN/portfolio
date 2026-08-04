@@ -76,7 +76,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         .send(
           new SendEmailCommand({
             Source: sesEmail,
-            Destination: { ToAddresses: [sesEmail] },
+            Destination: { ToAddresses: [process.env.CONTACT_TO_EMAIL ?? sesEmail] },
             Message: {
               Subject: {
                 Data: `[Portfolio] CV downloaded: ${CV_LABELS[cvType]}`,

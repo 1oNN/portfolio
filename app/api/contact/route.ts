@@ -136,12 +136,14 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
 
   if (awsConfigured) {
     const ses = getSESClient();
-    const toEmail = process.env.SES_FROM_EMAIL!;
+    // Source must stay an SES-verified identity; delivery target can differ.
+    const fromEmail = process.env.SES_FROM_EMAIL!;
+    const toEmail = process.env.CONTACT_TO_EMAIL ?? fromEmail;
 
     try {
       await ses.send(
         new SendEmailCommand({
-          Source: toEmail,
+          Source: fromEmail,
           Destination: { ToAddresses: [toEmail] },
           ReplyToAddresses: [`${safeName} <${safeEmail}>`],
           Message: {
