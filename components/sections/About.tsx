@@ -60,7 +60,8 @@ export default function About() {
                 At Outlyst, I reduced call latency by 54% across 2,100+ concurrent AI voice
                 interactions by profiling async I/O bottlenecks and restructuring connection
                 pooling. For my dissertation, I built FinLaw-UK - a graph-augmented RAG system
-                that improved legal-finance Q&A accuracy by 19% using Mistral 7B and Neo4j.
+                for UK financial regulation that uses a Neo4j knowledge graph to validate
+                citations and flag hallucinations, reaching 0.82 source accuracy with Mistral 7B.
               </p>
               <p>
                 I&apos;m interested in roles where I can continue pushing the boundary between

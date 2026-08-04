@@ -22,24 +22,24 @@ export const PROJECTS: Project[] = [
     title: "FinLaw-UK",
     tagline: "Graph-augmented RAG for UK financial regulation",
     description:
-      "Production-grade RAG system combining Mistral 7B with a Neo4j knowledge graph to deliver faithful, cited answers on UK financial regulation.",
+      "Graph-augmented RAG system combining locally-served Mistral 7B with a Neo4j knowledge graph that validates citations and flags potential hallucinations on UK financial regulation.",
     longDescription:
-      "FinLaw-UK is my MSc dissertation - a graph-augmented RAG pipeline built to tackle the complexity of FCA rulebooks and MiFID II. Dense retrieval + graph expansion significantly outperforms naive vector search on regulatory queries.",
-    tech: ["Python", "Mistral 7B", "Neo4j", "RAG", "Sentence Transformers", "FastAPI", "RAGAS"],
+      "FinLaw-UK is my MSc dissertation - a graph-augmented RAG pipeline over PRA/FCA/FRC and statutory corpora. Every clause lives twice: as a Neo4j graph node for structural precision and as a dense embedding for semantic recall; the graph then acts as a validation layer that deprioritises retrieved clauses without graph support and flags uncited rules as potential hallucinations.",
+    tech: ["Python", "Mistral 7B", "Ollama", "Neo4j", "RAG", "Sentence Transformers", "RAGAS", "React.js"],
     category: "research",
     featured: true,
     bentoSize: "large",
     githubUrl: "https://github.com/1oNN/finlaw-uk",
     metrics: [
-      { value: "+19%", label: "Answer accuracy" },
+      { value: "0.82", label: "Source accuracy" },
       { value: "0.76", label: "RAGAS faithfulness" },
       { value: "0.74", label: "Answer relevance" },
     ],
     highlights: [
-      "Integrated Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware retrieval",
-      "Improved answer accuracy by 19% through fine-tuned prompt and retrieval strategies",
-      "Achieved faithfulness score of 0.76 and answer relevance of 0.74 via RAGAS evaluation",
-      "Built end-to-end: ingestion pipeline, graph construction, API, and evaluation harness",
+      "Integrated Mistral 7B-Instruct (served locally via Ollama for data governance) with a Neo4j knowledge graph for domain-aware retrieval",
+      "Used the graph as a validation layer: answers citing rules absent from the graph are flagged as potential hallucinations",
+      "Evaluated on a 110-item benchmark across 7 regulatory domains: 0.82 source accuracy, 0.81 citation quality, 0.76 RAGAS faithfulness, 0.74 answer relevance",
+      "Built end-to-end: clause-level ingestion with citable provenance (e.g. DISP 1.3.1R), graph construction, retrieval, and evaluation harness",
     ],
   },
   {
@@ -70,26 +70,26 @@ export const PROJECTS: Project[] = [
   {
     id: "diabetes-risk",
     title: "DiabetesSense",
-    tagline: "93% accurate clinical risk scoring with SHAP interpretability",
+    tagline: "93% accurate diabetes risk prediction from an 11-model benchmark",
     description:
-      "Ensemble ML pipeline for diabetes risk prediction with SHAP-based per-prediction explanations and a production REST API - presented at ICSMAI 2024.",
+      "ML benchmark of 11 classifiers on 253,680 CDC health records - Random Forest won at 93.15% accuracy and 0.99 AUC - deployed as a React + Flask risk-screening app.",
     longDescription:
-      "Built at COMSATS - Random Forest + Gradient Boosting ensemble on clinical data, with SHAP TreeExplainer surfacing feature attribution to clinicians. React.js + Flask frontend for real-time risk scoring.",
+      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance handled with random over-sampling). Random Forest won: 93.15% accuracy, 98.4% sensitivity, 0.9887 AUC. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
     tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     bentoSize: "medium",
     githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
-      { value: "93%", label: "Classification accuracy" },
-      { value: "SHAP", label: "Interpretability" },
-      { value: "ICSMAI", label: "Published & presented" },
+      { value: "93.15%", label: "Accuracy (Random Forest)" },
+      { value: "0.99", label: "AUC" },
+      { value: "253K", label: "Health records" },
     ],
     highlights: [
-      "~93% accuracy on high-dimensional clinical data under stratified validation",
-      "Integrated SHAP TreeExplainer to surface per-prediction feature attribution",
-      "Full-stack: Flask API + React.js frontend for real-time clinical risk scoring",
-      "Presented at ICSMAI 2024, Casablanca, Morocco",
+      "Benchmarked 11 classifiers on BRFSS 2015 (253,680 CDC records); Random Forest best at 93.15% accuracy, 98.4% sensitivity, 0.9887 AUC",
+      "Handled 86/14 class imbalance with random over-sampling, selected after comparing ROS, SMOTE, and ADASYN",
+      "Full-stack: Flask API + React.js frontend - a 19-question, lab-free questionnaire returning risk classification with future-risk probability",
+      "Interpretability via correlation-driven risk-factor analysis; SHAP/LIME attribution applied during the COMSATS research assistantship",
     ],
   },
   {
@@ -149,9 +149,9 @@ export const EXPERIENCE: Experience[] = [
     current: false,
     responsibilities: [
       "Engineered FinLaw-UK, a Retrieval-Augmented Generation architecture integrating Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware regulatory retrieval.",
-      "Fine-tuned retrieval and prompt strategies using Sentence Transformers, improving answer accuracy by 19%.",
-      "Evaluated model faithfulness (0.76) and answer relevance (0.74) using the RAGAS framework.",
-      "Developed scalable retrieval systems and managed complex relational data structures for high-performance query processing.",
+      "Designed multi-modal representation learning pipelines using graph-augmented models and cross-encoder re-ranking architectures.",
+      "Evaluated on a 110-item regulatory benchmark: 0.76 faithfulness and 0.74 answer relevance (RAGAS), 0.82 source accuracy, 0.81 citation quality.",
+      "Built reproducible experimental pipelines with structured evaluation protocols, extending RAGAS with custom citation-precision and legal-completeness metrics.",
     ],
   },
   {
@@ -164,7 +164,7 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Jul 2024",
     current: false,
     responsibilities: [
-      "Developed ensemble ML models (Random Forest, Gradient Boosting) for diabetes risk prediction; ~93% classification accuracy under stratified validation.",
+      "Benchmarked 11 ML classifiers for diabetes risk prediction on 253,680 CDC records; Random Forest best at 93.15% accuracy and 0.9887 AUC.",
       "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
       "Co-authored Springer book chapter; presented results at ICSMAI 2024, Casablanca, Morocco.",
@@ -182,7 +182,7 @@ export const EDUCATION: Education[] = [
     startDate: "Sep 2024",
     endDate: "Sep 2025",
     dissertation:
-      "FinLaw-UK: A Graph-Augmented Retrieval Chatbot for Reliable UK Financial Regulation",
+      "FinLaw-UK: A Graph-Augmented Retrieval Chatbot for Reliable and Transparent UK Financial Regulation",
     focus: "Spatial and relational data modelling, graph networks, LLM evaluation, robustness benchmarking",
   },
   {
@@ -203,9 +203,9 @@ export const PUBLICATIONS: Publication[] = [
     id: "sleep-efficiency",
     title:
       "Comparative Analysis of Machine Learning Methods for Enhancing Sleep Efficiency and Prediction",
-    authors: "Ahmad, H., Khan, U., Azam, M.",
+    authors: "Ahmad, H. (first & corresponding author), Khan, M.U., Azam, M.",
     venue:
-      "International Conference on Smart Medical, IoT & Artificial Intelligence (ICSMAI 2024), Morocco",
+      "International Conference on Smart Medical, IoT & Artificial Intelligence (ICSMAI 2024), Springer Nature, pp. 3-15",
     year: "2024",
     doi: "10.1007/978-3-031-66854-8_1",
     type: "conference",

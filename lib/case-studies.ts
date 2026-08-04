@@ -18,12 +18,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The pipeline begins with bulk ingestion of FCA Handbook chapters and adjacent regulatory documents. Each section is chunked at the smallest semantic unit - typically a single rule or sub-rule - then run through a parallel two-stream extraction: Sentence Transformer embeddings into a vector index, and entity/relationship extraction into a Neo4j knowledge graph that captures Rule → Chapter, Rule → Entity, and Rule → Cross-reference relationships.",
       "At query time, dense retrieval pulls the top-K candidate chunks. The candidates' graph nodes are then expanded one hop in Neo4j to add adjacent rules, parent chapter context, and any cross-referenced sections - the structural context that pure vector search loses. The expanded set is re-ranked by relevance and trimmed to fit Mistral 7B-Instruct's context window.",
       "Generation runs locally on Mistral 7B-Instruct with strict citation-required prompting: every claim must reference a chunk ID, and every chunk ID must exist in the retrieved set. Post-generation, every response goes through a RAGAS evaluator that scores faithfulness (does the answer stay grounded in retrieved context?) and answer relevance (does it actually address the query?).",
-      "The result: 0.76 faithfulness and 0.74 answer relevance on a held-out evaluation set, with a 19% accuracy gain over a vector-only baseline.",
+      "The result: 0.76 faithfulness and 0.74 answer relevance, with 0.82 source accuracy and 0.81 citation quality, on a 110-item benchmark spanning seven regulatory domains.",
     ],
     decisions: [
       {
-        title: "Graph expansion over reranking",
-        body: "A cross-encoder reranker would have improved relevance at fixed K, but the failure mode wasn't ranking - it was missing context. Graph expansion captures the 'Rule X is meaningless without Rule Y next to it' pattern that no reranker can recover.",
+        title: "Graph expansion, then re-rank",
+        body: "Re-ranking alone can't fix the real failure mode: missing context. Graph expansion first captures the 'Rule X is meaningless without Rule Y next to it' pattern no reranker can recover, and cross-encoder re-ranking then orders the expanded set before it hits the context window.",
       },
       {
         title: "Mistral 7B over a frontier model",
@@ -39,11 +39,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "The +19% accuracy gain over a vector-only baseline came primarily from queries where the answer required understanding regulatory hierarchy - exactly the cases where graph expansion adds context that dense retrieval misses on its own.",
+      "Source accuracy peaked at 0.85 on advanced queries and document tasks cleared 0.83 on both source accuracy and citation quality - exactly the cases where graph expansion adds regulatory hierarchy that dense retrieval misses on its own. The weakest domain was consumer redress, where fragmented DISP rules dragged completeness below 0.65.",
       "Faithfulness at 0.76 means roughly three in four answers stay grounded in retrieved context; the 24% that drift are the prompt-engineering targets for next-iteration work. Answer relevance at 0.74 tracks closely, suggesting the model is staying on-topic when it stays grounded.",
     ],
     reflections: [
-      "If I were continuing this past the dissertation, the next move is two-pronged. First, replace the soft-vote evaluation harness with a structured legal-reasoning benchmark - RAGAS catches faithfulness drift but not legal-specific failure modes like jurisdictional misapplication. Second, ship a confidence-aware UI that surfaces uncertainty when the graph expansion returns sparse adjacency, so users know when the system is reasoning from rich vs thin context.",
+      "If I were continuing this past the dissertation, the next move is two-pronged. First, extend the evaluation harness into a structured legal-reasoning benchmark - RAGAS catches faithfulness drift but not legal-specific failure modes like jurisdictional misapplication. Second, ship a confidence-aware UI that surfaces uncertainty when the graph expansion returns sparse adjacency, so users know when the system is reasoning from rich vs thin context.",
     ],
     related: ["ai-voice-agent", "diabetes-risk"],
   },
@@ -98,42 +98,42 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "diabetes-risk": {
     projectId: "diabetes-risk",
     accent: "var(--status-ml)",
-    status: "Published",
+    status: "Shipped",
     timeline: "Jan - Jul 2024",
-    role: "Solo ML capstone, COMSATS University Islamabad",
+    role: "BSc thesis (with Inshra Javed), COMSATS University Islamabad",
     primaryStack: ["scikit-learn", "SHAP", "React.js", "Flask"],
-    links: { paper: "https://doi.org/10.1007/978-3-031-66854-8_1" },
+    links: {},
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
       "Adoption literature on clinical ML is consistent: when clinicians can't trace a prediction back to features they recognise, they reject the tool - even when the tool is more accurate than their own judgement. The interpretability layer isn't optional polish; it's the load-bearing part.",
     ],
     approach: [
-      "Built on a public diabetes risk dataset with stratified k-fold splits to handle class imbalance. Trained two complementary tree models - Random Forest for variance reduction across heterogeneous feature interactions, Gradient Boosting for sequential refinement on hard examples - and combined them via soft voting. Hyperparameter search via grid search with CV-internal validation.",
-      "Wrapped the ensemble in SHAP TreeExplainer, which exploits the additive structure of tree models to compute exact Shapley values rather than approximations. Per-prediction explanations surface the top contributing features as a horizontal bar chart with positive (risk-increasing) and negative (risk-decreasing) contributions colour-coded.",
-      "Deployed the model behind a Flask REST API with a React.js frontend that lets clinicians input patient features and get back a risk score plus the feature attribution chart in real time. The chart is the actual product - the score alone wouldn't have been adopted.",
-      "Co-authored a Springer book chapter and presented the work at ICSMAI 2024 in Casablanca, Morocco.",
+      "Built on BRFSS 2015 - 253,680 CDC health records, 22 features, and an 86/14 class imbalance handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
+      "Random Forest won decisively: 93.15% accuracy, 98.4% sensitivity, 87.9% specificity, 0.9887 AUC. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
+      "Persisted the winning model with joblib behind a Flask REST API with a React.js frontend: a 19-question, lab-free questionnaire that returns a risk classification plus a future-risk probability and lifestyle recommendations keyed to the user's dominant risk factors.",
+      "During the follow-on research assistantship, extended the deployed model with SHAP and LIME attribution for per-prediction transparency.",
     ],
     decisions: [
       {
-        title: "Ensemble over single model",
-        body: "Random Forest and Gradient Boosting fail differently. RF over-fits less on noisy features; GBM corrects RF's smooth-loss bias on boundary cases. Soft voting picked up the gain from each without the variance hit of stacking.",
+        title: "Benchmark breadth over a single favourite",
+        body: "Eleven models spanning linear, instance-based, tree, boosting, and neural families. The tree ensembles' dominance - Random Forest at 93.15% against logistic regression's 74.5% - was a measured finding, not an assumption baked in at the start.",
+      },
+      {
+        title: "ROS over SMOTE and ADASYN",
+        body: "All three balancing techniques were run head-to-head on the 86/14 imbalance. Synthetic interpolation (SMOTE/ADASYN) blurred the categorical questionnaire features; plain random over-sampling preserved the feature distributions and produced the strongest downstream classifier.",
       },
       {
         title: "SHAP over LIME",
-        body: "LIME's local linear approximations are fast but unstable across runs on the same input. SHAP TreeExplainer gives exact Shapley values for tree models, which means a clinician asking 'why this score?' gets the same answer twice. Reproducibility is non-negotiable for clinical use.",
+        body: "Applied during the research assistantship on the deployed model: LIME's local linear approximations are fast but unstable across runs on the same input. SHAP gives consistent attributions, so someone asking 'why this score?' gets the same answer twice. Reproducibility is non-negotiable for clinical use.",
       },
       {
-        title: "TreeExplainer specifically",
-        body: "KernelSHAP is model-agnostic but slow and approximate. TreeExplainer leverages tree structure for exact computation in polynomial time, so per-prediction explanations stay sub-second even at the API layer.",
-      },
-      {
-        title: "Flask + React over a notebook prototype",
-        body: "A notebook would have been faster for the conference paper. The deployed API forced production discipline - serialisation, input validation, error handling - that surfaced a feature-encoding bug the notebook had silently absorbed.",
+        title: "Lab-free questionnaire over clinical inputs",
+        body: "BRFSS features are all self-reportable - blood pressure history, BMI, activity, general health. That constraint means anyone can complete the 19-question screen without lab tests, which is exactly what makes a public-facing risk tool usable.",
       },
     ],
     results: [
-      "~93% classification accuracy on stratified validation, with sub-second per-prediction SHAP explanations served via the REST API. Feature attributions consistently surfaced clinically meaningful drivers (glucose, BMI, age) as the top contributors, which became the basis for clinician trust during pilot review.",
-      "Work was peer-reviewed and presented at ICSMAI 2024 in Casablanca, Morocco, with a Springer book chapter publication tied to the conference.",
+      "93.15% accuracy, 98.4% sensitivity, and 0.9887 AUC on the held-out split - best of the 11-model benchmark. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
+      "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [
       "For clinical deployment beyond a paper, the next blockers are calibration and population shift: 93% on a single curated dataset doesn't mean 93% on a different hospital's intake. The model needs Platt-scaled probabilities and a population-shift detector before it's safe at the bedside.",

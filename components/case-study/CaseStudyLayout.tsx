@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
+import VisualFrame from "@/components/project-visuals/VisualFrame";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 import ListingCard from "./ListingCard";
@@ -106,7 +107,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
 
           {/* Hero visual */}
           {Hero && (
-            <div
+            <VisualFrame
               className="mt-10 overflow-hidden rounded-xl border"
               style={{
                 aspectRatio: "16 / 10",
@@ -115,7 +116,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
               }}
             >
               <Hero accent={accent} className="h-full w-full" />
-            </div>
+            </VisualFrame>
           )}
         </section>
 
@@ -197,9 +198,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
               className="mt-10 overflow-x-auto rounded-xl border p-6 sm:p-8"
               style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
             >
-              <div style={{ minWidth: "720px" }}>
+              <VisualFrame style={{ minWidth: "720px" }}>
                 <Architecture accent={accent} className="w-full" />
-              </div>
+              </VisualFrame>
             </div>
           )}
           <div className="mt-10 max-w-3xl space-y-5">

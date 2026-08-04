@@ -276,6 +276,124 @@ body {
   }
 }
 
+/* ─── Project visuals (case-study SVGs) ──────────────────────────── */
+/* Draw/pop states apply ONLY under [data-inview] (set by VisualFrame once
+   the visual scrolls in). Without JS the attribute never exists, so the
+   SVGs are fully visible by default - nothing can be stuck hidden.
+   Elements using .pv-draw must set pathLength={1} so dasharray:1 spans
+   the whole path regardless of geometry. */
+[data-inview] .pv-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: pvDraw 0.9s ease-out forwards;
+}
+
+[data-inview] .pv-pop {
+  animation: pvPop 0.5s ease-out backwards; /* backwards = hidden during its delay */
+}
+
+.pv-pop,
+.pv-node {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Hover exploration: grow the hovered node, brighten its edges, dim the
+   rest. Decorative enhancement on aria-labelled images - not focusable
+   controls, so no focus twin is required. :where() keeps specificity flat. */
+.pv-node {
+  transition: transform 0.2s ease;
+}
+.pv-hover-group:hover .pv-node {
+  transform: scale(1.12);
+}
+.pv-hover-group .pv-edge {
+  transition: opacity 0.2s ease;
+}
+.pv-hover-group:hover .pv-edge {
+  opacity: 1;
+}
+svg.pv-interactive:has(.pv-hover-group:hover) .pv-hover-group:not(:hover) {
+  opacity: 0.4;
+}
+.pv-hover-group {
+  transition: opacity 0.2s ease;
+}
+
+/* Flow dots ride an offset-path along pipeline arrows. Hidden unless the
+   browser supports offset-path; reduced-motion hides them outright (the
+   global duration-zeroing rule would otherwise freeze them mid-path). */
+.pv-flow {
+  display: none;
+}
+@supports (offset-path: path("M 0 0 L 1 1")) {
+  .pv-flow {
+    display: block;
+    offset-rotate: 0deg;
+    animation: pvFlow var(--pv-flow-dur, 4s) linear infinite;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pv-flow {
+    display: none !important;
+  }
+}
+
+/* Fade-in for dashed strokes (the dasharray draw trick would overwrite
+   their dash pattern) and any element where a draw doesn't fit. */
+[data-inview] .pv-fade {
+  animation: pvFadeIn 0.8s ease-out backwards;
+}
+
+/* Horizontal bar growth for chart bars - origin anchored to the axis side. */
+[data-inview] .pv-grow-r {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: pvGrowX 0.7s ease-out backwards;
+}
+[data-inview] .pv-grow-l {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: pvGrowX 0.7s ease-out backwards;
+}
+
+/* Gentle infinite pulse for hub/focus nodes. No fill-mode, so
+   reduced-motion (~0 duration, one iteration) rests at base state. */
+.pv-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pvPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes pvDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pvFadeIn {
+  from { opacity: 0; }
+}
+
+@keyframes pvGrowX {
+  from { transform: scaleX(0); }
+}
+
+@keyframes pvPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+
+@keyframes pvPop {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pvFlow {
+  0% { offset-distance: 0%; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
 /* ─── Terminal Styles ────────────────────────────────────────────── */
 .terminal-text {
   font-family: var(--font-mono);

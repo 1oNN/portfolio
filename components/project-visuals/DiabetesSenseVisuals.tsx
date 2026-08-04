@@ -1,5 +1,6 @@
-// TODO: replace with real screenshot when available
-// DiabetesSense - SHAP feature attribution chart hero + ensemble pipeline architecture.
+// DiabetesSense - risk-factor correlation chart hero + benchmark pipeline architecture.
+// All figures are from the BSc thesis (BRFSS 2015, Table 3.1 and Figure 3.2).
+// Animation contract: pv-* classes fire when VisualFrame sets data-inview.
 
 interface Props {
   accent: string;
@@ -7,68 +8,69 @@ interface Props {
 }
 
 export function DiabetesSenseHero({ accent, className }: Props) {
-  // SHAP feature attribution for a synthetic patient. Bars right of zero increase risk;
-  // bars left decrease it. Values are illustrative - labelled as such in the caption.
+  // Pearson correlation of each factor with diabetes status - measured values
+  // from the thesis correlation analysis, not illustrative numbers.
   const muted = "var(--text-muted)";
   const text = "var(--text-secondary)";
   const surface = "var(--surface-elevated)";
   const border = "var(--border)";
 
   const features = [
-    { name: "Glucose", shap: 0.34 },
-    { name: "BMI", shap: 0.21 },
-    { name: "Age", shap: 0.14 },
-    { name: "Pregnancies", shap: 0.08 },
-    { name: "Insulin", shap: -0.04 },
-    { name: "BloodPressure", shap: -0.09 },
-    { name: "Pedigree", shap: -0.12 },
-    { name: "SkinThickness", shap: -0.18 },
+    { name: "High blood pressure", r: 0.38 },
+    { name: "High cholesterol", r: 0.29 },
+    { name: "BMI", r: 0.29 },
+    { name: "Age group", r: 0.27 },
+    { name: "Physical health", r: 0.21 },
+    { name: "Physical activity", r: -0.09 },
+    { name: "Education", r: -0.15 },
+    { name: "Income", r: -0.19 },
+    { name: "General health", r: -0.41 },
   ];
 
-  // Center axis at x=400. Scale: 0.4 SHAP = 280px.
-  const center = 400;
-  const scale = 280 / 0.4;
-  const rowHeight = 36;
-  const startY = 100;
+  // Center axis at x=430. Scale: 0.45 correlation = 250px.
+  const center = 430;
+  const scale = 250 / 0.45;
+  const rowHeight = 33;
+  const startY = 96;
 
   return (
     <svg
       viewBox="0 0 800 500"
-      className={className}
+      className={`pv-interactive ${className ?? ""}`}
       role="img"
-      aria-label="SHAP feature attribution chart for diabetes risk prediction"
+      aria-label="Correlation of risk factors with diabetes status in BRFSS 2015"
       style={{ width: "100%", height: "100%" }}
     >
       {/* Header */}
       <text x="40" y="48" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="10" fontWeight="600" fill={muted} letterSpacing="2">
-        SHAP · FEATURE ATTRIBUTION
+        BRFSS 2015 · CORRELATION WITH DIABETES
       </text>
       <text x="40" y="68" fontFamily="ui-sans-serif, Inter, system-ui" fontSize="14" fontWeight="600" fill={text}>
-        Per-prediction explanation · synthetic case
+        Measured drivers across 253,680 CDC health records
       </text>
 
       {/* Vertical center axis */}
-      <line x1={center} y1={88} x2={center} y2={400} stroke={border} strokeWidth="1.5" />
+      <line x1={center} y1={84} x2={center} y2={400} stroke={border} strokeWidth="1.5" />
 
       {/* Axis labels */}
-      <text x={center - 80} y={86} fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} textAnchor="middle">
-        ← lowers risk
+      <text x={center - 80} y={82} fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} textAnchor="middle">
+        ← protective
       </text>
-      <text x={center + 80} y={86} fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} textAnchor="middle">
-        increases risk →
+      <text x={center + 80} y={82} fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} textAnchor="middle">
+        risk-raising →
       </text>
 
-      {/* Bars */}
+      {/* Bars - grow out from the axis on reveal; hover dims the other rows */}
       {features.map((f, i) => {
         const y = startY + i * rowHeight;
-        const w = Math.abs(f.shap) * scale;
-        const x = f.shap >= 0 ? center : center - w;
-        const isPositive = f.shap >= 0;
+        const w = Math.abs(f.r) * scale;
+        const x = f.r >= 0 ? center : center - w;
+        const isPositive = f.r >= 0;
         return (
-          <g key={f.name}>
+          <g key={f.name} className="pv-hover-group">
             {/* feature label */}
             <text
-              x={center - 290}
+              x={40}
               y={y + 16}
               fontFamily="ui-monospace, 'JetBrains Mono', monospace"
               fontSize="11"
@@ -80,27 +82,31 @@ export function DiabetesSenseHero({ accent, className }: Props) {
             {/* bar */}
             <rect
               x={x}
-              y={y + 6}
+              y={y + 5}
               width={w}
-              height="20"
+              height="18"
               rx="2"
               ry="2"
+              className={isPositive ? "pv-grow-r" : "pv-grow-l"}
               fill={isPositive ? accent : surface}
               fillOpacity={isPositive ? 0.85 : 1}
               stroke={isPositive ? accent : border}
               strokeWidth="1"
+              style={{ animationDelay: `${0.1 + i * 0.07}s` }}
             />
             {/* value label */}
             <text
               x={isPositive ? x + w + 8 : x - 8}
-              y={y + 21}
+              y={y + 19}
               textAnchor={isPositive ? "start" : "end"}
               fontFamily="ui-monospace, 'JetBrains Mono', monospace"
               fontSize="10"
               fontWeight="600"
               fill={isPositive ? accent : muted}
+              className="pv-fade"
+              style={{ animationDelay: `${0.35 + i * 0.07}s` }}
             >
-              {f.shap >= 0 ? `+${f.shap.toFixed(2)}` : f.shap.toFixed(2)}
+              {f.r >= 0 ? `+${f.r.toFixed(2)}` : f.r.toFixed(2)}
             </text>
           </g>
         );
@@ -108,10 +114,10 @@ export function DiabetesSenseHero({ accent, className }: Props) {
 
       {/* Footer caption */}
       <text x="40" y="450" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
-        TreeExplainer · exact Shapley values · sub-second per prediction
+        Pearson correlation with diabetes status · prevalence peaks at 63.2% in the 70-74 age band
       </text>
       <text x="40" y="470" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.5">
-        - values illustrative; production explainer uses live patient features
+        Random Forest on these features: 93.15% accuracy · 0.9887 AUC
       </text>
     </svg>
   );
@@ -123,12 +129,13 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
   const surface = "var(--surface-elevated)";
   const border = "var(--border)";
 
-  const Box = ({ x, y, w, h, title, sub, highlight }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean;
+  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
+    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
   }) => (
-    <g>
+    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
       <rect
         x={x} y={y} width={w} height={h} rx="6" ry="6"
+        className="pv-node"
         fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
         stroke={highlight ? accent : border}
         strokeWidth="1.25"
@@ -159,12 +166,36 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
     </g>
   );
 
+  const Arrow = ({ x1, y1, x2, y2, delay }: { x1: number; y1: number; x2: number; y2: number; delay?: number }) => (
+    <line
+      x1={x1} y1={y1} x2={x2} y2={y2}
+      pathLength={1}
+      className="pv-draw"
+      stroke={accent} strokeWidth="1.25" opacity="0.7"
+      markerEnd="url(#dsense-arrow)"
+      style={{ animationDelay: `${delay ?? 0}s` }}
+    />
+  );
+
+  const FlowDot = ({ path, dur, delay }: { path: string; dur: number; delay: number }) => (
+    <circle
+      r="3.5"
+      className="pv-flow"
+      fill={accent}
+      style={{
+        offsetPath: `path("${path}")`,
+        ["--pv-flow-dur" as string]: `${dur}s`,
+        animationDelay: `${delay}s`,
+      }}
+    />
+  );
+
   return (
     <svg
       viewBox="0 0 900 360"
-      className={className}
+      className={`pv-interactive ${className ?? ""}`}
       role="img"
-      aria-label="DiabetesSense ensemble + SHAP architecture"
+      aria-label="DiabetesSense benchmark-to-deployment architecture"
       style={{ width: "100%", height: "auto" }}
     >
       <defs>
@@ -173,30 +204,33 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
         </marker>
       </defs>
 
-      <text x="40" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">DATA</text>
-      <text x="220" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">PARALLEL MODELS</text>
-      <text x="500" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">ENSEMBLE + EXPLAINER</text>
-      <text x="760" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
+      <text x="30" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">DATA</text>
+      <text x="210" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BALANCE</text>
+      <text x="400" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">BENCHMARK</text>
+      <text x="600" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
+      <text x="780" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
 
-      <Box x={20} y={150} w={150} h={60} title="Clinical Features" sub="stratified k-fold split" />
+      <Box x={20} y={150} w={150} h={60} title="BRFSS 2015" sub="253,680 records · 22 features" delay={0} />
+      <Box x={210} y={150} w={150} h={60} title="Random Over-Sampling" sub="86/14 → balanced · vs SMOTE/ADASYN" delay={0.15} />
+      <Box x={400} y={150} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · boosting · MLP" delay={0.3} />
+      <Box x={600} y={150} w={140} h={60} title="Random Forest" sub="93.15% acc · 0.9887 AUC" highlight delay={0.45} />
 
-      <Box x={210} y={70} w={140} h={50} title="Random Forest" sub="variance reducer" />
-      <Box x={210} y={230} w={140} h={50} title="Gradient Boosting" sub="boundary refinement" />
-
-      <Box x={400} y={150} w={130} h={60} title="Soft Vote" sub="ensemble" />
-      <Box x={570} y={150} w={150} h={60} title="SHAP TreeExplainer" sub="exact Shapley values" highlight />
-
-      <Box x={760} y={70} w={120} h={50} title="Flask API" sub="REST endpoint" />
-      <Box x={760} y={230} w={120} h={50} title="React.js UI" sub="risk + chart" />
+      <Box x={770} y={70} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
+      <Box x={770} y={230} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />
 
       {/* Arrows */}
-      <line x1={170} y1={170} x2={210} y2={95} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={170} y1={195} x2={210} y2={255} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={350} y1={95} x2={400} y2={170} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={350} y1={255} x2={400} y2={195} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={530} y1={180} x2={570} y2={180} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={720} y1={170} x2={760} y2={95} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
-      <line x1={720} y1={195} x2={760} y2={255} stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#dsense-arrow)" />
+      <Arrow x1={170} y1={180} x2={210} y2={180} delay={0.1} />
+      <Arrow x1={360} y1={180} x2={400} y2={180} delay={0.25} />
+      <Arrow x1={560} y1={180} x2={600} y2={180} delay={0.4} />
+      <Arrow x1={740} y1={170} x2={770} y2={95} delay={0.55} />
+      <Arrow x1={740} y1={190} x2={770} y2={255} delay={0.55} />
+
+      {/* Data packets hopping the pipeline gaps in sequence */}
+      <FlowDot path="M 170 180 L 210 180" dur={2.4} delay={0} />
+      <FlowDot path="M 360 180 L 400 180" dur={2.4} delay={0.8} />
+      <FlowDot path="M 560 180 L 600 180" dur={2.4} delay={1.6} />
+      <FlowDot path="M 740 170 L 770 95" dur={2.4} delay={2.4} />
+      <FlowDot path="M 740 190 L 770 255" dur={2.4} delay={2.4} />
     </svg>
   );
 }
