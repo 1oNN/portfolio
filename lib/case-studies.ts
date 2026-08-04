@@ -53,7 +53,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     accent: "var(--status-engineering)",
     status: "In Production",
     timeline: "Oct 2025 - Mar 2026",
-    role: "ML Engineer @ Outlyst",
+    role: "AI Systems Engineer @ Outlyst",
     primaryStack: ["FastAPI", "Retell AI", "AsyncIO", "PostgreSQL"],
     links: {},
     problem: [
@@ -99,7 +99,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "diabetes-risk",
     accent: "var(--status-ml)",
     status: "Shipped",
-    timeline: "Jan - Jul 2024",
+    timeline: "Jul 2023 - Jul 2024",
     role: "BSc thesis (with Inshra Javed), COMSATS University Islamabad",
     primaryStack: ["scikit-learn", "SHAP", "React.js", "Flask"],
     links: {},

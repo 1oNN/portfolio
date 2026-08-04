@@ -15,7 +15,7 @@ Languages spoken: English (Fluent, IELTS 7.0), Urdu (Native), German (A1.2 - cur
 
 EXPERIENCE:
 
-1. AI Automation & ML Engineer - Outlyst (Oct 2025 - Mar 2026, Leeds UK, Remote)
+1. AI Systems Engineer - Outlyst (Oct 2025 - Mar 2026, Leeds UK, Remote)
 - Engineered and optimized inference architecture for an autonomous AI voice agent (Retell AI, FastAPI), supporting 2,100+ concurrent stateful interactions.
 - Enhanced agent capabilities to detect gatekeepers and schedule callbacks, boosting lead conversions by ~25% and generating 27 qualified leads.
 - Conducted backend profiling to isolate inefficient async I/O and connection pooling, driving 54% latency reduction (2.4s → 1.1s).
@@ -26,7 +26,7 @@ EXPERIENCE:
 - Designed graph-augmented retrieval with cross-encoder re-ranking and dense Sentence Transformer embeddings.
 - Evaluated on a 110-item regulatory benchmark: 0.82 source accuracy, 0.81 citation quality, 0.76 faithfulness, 0.74 answer relevance (RAGAS + custom legal metrics).
 
-3. Research Assistant, Data Science - COMSATS University Islamabad (Jan 2024 - Jul 2024)
+3. Research Assistant, Data Science - COMSATS University Islamabad (Jul 2023 - Jul 2024)
 - Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC records; Random Forest best (93.15% accuracy, 0.9887 AUC).
 - Deployed via REST APIs with SHAP-based interpretability.
 - Co-authored Springer paper (sleep-efficiency prediction, first author), presented at ICSMAI 2024.

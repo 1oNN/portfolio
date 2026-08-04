@@ -125,7 +125,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "outlyst",
     company: "Outlyst",
-    role: "AI Automation & ML Engineer",
+    role: "AI Systems Engineer",
     type: "engineering",
     location: "Leeds, UK (Remote)",
     startDate: "Oct 2025",
@@ -160,7 +160,7 @@ export const EXPERIENCE: Experience[] = [
     role: "Research Assistant - Data Science",
     type: "research",
     location: "Islamabad, Pakistan",
-    startDate: "Jan 2024",
+    startDate: "Jul 2023",
     endDate: "Jul 2024",
     current: false,
     responsibilities: [
@@ -235,7 +235,7 @@ export const TERMINAL_COMMANDS: Record<string, string> = {
   skills:
     "Core: Python · PyTorch · FastAPI · Neo4j · RAG · LLMs\nAlso: TypeScript · React · Docker · AWS · PostgreSQL",
   experience:
-    "→ Outlyst (Oct 2025 - Mar 2026): AI Automation & ML Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jan-Jul 2024): Research Assistant (Data Science)",
+    "→ Outlyst (Oct 2025 - Mar 2026): AI Systems Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jul 2023-Jul 2024): Research Assistant (Data Science)",
   contact:
     "Email: hammadahmad.ml@gmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1onn",
   whoami: "hammad@portfolio:~$",
