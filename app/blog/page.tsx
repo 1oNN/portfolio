@@ -50,9 +50,13 @@ export default async function BlogPage({ searchParams }: Props) {
             <FiArrowLeft size={15} />
             Back to home
           </Link>
-          <span className="font-mono text-sm font-bold text-[var(--accent)]">
+          <Link
+            href="/"
+            aria-label="Back to home"
+            className="font-mono text-sm font-bold text-[var(--accent)] transition-opacity hover:opacity-75 focus-visible:opacity-75"
+          >
             ha<span className="text-[var(--accent-secondary)]">.</span>
-          </span>
+          </Link>
         </div>
       </header>
 
