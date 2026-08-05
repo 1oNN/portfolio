@@ -1,5 +1,5 @@
 import ContactForm from "@/components/sections/ContactForm";
-import { SOCIAL_LINKS } from "@/lib/constants";
+import { CONTACT_EMAIL, SOCIAL_LINKS } from "@/lib/constants";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -8,7 +8,7 @@ const iconMap: Record<string, React.ReactNode> = {
   FiMail: <FiMail size={18} />,
 };
 
-const EMAIL = "hammadahmad.ml@gmail.com";
+const EMAIL = CONTACT_EMAIL;
 
 /**
  * Closing section: a centered statement with ONE dominant CTA (the email),
@@ -39,8 +39,9 @@ export default function Contact() {
           style={{ color: "var(--text-secondary)" }}
         >
           I&apos;m open to full-time AI/ML engineering and research roles, and MSCA-eligible for
-          PhD or postdoc positions in the EU. Whether it&apos;s a role, a research problem, or
-          just a hello - my inbox is always open.
+          PhD or postdoc positions in the EU. If you&apos;re hiring for an AI/ML team, supervising
+          research, or just want to compare notes on retrieval systems, email is the fastest way
+          to reach me.
         </p>
 
         {/* The one dominant CTA */}

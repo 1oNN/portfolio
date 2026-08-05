@@ -24,7 +24,7 @@ Personal portfolio for Hammad Ahmad - AI/ML Engineer & Researcher. Built with Ne
 
 ## Getting Started
 ```bash
-git clone https://github.com/1onn/portfolio.git
+git clone https://github.com/1oNN/portfolio.git
 cd portfolio
 npm install
 npm run dev
@@ -45,6 +45,9 @@ SES_FROM_EMAIL=your-verified@email.com
 DYNAMODB_BLOG_TABLE=portfolio-blog
 DYNAMODB_CONTACTS_TABLE=portfolio-contacts
 DYNAMODB_AGENT_TABLE=portfolio-agent-logs
+DYNAMODB_DOWNLOADS_TABLE=portfolio-downloads
+
+CONTACT_TO_EMAIL=where-contact-mail-should-arrive@example.com
 
 GROQ_API_KEY=
 NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
@@ -56,6 +59,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
    - `portfolio-blog`
    - `portfolio-contacts`
    - `portfolio-agent-logs`
+   - `portfolio-downloads`
 
 2. **SES**: verify `SES_FROM_EMAIL` in the AWS SES console
 
@@ -85,7 +89,7 @@ public/cv/        → Downloadable CVs (add your PDFs here)
 ```
 
 ## Notes
-- **CV publishing**: no CVs ship by default. Drop a PDF into `public/cv/` and add a matching entry in `lib/cv-config.ts` - the About section and agent prompt pick it up automatically.
+- **CV publishing**: one CV (AI/ML) ships from `public/cv/`. To add or swap CVs, drop the PDF into `public/cv/` and edit the entry list in `lib/cv-config.ts` - the About section, agent prompt, and download-tracking validation all pick it up automatically.
 - **Seed posts**: `lib/seed-posts.ts` ships a couple of posts inside the bundle so the blog has content without a DB write. They're merged into the published read path only; a real DB post always wins on a slug collision.
 - **Fonts**: Inter (body), Space Grotesk (`--font-display`, headings), and JetBrains Mono (`--font-mono`, labels/metrics) are self-hosted via `next/font`, no external font requests.
 

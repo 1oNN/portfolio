@@ -97,12 +97,14 @@ const jsonLd = {
   jobTitle: "AI/ML Engineer & Researcher",
   description:
     "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
+  image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"}/profile.png`,
+  email: "mailto:hammadahmad.ml@gmail.com",
   alumniOf: [
     { "@type": "CollegeOrUniversity", name: "University of Bradford" },
     { "@type": "CollegeOrUniversity", name: "COMSATS University Islamabad" },
   ],
   sameAs: [
-    "https://github.com/1onn",
+    "https://github.com/1oNN",
     "https://linkedin.com/in/hammadahmad123",
   ],
 };
@@ -116,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
+      <body id="top">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-[var(--accent-contrast)] focus:shadow-lg"

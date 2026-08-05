@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { getAllPosts } from "@/lib/blog-db";
 import PostCard from "@/components/blog/PostCard";
+import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { BlogPost } from "@/types";
 
 export const revalidate = 60;
@@ -34,6 +35,7 @@ export default async function BlogPage({ searchParams }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+      <AnalyticsBeacon page="/blog" />
       {/* Sticky header */}
       <header
         className="sticky top-0 z-40 border-b backdrop-blur-md"

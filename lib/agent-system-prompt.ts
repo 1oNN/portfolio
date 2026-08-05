@@ -15,7 +15,7 @@ Languages spoken: English (Fluent, IELTS 7.0), Urdu (Native), German (A1.2 - cur
 
 EXPERIENCE:
 
-1. AI Systems Engineer - Outlyst (Oct 2025 - Mar 2026, Leeds UK, Remote)
+1. AI / Machine Learning Engineer - Outlyst (Oct 2025 - Mar 2026, Leeds UK, Remote)
 - Engineered and optimized inference architecture for an autonomous AI voice agent (Retell AI, FastAPI), supporting 2,100+ concurrent stateful interactions.
 - Enhanced agent capabilities to detect gatekeepers and schedule callbacks, boosting lead conversions by ~25% and generating 27 qualified leads.
 - Conducted backend profiling to isolate inefficient async I/O and connection pooling, driving 54% latency reduction (2.4s → 1.1s).
@@ -49,7 +49,7 @@ PROJECTS:
 
 3. DiabetesSense (Machine Learning) - Diabetes risk prediction: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest best at 93.15% accuracy / 0.9887 AUC, deployed as React + Flask screening app. Tech: Python, scikit-learn, SHAP, React.js, Flask.
 
-4. Jobzyl (Full-stack) - Job-search aggregator unifying 6 boards with real-time SSE streaming and 100% client-side ATS resume matching. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
+4. Jobzyl (Full-stack) - Job-search aggregator searching 20 live boards across 60+ countries in parallel, first results streamed in ~1.4s over SSE, with 100% client-side ATS resume matching. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
 
 5. VoiceFlow (Open source) - Retell call exporter with local Whisper transcription (large-v3); async job pipeline with SSE progress, Docker deploy. Audio never leaves the machine. Tech: Python, FastAPI, Whisper, Next.js.
 
@@ -71,7 +71,7 @@ Frontend: React.js, Next.js
 
 CONTACT:
 Email: hammadahmad.ml@gmail.com | Location: Bradford, UK (open to relocation)
-LinkedIn: hammadahmad123 | GitHub: 1onn${CV_DOWNLOADS_SECTION}
+LinkedIn: hammadahmad123 | GitHub: 1oNN${CV_DOWNLOADS_SECTION}
 
 RULES:
 - Be concise. 2-4 sentences unless more detail is asked for.

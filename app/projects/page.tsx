@@ -5,6 +5,7 @@ import { PROJECTS } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
 import FeaturedCard from "@/components/case-study/FeaturedCard";
 import ListingCard from "@/components/case-study/ListingCard";
+import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { Project } from "@/types";
 
 export const metadata: Metadata = {
@@ -34,14 +35,14 @@ export default async function ProjectsPage({ searchParams }: Props) {
   const filtered: Project[] =
     active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
-  // Every category has exactly one project today, so a category filter must never
-  // fall back to the jumbo FeaturedCard treatment - that reads as a lone-card bug.
-  // FeaturedCard is reserved for the unfiltered "all" view.
+  // FeaturedCard is reserved for the unfiltered "all" view; filtered views use
+  // uniform ListingCards so a small category never reads as a lone-card bug.
   const featured = active === "all" ? filtered[0] : undefined;
   const rest = active === "all" ? filtered.slice(1) : filtered;
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+      <AnalyticsBeacon page="/projects" />
       {/* Sticky header */}
       <header
         className="sticky top-0 z-40 border-b backdrop-blur-md"

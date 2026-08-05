@@ -43,6 +43,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Faithfulness at 0.76 means roughly three in four answers stay grounded in retrieved context; the 24% that drift are the prompt-engineering targets for next-iteration work. Answer relevance at 0.74 tracks closely, suggesting the model is staying on-topic when it stays grounded.",
     ],
     reflections: [
+      "The honest failure mode is consumer redress: DISP's fragmented rule structure dragged legal completeness below 0.65, and the one-hop graph expansion that lifts the other domains couldn't stitch it back together. Rule-level chunking is the right default for most of the Handbook, but domains like DISP likely need domain-aware chunk granularity, or a second expansion hop, before completeness recovers.",
       "If I were continuing this past the dissertation, the next move is two-pronged. First, extend the evaluation harness into a structured legal-reasoning benchmark - RAGAS catches faithfulness drift but not legal-specific failure modes like jurisdictional misapplication. Second, ship a confidence-aware UI that surfaces uncertainty when the graph expansion returns sparse adjacency, so users know when the system is reasoning from rich vs thin context.",
     ],
     related: ["ai-voice-agent", "diabetes-risk"],
@@ -53,7 +54,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     accent: "var(--status-engineering)",
     status: "In Production",
     timeline: "Oct 2025 - Mar 2026",
-    role: "AI Systems Engineer @ Outlyst",
+    role: "AI / Machine Learning Engineer @ Outlyst",
     primaryStack: ["FastAPI", "Retell AI", "AsyncIO", "PostgreSQL"],
     links: {},
     problem: [
@@ -90,9 +91,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Downstream business impact: 25% lift in lead conversions, 27 qualified leads generated through the gatekeeper-aware routing, and 100+ staff hours per week reclaimed from the automated CRM sync pipeline.",
     ],
     reflections: [
+      "What I'd change: instrument event-loop lag from day one. The request-rate dashboards looked healthy right up until sessions dropped, because they never measured the thing that was actually saturating - time-to-yield inside the event loop. py-spy found in an afternoon what the dashboards had been hiding for weeks.",
       "The next 200ms of latency reduction is going to come from the LLM inference itself, not the surrounding plumbing - speculative decoding, smaller fine-tuned models for the specific tool-call patterns, or moving the gatekeeper classifier to a co-located CPU model. The plumbing is mostly drained.",
     ],
-    related: ["finlaw-uk", "jobzyl"],
+    related: ["voiceflow", "finlaw-uk", "jobzyl"],
   },
 
   "diabetes-risk": {
@@ -136,9 +138,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [
+      "If I rebuilt it, per-prediction attribution would ship in v1 rather than arriving with the follow-on assistantship - a risk score without 'why this score' is exactly the black box the thesis argued against.",
       "For clinical deployment beyond a paper, the next blockers are calibration and population shift: 93% on a single curated dataset doesn't mean 93% on a different hospital's intake. The model needs Platt-scaled probabilities and a population-shift detector before it's safe at the bedside.",
     ],
-    related: ["finlaw-uk", "jobzyl"],
+    related: ["sleep-efficiency", "finlaw-uk"],
   },
 
   voiceflow: {
@@ -181,7 +184,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Deployment is a single docker-compose up - FastAPI backend on one port, Next.js frontend on another, no external services required beyond the Retell API itself.",
     ],
     reflections: [
-      "The natural next steps are a persistent job store so exports survive a restart, and speaker diarization so transcripts separate agent from caller - the two things I'd want before pointing it at a production-scale call archive.",
+      "The honest cost is the CPU path: 5-10 minutes per audio-hour means the privacy promise is only comfortable with a GPU. If local-first is the point, the next version should chunk audio and fan transcription across workers so the no-cloud constraint stops taxing throughput.",
+      "Beyond that, the natural next steps are a persistent job store so exports survive a restart, and speaker diarization so transcripts separate agent from caller - the two things I'd want before pointing it at a production-scale call archive.",
     ],
     related: ["ai-voice-agent", "jobzyl"],
   },
@@ -230,6 +234,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The app returns a score, a High (≥80%) / Normal (64-79%) / Low (<64%) classification, and recommendations matched to the band - runnable locally or via Docker in one command.",
     ],
     reflections: [
+      "Shipping the app taught me the distance between a paper artefact and a usable tool: inference-time input validation and explaining a High/Normal/Low band to a lay user were decisions the paper never had to face.",
       "The dataset is the limit: 452 records from one study. The next iteration is validation against a larger, independent cohort - and wearable integration, so stage percentages come from a device instead of self-report.",
     ],
     related: ["diabetes-risk", "finlaw-uk"],
@@ -244,19 +249,19 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
     links: { live: "https://jobzyl.com" },
     problem: [
-      "Job search across a half-dozen boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV. Aggregator products exist, but they're either unauthenticated ad farms or so slow that the data is stale by the time you load it.",
+      "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV. Aggregator products exist, but they're either unauthenticated ad farms or so slow that the data is stale by the time you load it.",
       "The interesting full-stack problem isn't the scraping itself - it's making a real-time, multi-tenant aggregator with row-level security, live progress streaming, and client-side ATS scoring that doesn't ship the candidate's resume to a server. The privacy-first ATS scoring was the differentiator.",
     ],
     approach: [
-      "Six job boards aggregated: four scraped in parallel (Indeed, Google Jobs, Glassdoor, ZipRecruiter) and two via official APIs (Reed, Adzuna). The scrape layer is a FastAPI service on AWS App Runner with per-board rate limits, scheduled re-scrapes every six hours for cache warming, and Server-Sent Events streaming search progress back to the client as results arrive - so users see jobs populate live instead of waiting for a single bulk response.",
+      "Twenty live job boards searched in parallel - Indeed, Reed, Adzuna, Careerjet, Jooble, USAJobs and more, covering 60+ countries. The aggregation layer is a FastAPI service on AWS App Runner with per-board rate limits, scheduled re-scrapes for cache warming, and Server-Sent Events streaming search progress back to the client as each board responds - first results land in about 1.4 seconds instead of a single bulk response.",
       "Storage is Supabase with row-level security on every one of 11 tables. No bare PostgreSQL access from the client; every read and write goes through RLS policies tied to the authenticated user's UUID. Auth supports email plus Google and LinkedIn OAuth via PKCE flow.",
       "ATS scoring runs entirely client-side. The user's CV is parsed in-browser, keywords are extracted with a small NLP routine, and each job card displays a match score computed locally. The CV never leaves the device. Application tracking is a Kanban board with the standard pipeline (Saved → Applied → Interview → Offer → Rejected), side-by-side job comparison, and a persistent audit log.",
       "Admin layer is a separate authenticated dashboard for search analytics, manual scrape triggers, and audit log review.",
     ],
     decisions: [
       {
-        title: "Parallel scraping over sequential",
-        body: "Six boards scraped sequentially is a four-minute search. Parallel with per-board concurrency limits is under 30 seconds for the same coverage. The scaling cost is rate-limit management - a one-time engineering investment, not a per-search cost.",
+        title: "Parallel search over sequential",
+        body: "Twenty boards searched sequentially would be a minutes-long wait. Parallel with per-board concurrency limits streams first results in about 1.4 seconds. The scaling cost is rate-limit management - a one-time engineering investment, not a per-search cost.",
       },
       {
         title: "Client-side ATS scoring",
@@ -272,7 +277,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "Six job boards aggregated under 30s with live SSE progress, 11 RLS-locked Supabase tables, 100% client-side ATS scoring (CV never leaves the browser), scheduled re-scrapes every 6 hours, and a Kanban-style application tracker with side-by-side job comparison.",
+      "Twenty live boards searched in parallel across 60+ countries, first results streamed in about 1.4s over SSE, 11 RLS-locked Supabase tables, 100% client-side ATS scoring (the CV never leaves the browser), and a Kanban-style application tracker with side-by-side job comparison.",
+      "The board count has grown from six at launch to twenty today without architectural change - the parallel, rate-limited fan-out absorbed the new sources.",
       "Operationally: PKCE OAuth for Google and LinkedIn, scheduled scrapes for cache warming, admin dashboard with persistent audit log, and search analytics for understanding which boards return useful results per query type.",
     ],
     reflections: [

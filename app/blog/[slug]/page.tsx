@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
-import { getPostBySlug } from "@/lib/blog-db";
-import { parseMarkdown } from "@/lib/markdown";
+import { FiArrowLeft, FiArrowRight, FiArrowUp } from "react-icons/fi";
+import { getAllPosts, getPostBySlug } from "@/lib/blog-db";
+import { parseMarkdownDoc } from "@/lib/markdown";
 import { readingTime } from "@/lib/reading-time";
+import TableOfContents from "@/components/blog/TableOfContents";
+import CopyLink from "@/components/blog/CopyLink";
 
 export const revalidate = 60;
 
@@ -47,10 +49,16 @@ export default async function BlogPostPage({ params }: Props) {
 
   if (!post || !post.published) notFound();
 
-  const contentHtml = parseMarkdown(post.content);
+  const { html: contentHtml, headings } = parseMarkdownDoc(post.content);
   const mins = readingTime(post.content);
   const isDeepDive = post.type === "case-study";
   const typeColor = isDeepDive ? "var(--accent-secondary)" : "var(--accent)";
+
+  // Prev/next within the published list (newest first)
+  const posts = await getAllPosts(true);
+  const idx = posts.findIndex((p) => p.slug === post.slug);
+  const newer = idx > 0 ? posts[idx - 1] : null;
+  const older = idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
   const jsonLd = {
@@ -71,6 +79,9 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Scroll-driven reading progress (CSS-only; hidden where unsupported) */}
+      <div className="reading-progress" aria-hidden="true" />
 
       {/* Sticky header */}
       <header
@@ -115,6 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
             <span className="font-mono text-[11px] text-[var(--text-muted)]">
               {formatDate(post.createdAt)} · {mins} min read
             </span>
+            <CopyLink url={`${siteUrl}/blog/${post.slug}`} />
           </div>
 
           <h1 className="font-display text-[clamp(2.75rem,2rem+2.6vw,4.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]">
@@ -138,11 +150,65 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="mt-10 border-t border-[var(--border)]" />
 
-        {/* Content */}
-        <div
-          className="blog-content mt-10 max-w-3xl"
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />
+        {/* Content + sticky outline */}
+        <div className="mt-10 lg:grid lg:grid-cols-[minmax(0,1fr)_200px] lg:gap-14">
+          <div
+            className="blog-content max-w-3xl"
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
+          {headings.length >= 2 && (
+            <aside className="hidden lg:block">
+              <div className="sticky top-24">
+                <TableOfContents headings={headings} />
+              </div>
+            </aside>
+          )}
+        </div>
+
+        {/* Footer nav: older/newer posts + back to top */}
+        <div className="mt-16 max-w-3xl border-t border-[var(--border)] pt-8">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {older ? (
+              <Link
+                href={`/blog/${older.slug}`}
+                className="group rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
+              >
+                <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
+                  <FiArrowLeft size={11} />
+                  Older
+                </span>
+                <span className="mt-2 block text-sm font-medium leading-snug text-[var(--text-secondary)] transition-colors group-hover:text-[var(--text-primary)] group-focus-visible:text-[var(--text-primary)]">
+                  {older.title}
+                </span>
+              </Link>
+            ) : (
+              <span aria-hidden="true" />
+            )}
+            {newer && (
+              <Link
+                href={`/blog/${newer.slug}`}
+                className="group rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 text-right transition-colors hover:border-[var(--text-secondary)] focus-visible:border-[var(--text-secondary)]"
+              >
+                <span className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
+                  Newer
+                  <FiArrowRight size={11} />
+                </span>
+                <span className="mt-2 block text-sm font-medium leading-snug text-[var(--text-secondary)] transition-colors group-hover:text-[var(--text-primary)] group-focus-visible:text-[var(--text-primary)]">
+                  {newer.title}
+                </span>
+              </Link>
+            )}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <a
+              href="#top"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+            >
+              <FiArrowUp size={12} />
+              Back to top
+            </a>
+          </div>
+        </div>
       </main>
     </div>
   );

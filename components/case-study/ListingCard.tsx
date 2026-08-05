@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
+import VisualFrame from "@/components/project-visuals/VisualFrame";
 
 interface Props {
   project: Project;
@@ -32,7 +33,9 @@ export default function ListingCard({ project, caseStudy }: Props) {
       >
         <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]">
           {Hero ? (
-            <Hero accent={accent} className="h-full w-full" />
+            <VisualFrame className="h-full w-full">
+              <Hero accent={accent} className="h-full w-full" />
+            </VisualFrame>
           ) : (
             <div className="h-full w-full" style={{ backgroundColor: "var(--surface-elevated)" }} />
           )}

@@ -4,16 +4,13 @@ export interface Project {
   id: string;
   title: string;
   tagline: string;
-  description: string;
   longDescription: string;
   tech: string[];
   category: "ml" | "fullstack" | "research" | "engineering";
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
-  highlights: string[];
   metrics?: ProjectMetric[];
-  bentoSize: "large" | "medium" | "small";
 }
 
 export interface ProjectMetric {
@@ -105,13 +102,6 @@ export interface ApiResponse<T = null> {
   success: boolean;
   message: string;
   data?: T;
-}
-
-// ─── UI Primitives ────────────────────────────────────────────────
-
-export interface NavItem {
-  label: string;
-  href: string;
 }
 
 // ─── Blog ─────────────────────────────────────────────────────────

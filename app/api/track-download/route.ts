@@ -4,13 +4,17 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { v4 as uuidv4 } from "uuid";
 
-type CvType = "ai-ml" | "data-scientist" | "research-phd";
+import { AVAILABLE_CVS, type CvEntry } from "@/lib/cv-config";
+
+type CvType = CvEntry["cvType"];
 
 const CV_LABELS: Record<CvType, string> = {
   "ai-ml": "AI/ML Engineer",
   "data-scientist": "Data Scientist",
   "research-phd": "Research / PhD",
 };
+
+const VALID_CV_TYPES = AVAILABLE_CVS.map((cv) => cv.cvType);
 
 function getDynamoClient(): DynamoDBDocumentClient {
   const dynamo = new DynamoDBClient({
@@ -33,7 +37,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  if (!["ai-ml", "data-scientist", "research-phd"].includes(cvType)) {
+  if (!VALID_CV_TYPES.includes(cvType)) {
     return NextResponse.json({ error: "Invalid cvType." }, { status: 400 });
   }
 

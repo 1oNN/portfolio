@@ -1,6 +1,24 @@
+export interface MarkdownHeading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
 export function parseMarkdown(md: string): string {
+  return parseMarkdownDoc(md).html;
+}
+
+/**
+ * Full parse: returns the sanitized HTML plus the document-ordered h2/h3
+ * outline (with the same slug ids embedded in the HTML) for building a
+ * table of contents.
+ */
+export function parseMarkdownDoc(md: string): { html: string; headings: MarkdownHeading[] } {
   const codeBlocks: string[] = [];
   const inlineCodes: string[] = [];
+  const inlineRaw: string[] = [];
+  const headings: MarkdownHeading[] = [];
+  const usedIds = new Set<string>();
 
   // Extract code blocks before any escaping. Capture the fence language token
   // and, when it's a valid identifier, emit a `language-<lang>` class; otherwise
@@ -16,15 +34,45 @@ export function parseMarkdown(md: string): string {
   html = html.replace(/`([^`]+)`/g, (_match, code: string) => {
     const idx = inlineCodes.length;
     inlineCodes.push(`<code>${escapeHtml(code)}</code>`);
+    inlineRaw.push(code);
     return `\x00INLINE_${idx}\x00`;
   });
 
   // Escape all remaining HTML so author-typed tags can't inject
   html = escapeHtml(html);
 
-  // Headers
-  html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
-  html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+  // Plain text of a heading for the outline: entities back to characters,
+  // inline-code placeholders back to their raw text.
+  const headingText = (raw: string): string =>
+    unescapeHtml(raw)
+      .replace(/\x00INLINE_(\d+)\x00/g, (_m, i: string) => inlineRaw[Number(i)] ?? "")
+      .trim();
+
+  // Slug ids contain only [a-z0-9-], so they're safe to embed unquoted-risk-free.
+  const slugify = (text: string): string => {
+    const base =
+      text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "section";
+    let id = base;
+    let n = 2;
+    while (usedIds.has(id)) {
+      id = `${base}-${n}`;
+      n += 1;
+    }
+    usedIds.add(id);
+    return id;
+  };
+
+  // Headers - h2/h3 in one pass so the collected outline stays in document order
+  html = html.replace(/^(#{2,3}) (.+)$/gm, (_m, hashes: string, t: string) => {
+    const level = hashes.length as 2 | 3;
+    const text = headingText(t);
+    const id = slugify(text);
+    headings.push({ id, text, level });
+    return `<h${level} id="${id}">${t}</h${level}>`;
+  });
   html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
 
   // Bold / italic
@@ -80,7 +128,7 @@ export function parseMarkdown(md: string): string {
     html = html.replace(`\x00INLINE_${i}\x00`, code);
   });
 
-  return html;
+  return { html, headings };
 }
 
 function escapeHtml(str: string): string {
@@ -90,4 +138,13 @@ function escapeHtml(str: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#x27;");
+}
+
+function unescapeHtml(str: string): string {
+  return str
+    .replace(/&#x27;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&gt;/g, ">")
+    .replace(/&lt;/g, "<")
+    .replace(/&amp;/g, "&");
 }

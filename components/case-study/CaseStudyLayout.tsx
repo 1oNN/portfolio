@@ -10,6 +10,7 @@ import {
   FiExternalLink,
   FiFileText,
   FiBookOpen,
+  FiMessageCircle,
 } from "react-icons/fi";
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
@@ -30,6 +31,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
   const Hero = visuals?.Hero;
   const Architecture = visuals?.Architecture;
   const Results = visuals?.Results;
+  const Demo = visuals?.Demo;
   const accent = caseStudy.accent;
 
   const links: { label: string; href: string; icon: React.ReactNode }[] = [];
@@ -145,8 +147,7 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                 value={caseStudy.primaryStack.join(" · ")}
               />
             </dl>
-            {links.length > 0 && (
-              <div className="mt-5 flex flex-wrap items-center gap-2 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
+            <div className="mt-5 flex flex-wrap items-center gap-2 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
                 {links.map((l) => {
                   // Live demo is the strongest CTA on the page - solid accent fill
                   const primary = l.label === "Live demo";
@@ -181,8 +182,14 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     </a>
                   );
                 })}
-              </div>
-            )}
+                <Link
+                  href="/#agent"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)]"
+                >
+                  <FiMessageCircle size={13} />
+                  Ask my agent about this project
+                </Link>
+            </div>
           </div>
         </section>
 
@@ -278,6 +285,18 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             ))}
           </div>
         </section>
+
+        {/* 5b. INTERACTIVE DEMO - real verified data only, never generated output */}
+        {Demo && (
+          <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
+            <SectionHeader
+              eyebrow={visuals?.demoHeader?.eyebrow ?? "Try it"}
+              title={visuals?.demoHeader?.title ?? "Explore the data"}
+              accent={accent}
+            />
+            <Demo accent={accent} className="mt-10" />
+          </section>
+        )}
 
         {/* 6. KEY DECISIONS - numbered cards that lift on hover */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>

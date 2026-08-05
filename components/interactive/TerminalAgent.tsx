@@ -294,7 +294,7 @@ export default function TerminalAgent() {
 
       {/* Suggestions - tech-chip-like buttons */}
       <div className="flex flex-wrap gap-2 border-t px-5 py-3" style={{ borderColor: "var(--border)" }}>
-        {AGENT_SUGGESTIONS.slice(0, 3).map((s) => (
+        {AGENT_SUGGESTIONS.map((s) => (
           <button
             key={s}
             type="button"
