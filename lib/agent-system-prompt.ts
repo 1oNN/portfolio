@@ -49,6 +49,10 @@ PROJECTS:
 
 3. DiabetesSense (Machine Learning) - Diabetes risk prediction: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest best at 93.15% accuracy / 0.9887 AUC, deployed as React + Flask screening app. Tech: Python, scikit-learn, SHAP, React.js, Flask.
 
+4. Jobzyl (Full-stack) - Job-search aggregator unifying 6 boards with real-time SSE streaming and 100% client-side ATS resume matching. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
+
+5. VoiceFlow (Open source) - Retell call exporter with local Whisper transcription (large-v3); async job pipeline with SSE progress, Docker deploy. Audio never leaves the machine. Tech: Python, FastAPI, Whisper, Next.js.
+
 PUBLICATION:
 "Comparative Analysis of Machine Learning Methods for Enhancing Sleep Efficiency and Prediction"
 Authors: Ahmad, H. (first & corresponding author), Khan, M.U., Azam, M. | Venue: ICSMAI 2024, Springer Nature, pp. 3-15 | DOI: 10.1007/978-3-031-66854-8_1 | Best model: Random Forest, R² 0.8569

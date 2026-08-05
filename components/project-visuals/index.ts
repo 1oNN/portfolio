@@ -3,6 +3,7 @@ import { FinLawHero, FinLawArchitecture } from "./FinLawVisuals";
 import { VoiceAgentHero, VoiceAgentArchitecture } from "./VoiceAgentVisuals";
 import { DiabetesSenseHero, DiabetesSenseArchitecture } from "./DiabetesSenseVisuals";
 import { JobzylHero, JobzylArchitecture } from "./JobzylVisuals";
+import { VoiceFlowHero, VoiceFlowArchitecture } from "./VoiceFlowVisuals";
 import { FinLawResults, DiabetesSenseResults, VoiceAgentResults } from "./ResultsCharts";
 
 interface VisualProps {
@@ -23,6 +24,7 @@ export const PROJECT_VISUALS: Record<string, ProjectVisuals> = {
   "ai-voice-agent": { Hero: VoiceAgentHero, Architecture: VoiceAgentArchitecture, Results: VoiceAgentResults },
   "diabetes-risk": { Hero: DiabetesSenseHero, Architecture: DiabetesSenseArchitecture, Results: DiabetesSenseResults },
   jobzyl: { Hero: JobzylHero, Architecture: JobzylArchitecture },
+  voiceflow: { Hero: VoiceFlowHero, Architecture: VoiceFlowArchitecture },
 };
 
 export function getProjectVisuals(projectId: string): ProjectVisuals | undefined {

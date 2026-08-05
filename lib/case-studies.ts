@@ -141,6 +141,51 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     related: ["finlaw-uk", "jobzyl"],
   },
 
+  voiceflow: {
+    projectId: "voiceflow",
+    accent: "var(--status-engineering)",
+    status: "Open source",
+    timeline: "Apr 2026",
+    role: "Solo open-source tool",
+    primaryStack: ["FastAPI", "Whisper", "Next.js", "Docker"],
+    links: { github: "https://github.com/1oNN/VoiceFlow" },
+    problem: [
+      "Teams running Retell voice agents accumulate thousands of call recordings, and getting them out for QA or analysis means hand-scripting against the API every time. Worse, the obvious transcription route - a cloud speech-to-text service - means shipping customer call audio to yet another third party.",
+      "VoiceFlow is the tool I wanted while working with the Retell stack: point it at an API key, pick the columns and date range, and get transcribed, structured exports - without any audio leaving the machine.",
+    ],
+    approach: [
+      "A FastAPI backend drives the pipeline: a column-discovery endpoint reads the first call's metadata so the UI adapts to whatever fields the account actually has, then an export job fetches calls with date-range filtering, downloads the audio, and runs Whisper transcription locally - large-v3 by default, GPU-accelerated when one is available.",
+      "Exports run as async jobs. Kicking one off returns a job ID immediately; progress, per-call summaries, and live logs stream to the Next.js UI over server-sent events, so a multi-hour export is watchable rather than a black box.",
+      "Everything lands in a structured JSON export with exactly the columns selected. The whole stack ships as a docker-compose file: one command, two services, running.",
+    ],
+    decisions: [
+      {
+        title: "Local Whisper over cloud STT",
+        body: "Call audio is the most sensitive artifact a voice agent produces. Running Whisper locally means it never crosses another trust boundary. The price is speed - roughly 5-10 minutes per hour of audio on CPU - which GPU acceleration cuts substantially.",
+      },
+      {
+        title: "Async jobs, not request-response",
+        body: "An export can take minutes to hours depending on call volume and hardware. POST /api/run returns a job ID instantly and the job manager owns the lifecycle, so the UI never sits on a hanging request.",
+      },
+      {
+        title: "SSE for progress, not polling",
+        body: "Server-sent events push logs and progress the moment they happen - the same streaming pattern as Jobzyl's live search. For one-directional progress updates, SSE beats websockets on simplicity and beats polling on latency.",
+      },
+      {
+        title: "Column discovery from live metadata",
+        body: "Retell accounts differ in what call metadata they carry. Reading the schema from a real call instead of hardcoding fields means the export UI is always accurate for the account in front of it.",
+      },
+    ],
+    results: [
+      "A working open-source export pipeline: select columns, filter by date, and receive a structured JSON export with local transcripts attached. The ~3GB Whisper model downloads once and is cached; transcription uses the GPU when present.",
+      "Deployment is a single docker-compose up - FastAPI backend on one port, Next.js frontend on another, no external services required beyond the Retell API itself.",
+    ],
+    reflections: [
+      "The natural next steps are a persistent job store so exports survive a restart, and speaker diarization so transcripts separate agent from caller - the two things I'd want before pointing it at a production-scale call archive.",
+    ],
+    related: ["ai-voice-agent", "jobzyl"],
+  },
+
   jobzyl: {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",

@@ -54,7 +54,7 @@ export const PROJECTS: Project[] = [
     category: "engineering",
     featured: true,
     bentoSize: "medium",
-    githubUrl: "https://github.com/1oNN/VoiceFlow",
+    // Proprietary Outlyst work - deliberately no public repo link
     metrics: [
       { value: "54%", label: "Latency reduction" },
       { value: "2,100+", label: "Concurrent sessions" },
@@ -117,6 +117,30 @@ export const PROJECTS: Project[] = [
       "Supabase Auth with row-level security on all 11 tables; PKCE OAuth flow for Google + LinkedIn",
       "Application tracker with Kanban board, status pipeline, and side-by-side job comparison",
       "Admin dashboard with persistent audit log, search analytics, and manual scrape triggers",
+    ],
+  },
+  {
+    id: "voiceflow",
+    title: "VoiceFlow",
+    tagline: "Retell call exporter with local Whisper transcription",
+    description:
+      "Open-source tool that exports voice calls from Retell and transcribes them locally with Whisper - async job pipeline, live SSE progress, one-command Docker deploy.",
+    longDescription:
+      "Companion tooling for the Retell stack: a FastAPI + Next.js tool that exports call recordings and metadata, then transcribes them with locally-run Whisper (large-v3, GPU-accelerated when available). Call audio never leaves the machine; an async job manager streams progress and logs over server-sent events.",
+    tech: ["Python", "FastAPI", "Whisper", "Next.js", "SSE", "Docker"],
+    category: "engineering",
+    featured: false,
+    bentoSize: "small",
+    githubUrl: "https://github.com/1oNN/VoiceFlow",
+    metrics: [
+      { value: "local", label: "Whisper large-v3" },
+      { value: "SSE", label: "Live job progress" },
+    ],
+    highlights: [
+      "Exports Retell call audio and metadata with column selection and date-range filtering",
+      "Local Whisper transcription (large-v3) - call audio never leaves the machine",
+      "Async job manager with progress, summaries, and log streaming over SSE",
+      "docker-compose up and it runs: FastAPI backend + Next.js frontend",
     ],
   },
 ];
