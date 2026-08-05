@@ -4,7 +4,13 @@ import { VoiceAgentHero, VoiceAgentArchitecture } from "./VoiceAgentVisuals";
 import { DiabetesSenseHero, DiabetesSenseArchitecture } from "./DiabetesSenseVisuals";
 import { JobzylHero, JobzylArchitecture } from "./JobzylVisuals";
 import { VoiceFlowHero, VoiceFlowArchitecture } from "./VoiceFlowVisuals";
-import { FinLawResults, DiabetesSenseResults, VoiceAgentResults } from "./ResultsCharts";
+import { SleepEfficiencyHero, SleepEfficiencyArchitecture } from "./SleepEfficiencyVisuals";
+import {
+  FinLawResults,
+  DiabetesSenseResults,
+  VoiceAgentResults,
+  SleepEfficiencyResults,
+} from "./ResultsCharts";
 
 interface VisualProps {
   accent: string;
@@ -25,6 +31,11 @@ export const PROJECT_VISUALS: Record<string, ProjectVisuals> = {
   "diabetes-risk": { Hero: DiabetesSenseHero, Architecture: DiabetesSenseArchitecture, Results: DiabetesSenseResults },
   jobzyl: { Hero: JobzylHero, Architecture: JobzylArchitecture },
   voiceflow: { Hero: VoiceFlowHero, Architecture: VoiceFlowArchitecture },
+  "sleep-efficiency": {
+    Hero: SleepEfficiencyHero,
+    Architecture: SleepEfficiencyArchitecture,
+    Results: SleepEfficiencyResults,
+  },
 };
 
 export function getProjectVisuals(projectId: string): ProjectVisuals | undefined {

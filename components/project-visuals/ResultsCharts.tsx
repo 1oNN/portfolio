@@ -232,6 +232,86 @@ export function DiabetesSenseResults({ accent, className }: Props) {
   );
 }
 
+/* ─── Sleep Efficiency: four-model R² comparison (published Table 2) ── */
+
+const SLEEP_MODELS = [
+  { label: "Random Forest", r2: 0.8569, winner: true },
+  { label: "Gradient Boosting", r2: 0.8558 },
+  { label: "Linear Regression", r2: 0.7981 },
+  { label: "Decision Tree", r2: 0.6912 },
+];
+
+export function SleepEfficiencyResults({ accent, className }: Props) {
+  const muted = "var(--text-muted)";
+  const text = "var(--text-secondary)";
+  const surface = "var(--surface-elevated)";
+  const border = "var(--border)";
+
+  const barX = 220;
+  const barScale = 620; // R² 1.0 = 620px
+  const rowH = 44;
+  const startY = 76;
+
+  return (
+    <svg
+      viewBox="0 0 900 300"
+      className={`pv-interactive ${className ?? ""}`}
+      role="img"
+      aria-label="R-squared of the four models compared; Random Forest leads at 0.8569"
+      style={{ width: "100%", height: "auto" }}
+    >
+      <text x="40" y="34" fontFamily={MONO} fontSize="10" fontWeight="600" fill={muted} letterSpacing="2">
+        MODEL COMPARISON · R² ON HELD-OUT 20% (TABLE 2 OF THE PAPER)
+      </text>
+
+      {[0, 0.25, 0.5, 0.75, 1].map((t) => (
+        <g key={t}>
+          <line
+            x1={barX + t * barScale} y1={60} x2={barX + t * barScale} y2={startY + SLEEP_MODELS.length * rowH + 4}
+            stroke={border} strokeWidth="1" strokeDasharray="2 4" opacity="0.5"
+          />
+          <text x={barX + t * barScale} y={startY + SLEEP_MODELS.length * rowH + 22} textAnchor="middle" fontFamily={MONO} fontSize="9" fill={muted}>
+            {t.toFixed(2)}
+          </text>
+        </g>
+      ))}
+
+      {SLEEP_MODELS.map((m, i) => {
+        const y = startY + i * rowH;
+        return (
+          <g key={m.label} className="pv-hover-group">
+            <text x={40} y={y + 15} fontFamily={MONO} fontSize="11" fill={m.winner ? "var(--text-primary)" : text} fontWeight={m.winner ? 700 : 400}>
+              {m.label}
+            </text>
+            <rect
+              x={barX} y={y + 2} width={m.r2 * barScale} height="18" rx="2"
+              className="pv-grow-r"
+              fill={m.winner ? accent : surface}
+              fillOpacity={m.winner ? 0.9 : 1}
+              stroke={m.winner ? accent : border}
+              strokeWidth="1"
+              style={{ animationDelay: `${0.1 + i * 0.1}s` }}
+            />
+            <text
+              x={barX + m.r2 * barScale + 8} y={y + 16}
+              fontFamily={MONO} fontSize="10.5" fontWeight={m.winner ? 700 : 500}
+              fill={m.winner ? accent : muted}
+              className="pv-fade"
+              style={{ animationDelay: `${0.4 + i * 0.1}s` }}
+            >
+              {m.r2.toFixed(4)}
+            </text>
+          </g>
+        );
+      })}
+
+      <text x="40" y="290" fontFamily={MONO} fontSize="9" fill={muted} opacity="0.7">
+        452 records · 80/20 split · Random Forest MSE 0.0027 · ICSMAI 2024, Springer Nature
+      </text>
+    </svg>
+  );
+}
+
 /* ─── Voice Agent: stable-concurrency comparison + impact chips ─────── */
 
 export function VoiceAgentResults({ accent, className }: Props) {

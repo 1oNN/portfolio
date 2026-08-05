@@ -143,6 +143,30 @@ export const PROJECTS: Project[] = [
       "docker-compose up and it runs: FastAPI backend + Next.js frontend",
     ],
   },
+  {
+    id: "sleep-efficiency",
+    title: "Sleep Efficiency Predictor",
+    tagline: "Published ML research served as a lifestyle-factor prediction app",
+    description:
+      "The Random Forest model from my first-author ICSMAI 2024 Springer paper (R² 0.8569), shipped as a Flask web app that predicts sleep efficiency from lifestyle factors and returns personalized recommendations.",
+    longDescription:
+      "Companion app to my peer-reviewed paper on ML methods for sleep-efficiency prediction. Four models compared on 452 study records; Random Forest won at R² 0.8569 / MSE 0.0027. The app takes age, sleep-stage percentages, awakenings, caffeine, alcohol, exercise, and smoking status, then returns an efficiency score, a classification, and recommendations keyed to the result.",
+    tech: ["Python", "scikit-learn", "Random Forest", "Flask", "Docker"],
+    category: "research",
+    featured: false,
+    bentoSize: "small",
+    githubUrl: "https://github.com/1oNN/sleep-efficiency-app",
+    metrics: [
+      { value: "0.8569", label: "R² · Random Forest" },
+      { value: "452", label: "Records · 15 features" },
+    ],
+    highlights: [
+      "First & corresponding author: ICSMAI 2024, Springer Nature, pp. 3-15 (DOI 10.1007/978-3-031-66854-8_1)",
+      "Four models benchmarked - Random Forest best at R² 0.8569, MSE 0.0027",
+      "Strongest drivers measured: deep sleep (+0.787), light sleep (-0.819), awakenings (-0.554)",
+      "Deployed as a Flask app: lifestyle inputs in, efficiency score + tailored recommendations out",
+    ],
+  },
 ];
 
 export const EXPERIENCE: Experience[] = [

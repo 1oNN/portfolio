@@ -186,6 +186,55 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     related: ["ai-voice-agent", "jobzyl"],
   },
 
+  "sleep-efficiency": {
+    projectId: "sleep-efficiency",
+    accent: "var(--status-research)",
+    status: "Published",
+    timeline: "2024 - Apr 2026",
+    role: "First & corresponding author · ICSMAI 2024",
+    primaryStack: ["scikit-learn", "Random Forest", "Flask"],
+    links: {
+      paper: "https://doi.org/10.1007/978-3-031-66854-8_1",
+      github: "https://github.com/1oNN/sleep-efficiency-app",
+    },
+    problem: [
+      "Most sleep research predicts efficiency from the obvious determinants - bedtime and wake time. But those are outputs of a life, not levers. The interesting question is how much of sleep efficiency is explained by the broader factor set people can actually act on: sleep-stage composition, awakenings, caffeine, alcohol, exercise, smoking.",
+      "That question became my first peer-reviewed publication - a comparative study of ML methods for sleep-efficiency prediction, presented at ICSMAI 2024 and published by Springer Nature - and later this app, which puts the winning model behind a form anyone can fill in.",
+    ],
+    approach: [
+      "The study used the Kaggle Sleep Efficiency dataset: 452 records, 15 features, missing values imputed with KNN. Four regressors were compared under an 80/20 split - Linear Regression, Decision Tree, Random Forest, and Gradient Boosting.",
+      "Random Forest won: R² 0.8569 with MSE 0.0027, a hair ahead of Gradient Boosting (0.8558) and clearly ahead of Linear Regression (0.7981). Correlation analysis quantified the drivers: deep sleep (+0.787) and light sleep (-0.819) dominate, with awakenings (-0.554), alcohol (-0.384), smoking (-0.290), and exercise (+0.258) behind them.",
+      "The app wraps the trained model and scaler behind a Flask form: enter age, gender, stage percentages, awakenings, caffeine, alcohol, exercise, and smoking status, and it returns a predicted efficiency score, a High / Normal / Low classification, and recommendations keyed to the band. Ships with Docker and a Procfile.",
+    ],
+    decisions: [
+      {
+        title: "Random Forest over Gradient Boosting",
+        body: "0.8569 vs 0.8558 R² is nearly a tie, so the call came down to behaviour: RF's predictions were more stable across the small dataset and it needs less tuning to stay that way. With 452 records, robustness beats squeezing a third decimal.",
+      },
+      {
+        title: "Lifestyle factors over bedtime determinants",
+        body: "The paper's core premise: predict from the broad factor set rather than the conventional bedtime/wake-time inputs. That's what makes the model useful in an app - the inputs are things a person can report and change.",
+      },
+      {
+        title: "KNN imputation over dropping rows",
+        body: "With only 452 records, discarding incomplete rows would have cost real signal. KNN imputation (n=2) preserved the sample while keeping imputed values locally plausible.",
+      },
+      {
+        title: "Ship the model, not just the paper",
+        body: "A published R² is an abstract claim; a form that returns your predicted efficiency makes it concrete. Persisting the model and scaler behind Flask turned the study into something a reader can poke at.",
+      },
+    ],
+    results: [
+      "Random Forest at R² 0.8569 and MSE 0.0027 - the best of the four models compared, published at ICSMAI 2024 (Springer Nature, pp. 3-15) with me as first and corresponding author.",
+      "Beyond the headline number, the study surfaced usable findings: deep and light sleep percentages dominate efficiency, caffeine showed no significant effect in this dataset, and efficiency peaked for women in their 50s and men in their 60s.",
+      "The app returns a score, a High (≥80%) / Normal (64-79%) / Low (<64%) classification, and recommendations matched to the band - runnable locally or via Docker in one command.",
+    ],
+    reflections: [
+      "The dataset is the limit: 452 records from one study. The next iteration is validation against a larger, independent cohort - and wearable integration, so stage percentages come from a device instead of self-report.",
+    ],
+    related: ["diabetes-risk", "finlaw-uk"],
+  },
+
   jobzyl: {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",

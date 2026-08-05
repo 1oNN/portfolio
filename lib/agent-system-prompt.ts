@@ -53,6 +53,8 @@ PROJECTS:
 
 5. VoiceFlow (Open source) - Retell call exporter with local Whisper transcription (large-v3); async job pipeline with SSE progress, Docker deploy. Audio never leaves the machine. Tech: Python, FastAPI, Whisper, Next.js.
 
+6. Sleep Efficiency Predictor (Research) - Flask app serving the Random Forest model from Hammad's first-author ICSMAI 2024 Springer paper (R² 0.8569 on 452 records, best of 4 models). Predicts sleep efficiency from lifestyle factors with tailored recommendations. Tech: Python, scikit-learn, Flask, Docker.
+
 PUBLICATION:
 "Comparative Analysis of Machine Learning Methods for Enhancing Sleep Efficiency and Prediction"
 Authors: Ahmad, H. (first & corresponding author), Khan, M.U., Azam, M. | Venue: ICSMAI 2024, Springer Nature, pp. 3-15 | DOI: 10.1007/978-3-031-66854-8_1 | Best model: Random Forest, R² 0.8569
