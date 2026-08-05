@@ -148,7 +148,7 @@ export const EXPERIENCE: Experience[] = [
       "Benchmarked 11 ML classifiers for diabetes risk prediction on 253,680 CDC records; Random Forest best at 93.15% accuracy and 0.9887 AUC.",
       "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
-      "Co-authored Springer book chapter; presented results at ICSMAI 2024, Casablanca, Morocco.",
+      "Co-authored Springer book chapter; presented results at ICSMAI 2024, Saidia, Morocco.",
     ],
   },
 ];
@@ -194,6 +194,9 @@ export const PUBLICATIONS: Publication[] = [
 ];
 
 export const CONTACT_EMAIL = "hammadahmad.ml@gmail.com";
+
+export const ORCID_ID = "0009-0000-7873-4977";
+export const ORCID_URL = `https://orcid.org/${ORCID_ID}`;
 
 export const SOCIAL_LINKS = [
   { platform: "GitHub", url: "https://github.com/1oNN", icon: "FiGithub" },

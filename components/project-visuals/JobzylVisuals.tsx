@@ -76,7 +76,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
     { name: "Careerjet", sub: "global" },
     { name: "Jooble", sub: "global" },
     { name: "USAJobs", sub: "US" },
-    { name: "+15 more sources", sub: "incl. remote-only boards" },
+    { name: "+15 sources", sub: "incl. remote-only" },
   ];
 
   return (

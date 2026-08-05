@@ -1,5 +1,5 @@
 import SectionHeader from "@/components/ui/SectionHeader";
-import { PUBLICATIONS } from "@/lib/constants";
+import { ORCID_ID, ORCID_URL, PUBLICATIONS } from "@/lib/constants";
 import type { Publication } from "@/types";
 
 const TYPE_LABEL: Record<Publication["type"], string> = {
@@ -91,6 +91,15 @@ export default function Publications() {
             applications. Currently exploring MSCA-eligible opportunities - earliest start date
             October 2026.
           </p>
+          <a
+            href={ORCID_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs text-[var(--text-muted)] underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:underline focus-visible:text-[var(--text-primary)] focus-visible:underline"
+          >
+            ORCID {ORCID_ID}
+            <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
     </section>

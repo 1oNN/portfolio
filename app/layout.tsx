@@ -106,6 +106,7 @@ const jsonLd = {
   sameAs: [
     "https://github.com/1oNN",
     "https://linkedin.com/in/hammadahmad123",
+    "https://orcid.org/0009-0000-7873-4977",
   ],
 };
 
