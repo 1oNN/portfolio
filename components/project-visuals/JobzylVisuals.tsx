@@ -1,4 +1,6 @@
-// Jobzyl - real product screenshot hero (captured from jobzyl.com) + scrape pipeline arch.
+// Jobzyl - real product screenshot hero (captured from jobzyl.com) + aggregation pipeline arch.
+// Source boxes name only vendors with documented public APIs (matching what
+// jobzyl.com itself lists); the rest are grouped without vendor or method.
 
 import Image from "next/image";
 
@@ -69,12 +71,12 @@ export function JobzylArchitecture({ accent, className }: Props) {
   );
 
   const sources = [
-    { name: "Indeed", kind: "scrape" },
-    { name: "Google Jobs", kind: "scrape" },
-    { name: "Glassdoor", kind: "scrape" },
-    { name: "ZipRecruiter", kind: "scrape" },
-    { name: "Reed", kind: "api" },
-    { name: "Adzuna", kind: "api" },
+    { name: "Reed", sub: "UK" },
+    { name: "Adzuna", sub: "19 countries" },
+    { name: "Careerjet", sub: "global" },
+    { name: "Jooble", sub: "global" },
+    { name: "USAJobs", sub: "US" },
+    { name: "+15 more sources", sub: "incl. remote-only boards" },
   ];
 
   return (
@@ -82,7 +84,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
       viewBox="0 0 900 480"
       className={className}
       role="img"
-      aria-label="Jobzyl scraper aggregation and SSE streaming pipeline"
+      aria-label="Jobzyl source aggregation and SSE streaming pipeline"
       style={{ width: "100%", height: "auto" }}
     >
       <defs>
@@ -104,7 +106,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
         STREAM · CLIENT
       </text>
 
-      {/* Sources stack - 6 boxes vertical, staggered like parallel scrapers spinning up */}
+      {/* Sources stack - 6 boxes vertical, staggered like parallel fetches spinning up */}
       {sources.map((s, i) => (
         <Box
           key={s.name}
@@ -113,7 +115,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
           w={140}
           h={44}
           title={s.name}
-          sub={s.kind === "api" ? "official API" : "scraper"}
+          sub={s.sub}
           delay={i * 0.08}
         />
       ))}
@@ -125,7 +127,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
       <Box x={400} y={170} w={150} h={56} title="Supabase" sub="11 RLS-locked tables" highlight delay={0.7} />
 
       {/* Scheduler (cache warming) */}
-      <Box x={400} y={260} w={150} h={44} title="Scheduler" sub="every 6h re-scrape" delay={0.78} />
+      <Box x={400} y={260} w={150} h={44} title="Scheduler" sub="6-hourly cache refresh" delay={0.78} />
 
       {/* SSE */}
       <Box x={600} y={170} w={130} h={56} title="SSE Stream" sub="live progress" delay={0.85} />
@@ -166,7 +168,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
       {/* Next.js → ATS (client-only) */}
       <line x1={825} y1={190} x2={825} y2={230} className="pv-fade" stroke={accent} strokeWidth="1.25" opacity="0.55" markerEnd="url(#jobzyl-arrow)" strokeDasharray="3 3" style={{ animationDelay: "1.05s" }} />
 
-      {/* Job packets: scrapers → aggregator → storage → stream → client */}
+      {/* Job packets: sources → aggregator → storage → stream → client */}
       {[0, 2, 4].map((i) => (
         <circle
           key={i}
@@ -186,7 +188,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
 
       {/* Footer */}
       <text x="20" y="460" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted}>
-        Privacy boundary: CV never leaves the browser. ATS keyword scoring runs entirely client-side; only de-identified job features touch the server.
+        Scoring runs client-side; the CV is only sent to the server if the user saves it to their account, where it is encrypted at rest.
       </text>
     </svg>
   );

@@ -32,7 +32,7 @@ export function VoiceAgentHero({ accent, className }: Props) {
         MEAN CALL LATENCY
       </text>
       <text x="60" y="80" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
-        n = 2,100+ concurrent stateful sessions
+        sustained across 2,100+ concurrent stateful sessions
       </text>
 
       {/* Y-axis labels */}

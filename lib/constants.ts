@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
-      "Jobzyl searches 20 live job boards in parallel - Indeed, Reed, Adzuna, Careerjet, Jooble, USAJobs and more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. Application tracking (Saved → Applied → Interview → Offer → Rejected), 100% client-side ATS resume matching, Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
     tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,

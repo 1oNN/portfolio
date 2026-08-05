@@ -250,13 +250,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     links: { live: "https://jobzyl.com" },
     problem: [
       "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV. Aggregator products exist, but they're either unauthenticated ad farms or so slow that the data is stale by the time you load it.",
-      "The interesting full-stack problem isn't the scraping itself - it's making a real-time, multi-tenant aggregator with row-level security, live progress streaming, and client-side ATS scoring that doesn't ship the candidate's resume to a server. The privacy-first ATS scoring was the differentiator.",
+      "The interesting full-stack problem isn't fetching listings - it's making a real-time, multi-tenant aggregator with row-level security, live progress streaming, and ATS scoring that runs client-side: the CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest.",
     ],
     approach: [
-      "Twenty live job boards searched in parallel - Indeed, Reed, Adzuna, Careerjet, Jooble, USAJobs and more, covering 60+ countries. The aggregation layer is a FastAPI service on AWS App Runner with per-board rate limits, scheduled re-scrapes for cache warming, and Server-Sent Events streaming search progress back to the client as each board responds - first results land in about 1.4 seconds instead of a single bulk response.",
+      "Twenty live job boards searched in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries. The aggregation layer is a FastAPI service on AWS App Runner with per-board rate limits and Server-Sent Events streaming search progress back as each board responds. It's live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches, and first results land in about 1.4 seconds instead of a single bulk response.",
       "Storage is Supabase with row-level security on every one of 11 tables. No bare PostgreSQL access from the client; every read and write goes through RLS policies tied to the authenticated user's UUID. Auth supports email plus Google and LinkedIn OAuth via PKCE flow.",
-      "ATS scoring runs entirely client-side. The user's CV is parsed in-browser, keywords are extracted with a small NLP routine, and each job card displays a match score computed locally. The CV never leaves the device. Application tracking is a Kanban board with the standard pipeline (Saved → Applied → Interview → Offer → Rejected), side-by-side job comparison, and a persistent audit log.",
-      "Admin layer is a separate authenticated dashboard for search analytics, manual scrape triggers, and audit log review.",
+      "ATS scoring runs entirely client-side. The user's CV is parsed in-browser, keywords are extracted with a small NLP routine, and each job card displays a match score computed locally. The CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest. Application tracking is a Kanban board with the standard pipeline (Saved → Applied → Interview → Offer → Rejected), side-by-side job comparison, and a persistent audit log.",
+      "Admin layer is a separate authenticated dashboard for search analytics, manual refresh triggers, and audit log review.",
     ],
     decisions: [
       {
@@ -277,9 +277,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "Twenty live boards searched in parallel across 60+ countries, first results streamed in about 1.4s over SSE, 11 RLS-locked Supabase tables, 100% client-side ATS scoring (the CV never leaves the browser), and a Kanban-style application tracker with side-by-side job comparison.",
+      "Twenty live boards searched in parallel across 60+ countries, first results streamed in about 1.4s over SSE, 11 RLS-locked Supabase tables, client-side ATS scoring (the CV is only sent to the server if the user saves it to their account, encrypted at rest), and a Kanban-style application tracker with side-by-side job comparison.",
       "The board count has grown from six at launch to twenty today without architectural change - the parallel, rate-limited fan-out absorbed the new sources.",
-      "Operationally: PKCE OAuth for Google and LinkedIn, scheduled scrapes for cache warming, admin dashboard with persistent audit log, and search analytics for understanding which boards return useful results per query type.",
+      "Operationally: PKCE OAuth for Google and LinkedIn, scheduled cache refreshes, admin dashboard with persistent audit log, and search analytics for understanding which boards return useful results per query type.",
     ],
     reflections: [
       "The interesting next step is shifting some scoring server-side without breaking the privacy promise - federated or homomorphic patterns where the CV embedding stays local but the score computation can use server-side job-side embeddings. Probably not worth it for v1; potentially the next moat.",

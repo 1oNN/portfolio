@@ -22,7 +22,7 @@ function findProfilePhoto(): string | null {
 const STATS = [
   { value: "54%", label: "Latency cut" },
   { value: "93%", label: "Model accuracy" },
-  { value: "2,100+", label: "Concurrent agents" },
+  { value: "2,100+", label: "Concurrent sessions" },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {

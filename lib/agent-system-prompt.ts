@@ -49,7 +49,7 @@ PROJECTS:
 
 3. DiabetesSense (Machine Learning) - Diabetes risk prediction: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest best at 93.15% accuracy / 0.9887 AUC, deployed as React + Flask screening app. Tech: Python, scikit-learn, SHAP, React.js, Flask.
 
-4. Jobzyl (Full-stack) - Job-search aggregator searching 20 live boards across 60+ countries in parallel, first results streamed in ~1.4s over SSE, with 100% client-side ATS resume matching. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
+4. Jobzyl (Full-stack) - Job-search aggregator searching 20 live boards across 60+ countries in parallel (Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more), first results streamed in ~1.4s over SSE. ATS scoring runs client-side; the CV is only sent to the server if the user saves it to their account, where it is encrypted at rest. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
 
 5. VoiceFlow (Open source) - Retell call exporter with local Whisper transcription (large-v3); async job pipeline with SSE progress, Docker deploy. Audio never leaves the machine. Tech: Python, FastAPI, Whisper, Next.js.
 
