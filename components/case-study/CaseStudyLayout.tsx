@@ -211,8 +211,51 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           </section>
         )}
 
-        {/* 4. PROBLEM */}
-        <ProseSection eyebrow="The problem" title="What this project tackles" accent={accent} paragraphs={caseStudy.problem} />
+        {/* 4. PROBLEM - told as a stepped story, each beat revealing on scroll */}
+        <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
+          <SectionHeader eyebrow="The problem" title="What this project tackles" accent={accent} />
+          <div className="mt-12 max-w-3xl">
+            {caseStudy.problem.map((p, i) => {
+              const isLast = i === caseStudy.problem.length - 1;
+              return (
+                <div key={i} className="animate-reveal relative flex gap-5 sm:gap-7">
+                  {/* Story rail: numbered beat + connecting thread */}
+                  <div className="flex flex-col items-center">
+                    <span
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-bold"
+                      style={{
+                        color: accent,
+                        backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                        border: `1px solid color-mix(in srgb, ${accent} 30%, transparent)`,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {!isLast && (
+                      <span
+                        aria-hidden="true"
+                        className="my-2 w-px flex-1"
+                        style={{
+                          background: `linear-gradient(to bottom, color-mix(in srgb, ${accent} 35%, transparent), var(--border))`,
+                        }}
+                      />
+                    )}
+                  </div>
+                  <p
+                    className={
+                      i === 0
+                        ? `pt-0.5 text-lg leading-[1.75] ${isLast ? "" : "pb-10"}`
+                        : `pt-0.5 text-[1.0625rem] leading-[1.85] ${isLast ? "" : "pb-10"}`
+                    }
+                    style={{ color: i === 0 ? "var(--text-primary)" : "var(--text-secondary)" }}
+                  >
+                    {p}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         {/* 5. APPROACH + ARCHITECTURE */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
@@ -236,20 +279,39 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           </div>
         </section>
 
-        {/* 6. KEY DECISIONS */}
+        {/* 6. KEY DECISIONS - numbered cards that lift on hover */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
           <SectionHeader eyebrow="Engineering" title="Key technical decisions" accent={accent} />
-          <div className="mt-10 grid gap-8 sm:grid-cols-2">
-            {caseStudy.decisions.map((d) => (
-              <div key={d.title} className="space-y-2.5">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            {caseStudy.decisions.map((d, i) => (
+              <div
+                key={d.title}
+                className="animate-reveal group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--cs-accent)] hover:shadow-[var(--shadow)]"
+                style={{ ["--cs-accent" as string]: accent }}
+              >
+                {/* Accent top edge - draws across on hover */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ backgroundColor: accent }}
+                />
+                <span
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md font-mono text-[11px] font-bold"
+                  style={{
+                    color: accent,
+                    backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                    border: `1px solid color-mix(in srgb, ${accent} 25%, transparent)`,
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3
-                  className="text-base font-semibold leading-tight"
+                  className="mt-4 font-display text-lg font-semibold leading-snug"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  <span style={{ color: accent }}>-&nbsp;</span>
                   {d.title}
                 </h3>
-                <p className="text-[0.9375rem] leading-[1.75]" style={{ color: "var(--text-secondary)" }}>
+                <p className="mt-2.5 text-[0.9375rem] leading-[1.75]" style={{ color: "var(--text-secondary)" }}>
                   {d.body}
                 </p>
               </div>
