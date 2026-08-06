@@ -15,6 +15,12 @@ export default function AgentSection() {
         <div className="mt-10">
           <TerminalAgent />
         </div>
+
+        {/* Conversations are stored server-side, so say so rather than not. */}
+        <p className="mt-4 font-mono text-[11px] text-[var(--text-muted)]">
+          Conversations are logged so I can see what the agent tells people. Don&apos;t send
+          anything confidential.
+        </p>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent-system-prompt";
+import { GUARD_REFUSAL, isInjectionAttempt, leaksSystemPrompt } from "@/lib/agent-guard";
 
 // Per-IP rate limit: 20 requests/hour. Resets on cold start - acceptable
 // for a portfolio agent since abuse cost is primarily GROQ quota, not data.
@@ -84,6 +85,13 @@ export async function POST(req: NextRequest) {
     .slice(-20);
   if (sessionId.length > 128) sessionId = sessionId.slice(0, 128);
 
+  // Refuse known injection phrasings before spending a Groq call on them. The
+  // model does not reliably hold the line on its own - see lib/agent-guard.ts.
+  if (isInjectionAttempt(message)) {
+    console.warn("[/api/agent] Blocked injection attempt:", message.slice(0, 120));
+    return NextResponse.json({ response: GUARD_REFUSAL });
+  }
+
   const groqKey = process.env.GROQ_API_KEY;
   if (!groqKey) {
     return NextResponse.json(
@@ -128,6 +136,13 @@ export async function POST(req: NextRequest) {
       choices: { message: { content: string } }[];
     };
     text = data.choices?.[0]?.message?.content ?? "";
+
+    // Last line of defence: a phrasing the input filter did not anticipate can
+    // still walk the model into reciting its instructions. Drop the whole reply.
+    if (leaksSystemPrompt(text)) {
+      console.warn("[/api/agent] Response leaked system prompt; replaced with refusal.");
+      text = GUARD_REFUSAL;
+    }
   } catch (err) {
     console.error("[/api/agent] Fetch error:", err);
     return NextResponse.json(

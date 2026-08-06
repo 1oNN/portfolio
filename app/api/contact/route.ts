@@ -211,8 +211,18 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         )
         .catch((e) => console.error("[/api/contact] DynamoDB log failed:", e));
     }
+  } else if (process.env.NODE_ENV === "production") {
+    // Never report success we cannot back. A production deploy missing its AWS
+    // credentials used to return "Message sent successfully" while silently
+    // dropping the message, which is the worst possible failure mode here: the
+    // sender believes they have made contact and nobody ever sees it.
+    console.error("[/api/contact] AWS not configured in production - message dropped.");
+    return NextResponse.json(
+      { success: false, message: "Failed to send your message. Please try again later." },
+      { status: 500 }
+    );
   } else {
-    console.info("[/api/contact] AWS not configured - email not sent.");
+    console.info("[/api/contact] AWS not configured - email not sent (dev).");
   }
 
   return NextResponse.json({ success: true, message: "Message sent successfully." });
