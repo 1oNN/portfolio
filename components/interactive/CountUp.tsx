@@ -66,10 +66,11 @@ export default function CountUp({
     };
   }, [value, duration]);
 
-  return (
-    <span ref={ref}>
-      <span aria-hidden="true">{display}</span>
-      <span className="sr-only">{value}</span>
-    </span>
-  );
+  // Single text node deliberately: an aria-hidden animation layer plus an
+  // sr-only twin renders the value twice in the DOM, so text extractors and
+  // search crawlers see "54%54%". One node keeps the SSR/no-JS output equal to
+  // the real value, and because nothing here is aria-live, assistive tech reads
+  // whatever is present when the user reaches it - by which point the ~1.2s
+  // count has settled on the true figure.
+  return <span ref={ref}>{display}</span>;
 }
