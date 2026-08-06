@@ -19,7 +19,9 @@ const CATEGORY_LABEL: Record<Project["category"], string> = {
   fullstack: "Full-stack",
 };
 
-const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
+// All six, in PROJECTS order. The list used to show only the featured four,
+// which quietly hid VoiceFlow and the Sleep Efficiency Predictor from anyone
+// who never clicked through to /projects.
 
 /**
  * Compact editorial rows for the narrow home column - the rich card layouts
@@ -37,7 +39,7 @@ export default function HomeProjects() {
         />
 
         <ul className="mt-6 divide-y divide-[var(--border)]">
-          {FEATURED_PROJECTS.map((project) => (
+          {PROJECTS.map((project) => (
             <li key={project.id}>
               <Link
                 href={`/projects/${project.id}`}
@@ -88,10 +90,7 @@ export default function HomeProjects() {
             href="/projects"
             className="group inline-flex items-center gap-2 text-sm font-medium text-[var(--accent)]"
           >
-            All projects
-            <span className="font-mono text-[11px] text-[var(--text-muted)]">
-              {PROJECTS.length}
-            </span>
+            Full case studies
             <FiArrowRight
               size={15}
               className="transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"

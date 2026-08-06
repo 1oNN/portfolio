@@ -5,7 +5,26 @@ import type {
   Publication,
 } from "@/types";
 
+// Order is the display order everywhere: the home list, /projects, and the
+// sitemap. The first two are the lead pair - the shipped product and the
+// dissertation - and /projects gives them the large panes.
 export const PROJECTS: Project[] = [
+  {
+    id: "jobzyl",
+    title: "Jobzyl",
+    tagline: "One search across 20 job boards, with ATS resume matching",
+    longDescription:
+      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+    tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
+    category: "fullstack",
+    featured: true,
+    liveUrl: "https://jobzyl.com",
+    metrics: [
+      { value: "20", label: "Job boards searched" },
+      { value: "60+", label: "Countries covered" },
+      { value: "~1.4s", label: "First results streamed" },
+    ],
+  },
   {
     id: "finlaw-uk",
     title: "FinLaw-UK",
@@ -52,22 +71,6 @@ export const PROJECTS: Project[] = [
       { value: "93.15%", label: "Accuracy (Random Forest)" },
       { value: "11", label: "Models benchmarked" },
       { value: "253K", label: "Health records" },
-    ],
-  },
-  {
-    id: "jobzyl",
-    title: "Jobzyl",
-    tagline: "One search across 20 job boards, with ATS resume matching",
-    longDescription:
-      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
-    tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
-    category: "fullstack",
-    featured: true,
-    liveUrl: "https://jobzyl.com",
-    metrics: [
-      { value: "20", label: "Job boards searched" },
-      { value: "60+", label: "Countries covered" },
-      { value: "~1.4s", label: "First results streamed" },
     ],
   },
   {

@@ -218,9 +218,51 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           </section>
         )}
 
+        {/* 3b. THE PAIR - the whole case study in two lines, for the reader who
+            will not scroll. Deliberately placed above the long-form prose, and
+            deliberately not a repeat of it: these condense the problem and
+            results sections rather than introducing anything new. */}
+        <section
+          className="mx-auto max-w-5xl px-6 py-14 sm:py-16"
+          style={{ borderTop: "1px solid var(--border)" }}
+        >
+          <dl className="grid gap-10 sm:grid-cols-2 sm:gap-12">
+            <div>
+              <dt
+                className="text-[10px] font-semibold uppercase tracking-widest"
+                style={{ color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}
+              >
+                What it tackles
+              </dt>
+              <dd
+                className="mt-4 border-l-2 pl-5 text-lg leading-relaxed"
+                style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+              >
+                {caseStudy.tackles}
+              </dd>
+            </div>
+            <div>
+              <dt
+                className="text-[10px] font-semibold uppercase tracking-widest"
+                style={{ color: accent, fontFamily: "var(--font-mono)" }}
+              >
+                What it delivers
+              </dt>
+              <dd
+                className="mt-4 border-l-2 pl-5 text-lg leading-relaxed"
+                style={{ borderColor: accent, color: "var(--text-primary)" }}
+              >
+                {caseStudy.delivers}
+              </dd>
+            </div>
+          </dl>
+        </section>
+
         {/* 4. PROBLEM - told as a stepped story, each beat revealing on scroll */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
-          <SectionHeader eyebrow="The problem" title="What this project tackles" accent={accent} />
+          {/* Titled as the expansion of the one-line "What it tackles" above,
+              rather than repeating it word for word. */}
+          <SectionHeader eyebrow="The problem" title="The problem in full" accent={accent} />
           <div className="mt-12 max-w-3xl">
             {caseStudy.problem.map((p, i) => {
               const isLast = i === caseStudy.problem.length - 1;

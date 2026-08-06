@@ -5,7 +5,6 @@ import { PROJECTS } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
 import { toJsonLd } from "@/lib/json-ld";
 import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
-import FeaturedCard from "@/components/case-study/FeaturedCard";
 import ListingCard from "@/components/case-study/ListingCard";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { Project } from "@/types";
@@ -71,10 +70,11 @@ export default async function ProjectsPage({ searchParams }: Props) {
   const filtered: Project[] =
     active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
-  // FeaturedCard is reserved for the unfiltered "all" view; filtered views use
-  // uniform ListingCards so a small category never reads as a lone-card bug.
-  const featured = active === "all" ? filtered[0] : undefined;
-  const rest = active === "all" ? filtered.slice(1) : filtered;
+  // The lead pair - Jobzyl and FinLaw-UK, the first two in PROJECTS - gets the
+  // large treatment, but only in the unfiltered view. Filtered views stay
+  // uniform so a small category never reads as a lone-card bug.
+  const lead = active === "all" ? filtered.slice(0, 2) : [];
+  const rest = active === "all" ? filtered.slice(2) : filtered;
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
@@ -180,17 +180,23 @@ export default async function ProjectsPage({ searchParams }: Props) {
           </div>
         ) : (
           <>
-            {/* Featured card */}
-            {featured && (
-              <div className="mt-12">
-                <FeaturedCard project={featured} caseStudy={getCaseStudy(featured.id)} />
+            {/* Lead pair */}
+            {lead.length > 0 && (
+              <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {lead.map((p) => (
+                  <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} size="lead" />
+                ))}
               </div>
             )}
 
-            {/* Grid - mt-12 when it's the first block after the filter row (filtered view,
-                no FeaturedCard above it), mt-10 when it follows the FeaturedCard */}
+            {/* The rest - mt-12 when this is the first block after the filter row
+                (a filtered view has no lead pair above it), mt-10 when it follows one */}
             {rest.length > 0 && (
-              <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${featured ? "mt-10" : "mt-12"}`}>
+              <div
+                className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${
+                  lead.length > 0 ? "mt-10" : "mt-12"
+                }`}
+              >
                 {rest.map((p) => (
                   <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} />
                 ))}

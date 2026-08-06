@@ -7,16 +7,24 @@ import VisualFrame from "@/components/project-visuals/VisualFrame";
 interface Props {
   project: Project;
   caseStudy?: CaseStudy;
+  /**
+   * "lead" is the pair at the top of /projects - the shipped product and the
+   * dissertation. Same card, turned up: taller hero, larger title, all three
+   * metrics. The hierarchy comes from scale, not from a separate component.
+   */
+  size?: "lead" | "default";
 }
 
-export default function ListingCard({ project, caseStudy }: Props) {
+export default function ListingCard({ project, caseStudy, size = "default" }: Props) {
+  const isLead = size === "lead";
   const visuals = getProjectVisuals(project.id);
   const Hero = visuals?.Hero;
   const accent = caseStudy?.accent ?? "var(--accent)";
   const status = caseStudy?.status ?? project.category;
-  const visibleTech = (caseStudy?.primaryStack ?? project.tech).slice(0, 5);
+  const techLimit = isLead ? 6 : 5;
+  const visibleTech = (caseStudy?.primaryStack ?? project.tech).slice(0, techLimit);
   const overflow = (caseStudy?.primaryStack ?? project.tech).length - visibleTech.length;
-  const headlineMetrics = (project.metrics ?? []).slice(0, 2);
+  const headlineMetrics = (project.metrics ?? []).slice(0, isLead ? 3 : 2);
 
   return (
     <Link
@@ -29,7 +37,10 @@ export default function ListingCard({ project, caseStudy }: Props) {
       {/* Hero visual - 16:9, full bleed */}
       <div
         className="relative w-full overflow-hidden"
-        style={{ aspectRatio: "16 / 9", backgroundColor: "var(--surface-elevated)" }}
+        style={{
+          aspectRatio: isLead ? "16 / 10" : "16 / 9",
+          backgroundColor: "var(--surface-elevated)",
+        }}
       >
         <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]">
           {Hero ? (
@@ -57,26 +68,34 @@ export default function ListingCard({ project, caseStudy }: Props) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-4 p-6">
+      <div className={`flex flex-1 flex-col gap-4 ${isLead ? "p-7 sm:p-8" : "p-6"}`}>
         <div className="space-y-1.5">
           <h3
-            className="text-xl font-bold leading-tight tracking-tight"
+            className={`font-display font-bold leading-tight tracking-tight ${
+              isLead ? "text-2xl lg:text-3xl" : "text-xl"
+            }`}
             style={{ color: "var(--text-primary)" }}
           >
             {project.title}
           </h3>
-          <p className="text-[0.9375rem] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <p
+            className={`leading-relaxed ${isLead ? "text-base font-medium" : "text-[0.9375rem]"}`}
+            style={{ color: isLead ? accent : "var(--text-secondary)" }}
+          >
             {project.tagline}
           </p>
         </div>
 
         {/* Headline metrics */}
         {headlineMetrics.length > 0 && (
-          <div className="flex gap-6 border-y py-3" style={{ borderColor: "var(--border)" }}>
+          <div
+            className={`flex border-y py-3 ${isLead ? "gap-5 sm:gap-7" : "gap-6"}`}
+            style={{ borderColor: "var(--border)" }}
+          >
             {headlineMetrics.map((m) => (
               <div key={m.label} className="flex flex-col">
                 <span
-                  className="text-lg font-bold leading-none"
+                  className={`font-bold leading-none ${isLead ? "text-xl sm:text-2xl" : "text-lg"}`}
                   style={{ color: accent, fontFamily: "var(--font-mono)" }}
                 >
                   {m.value}
@@ -119,7 +138,7 @@ export default function ListingCard({ project, caseStudy }: Props) {
 
         {/* CTA */}
         <div className="mt-auto flex items-center gap-1.5 pt-2 text-sm font-medium" style={{ color: accent }}>
-          Read case study
+          {isLead ? "Read full case study" : "Read case study"}
           <FiArrowRight
             size={14}
             className="transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"

@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import HomeProjects from "@/components/sections/HomeProjects";
+import HomeWriting from "@/components/sections/HomeWriting";
 import AgentSection from "@/components/sections/AgentSection";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
@@ -17,6 +18,11 @@ import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 // openGraph block are page-specific (see the note in app/projects/page.tsx on
 // why canonicals are never set at the root, and lib/metadata.ts on why every
 // page has to restate the whole openGraph object).
+// The home page now reads published posts for the Writing section, so it is
+// ISR rather than fully static - still served from the CDN, revalidated every
+// five minutes so a newly published post surfaces without a rebuild.
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: pageOpenGraph({
@@ -95,6 +101,7 @@ export default function HomePage() {
           <About />
           <Experience />
           <HomeProjects />
+          <HomeWriting />
           <AgentSection />
           <Publications />
           <Contact />

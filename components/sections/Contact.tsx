@@ -49,7 +49,7 @@ export default function Contact() {
         {/* The one dominant CTA */}
         <a
           href={`mailto:${EMAIL}`}
-          className="mt-9 inline-flex items-center gap-2.5 rounded-lg bg-[var(--accent)] px-6 py-3.5 font-mono text-sm font-semibold text-[var(--accent-contrast)] transition-opacity hover:opacity-90 focus-visible:opacity-90"
+          className="mt-9 inline-flex items-center gap-2.5 rounded-lg bg-[var(--accent-strong)] px-6 py-3.5 font-mono text-sm font-semibold text-[var(--accent-contrast)] transition-opacity hover:opacity-90 focus-visible:opacity-90"
         >
           <FiMail size={15} />
           {EMAIL}

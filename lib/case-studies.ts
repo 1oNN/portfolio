@@ -8,6 +8,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "Sep 2024 - Sep 2025",
     role: "Solo MSc dissertation, University of Bradford",
     primaryStack: ["Mistral 7B", "Neo4j", "Sentence Transformers", "RAGAS"],
+    tackles:
+      "Compliance teams thread citations by hand across the FCA Handbook, the PRA Rulebook and MiFID II, and a plain LLM answers confidently without showing which rule it relied on.",
+    delivers:
+      "A retrieval pipeline where a Neo4j graph validates every citation and flags uncited rules, scored on a 110-item regulatory benchmark: 0.82 source accuracy, 0.81 citation quality.",
     links: {},
     problem: [
       "UK financial regulation is a moving target. The FCA Handbook alone runs to thousands of pages, cross-referenced with MiFID II, the PRA Rulebook, and binding technical standards. Compliance teams burn hours threading citations across documents, and naive LLM lookups hallucinate confidently in exactly the places that matter most.",
@@ -56,6 +60,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "Oct 2025 - Mar 2026",
     role: "AI / Machine Learning Engineer @ Outlyst",
     primaryStack: ["FastAPI", "Retell AI", "AsyncIO", "PostgreSQL"],
+    tackles:
+      "At 2.4s a voice agent sounds like a bad phone line and the prospect hangs up, and the system fell over past about 200 simultaneous calls.",
+    delivers:
+      "1.1s mean latency, a 54% cut with no horizontal scaling, holding 2,100+ concurrent stateful sessions without dropping any.",
     links: {},
     problem: [
       "A voice agent's quality is dominated by latency. A 2.4-second response feels like a bad cell connection; under 1.2 seconds it feels human enough that the prospect stays on the call. The Outlyst voice agent was clearing 2.4s on warm calls and degrading further as concurrency rose - past 200 simultaneous sessions, response times spiked unpredictably and a fraction of sessions dropped entirely.",
@@ -104,6 +112,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "Jul 2023 - Jul 2024",
     role: "BSc thesis (with Inshra Javed), COMSATS University Islamabad",
     primaryStack: ["scikit-learn", "SHAP", "React.js", "Flask"],
+    tackles:
+      "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
+    delivers:
+      "An 11-model benchmark on 253,680 BRFSS records won by Random Forest at 93.15%, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
     links: {},
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
@@ -151,6 +163,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "Apr 2026",
     role: "Solo open-source tool",
     primaryStack: ["FastAPI", "Whisper", "Next.js", "Docker"],
+    tackles:
+      "Getting Retell call recordings out for QA means hand-scripting the API every time, and the obvious transcription route ships customer audio to a third-party cloud service.",
+    delivers:
+      "An open-source export pipeline with filters and column selection, transcribed by Whisper large-v3 running locally, so the audio never leaves the machine.",
     links: { github: "https://github.com/1oNN/VoiceFlow" },
     problem: [
       "Teams running Retell voice agents accumulate thousands of call recordings, and getting them out for QA or analysis means hand-scripting against the API every time. Worse, the obvious transcription route - a cloud speech-to-text service - means shipping customer call audio to yet another third party.",
@@ -197,6 +213,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "2024 - Apr 2026",
     role: "First & corresponding author · ICSMAI 2024",
     primaryStack: ["scikit-learn", "Random Forest", "Flask"],
+    tackles:
+      "Sleep research predicts efficiency from bedtime and wake time, which are outputs of a life rather than levers anyone can pull.",
+    delivers:
+      "Four models compared on the lifestyle factors people can actually change; Random Forest at R² 0.8569, published at ICSMAI 2024 and served as an app that returns a score and recommendations.",
     links: {
       paper: "https://doi.org/10.1007/978-3-031-66854-8_1",
       github: "https://github.com/1oNN/sleep-efficiency-app",
@@ -247,6 +267,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     timeline: "Apr 2026 - present",
     role: "Solo full-stack project",
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
+    tackles:
+      "Searching for a job across the major boards is a data-collection chore before it is a job search: different filters, different refresh cadences, and no visibility into how your CV scores.",
+    delivers:
+      "One search across 20 live boards in 60+ countries with first results in about 1.4s, ATS scoring that runs in the browser, and a Kanban tracker for everything applied to.",
     links: { live: "https://jobzyl.com" },
     problem: [
       "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV.",

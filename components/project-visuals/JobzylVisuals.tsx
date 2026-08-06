@@ -9,19 +9,36 @@ interface Props {
   className?: string;
 }
 
-// Real screenshot of the live product (jobzyl.com, Aug 2026). Deliberately not a
+// Real screenshots of the live product (jobzyl.com, Aug 2026). Deliberately not a
 // mockup: the previous hand-drawn dashboard invented job rows, which read as
 // fabricated placements. The live hero also states the case-study numbers
 // (20 live boards, 60+ countries, ~1.4s streaming) on the record.
+//
+// Two captures, one per theme, toggled with CSS rather than a `useTheme` hook:
+// this stays a server component and the correct image is right on first paint,
+// with no flash of the wrong one during hydration. Both are identically framed
+// at 1280x800 @2x with the consent banner dismissed - reshoot both together or
+// the light/dark switch will jump.
+const HERO_ALT =
+  "Jobzyl homepage: 'Every public job posting. One search.' - 20 live boards across 60+ countries, searched in parallel and streamed in about 1.4s";
+
 export function JobzylHero({ className }: Props) {
   return (
     <div className={`relative ${className ?? ""}`}>
       <Image
-        src="/projects/jobzyl/jobzyl-live.png"
-        alt="Jobzyl homepage: 'Every public job posting. One search.' - 20 live boards across 60+ countries, searched in parallel and streamed in about 1.4s"
+        src="/projects/jobzyl/jobzyl-live-light.png"
+        alt={HERO_ALT}
         fill
         sizes="(min-width: 1024px) 960px, 100vw"
-        className="object-cover object-top"
+        className="object-cover object-top dark:hidden"
+      />
+      <Image
+        src="/projects/jobzyl/jobzyl-live-dark.png"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="(min-width: 1024px) 960px, 100vw"
+        className="hidden object-cover object-top dark:block"
       />
     </div>
   );

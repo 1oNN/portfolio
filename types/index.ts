@@ -30,6 +30,14 @@ export interface CaseStudy {
   timeline: string;
   role: string;
   primaryStack: string[];
+  /**
+   * One line each, above the long-form prose. `tackles` is the problem in the
+   * reader's terms, `delivers` is the measured outcome - both condensed from
+   * the `problem` and `results` arrays below, never claiming anything they do
+   * not. Most visitors read these two lines and nothing else.
+   */
+  tackles: string;
+  delivers: string;
   links: {
     github?: string;
     live?: string;

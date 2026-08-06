@@ -21,7 +21,22 @@ export default function Publications() {
 
         <div className="mt-4 divide-y divide-[var(--border)]">
           {PUBLICATIONS.map((pub) => (
-            <div key={pub.id} className="py-8 sm:grid sm:grid-cols-[88px_1fr] sm:gap-6">
+            /* The whole entry is the link, matching the project rows: the DOI is
+               the only destination on the card, so making the reader hunt for a
+               small mono link was needless. Opens in a new tab because it leaves
+               the site for the publisher. */
+            <a
+              key={pub.id}
+              href={pub.doi ? `https://doi.org/${pub.doi}` : undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative -mx-4 block rounded-lg px-4 py-8 transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--status-research)_7%,transparent)] focus-visible:bg-[color-mix(in_srgb,var(--status-research)_7%,transparent)] sm:grid sm:grid-cols-[88px_1fr] sm:gap-6"
+            >
+              <span
+                aria-hidden="true"
+                className="absolute bottom-8 left-0 top-8 w-0.5 origin-center scale-y-0 rounded-full transition-transform duration-200 group-hover:scale-y-100 group-focus-visible:scale-y-100"
+                style={{ backgroundColor: "var(--status-research)" }}
+              />
               {/* Year */}
               <div>
                 <span
@@ -46,10 +61,15 @@ export default function Publications() {
                 </span>
 
                 <h3
-                  className="mt-3 text-base font-semibold leading-tight sm:text-lg"
-                  style={{ color: "var(--text-primary)" }}
+                  className="mt-3 text-base font-semibold leading-tight text-[var(--text-primary)] transition duration-200 group-hover:translate-x-1 group-hover:text-[var(--status-research)] group-focus-visible:translate-x-1 group-focus-visible:text-[var(--status-research)] sm:text-lg"
                 >
                   {pub.title}
+                  <span
+                    aria-hidden="true"
+                    className="ml-2 inline-block text-[var(--text-muted)] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5"
+                  >
+                    ↗
+                  </span>
                 </h3>
                 <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
                   {pub.authors}
@@ -58,19 +78,15 @@ export default function Publications() {
                   {pub.venue}
                 </p>
 
+                {/* Not a link any more - the whole card is. Kept visible because
+                    the DOI is the citation, not just a destination. */}
                 {pub.doi && (
-                  <a
-                    href={`https://doi.org/${pub.doi}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-[var(--accent)] underline-offset-2 hover:underline focus-visible:underline"
-                  >
+                  <span className="mt-3 inline-block font-mono text-xs text-[var(--text-muted)] underline-offset-2 transition-colors duration-200 group-hover:text-[var(--status-research)] group-hover:underline group-focus-visible:text-[var(--status-research)] group-focus-visible:underline">
                     doi:{pub.doi}
-                    <span aria-hidden="true">↗</span>
-                  </a>
+                  </span>
                 )}
               </div>
-            </div>
+            </a>
           ))}
         </div>
 
