@@ -117,7 +117,6 @@ export const EXPERIENCE: Experience[] = [
       "Built the aggregation layer as a FastAPI service on AWS App Runner: per-board rate limits, Server-Sent Events streaming search progress as each board responds, and scheduled 6-hourly cache refreshes behind the live fan-out.",
       "Implemented ATS scoring that runs client-side - the CV is parsed in-browser and only sent to the server if the user saves it to their account, where it is encrypted at rest.",
       "Modelled multi-tenant data on Supabase Postgres with row-level security and PKCE OAuth.",
-      "Alongside this, working in quality control in the food industry.",
     ],
   },
   {
