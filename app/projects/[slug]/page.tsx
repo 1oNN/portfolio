@@ -12,6 +12,13 @@ export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: p.id }));
 }
 
+// The project set is fixed at build time. Without this, an unknown slug is
+// rendered on demand and the host returns the not-found body with a 200 status,
+// which search engines treat as a soft 404. Restricting to the generated params
+// makes unknown slugs a real 404. Deliberately NOT applied to blog posts, which
+// are database-backed and must stay renderable after publish without a rebuild.
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.id === slug);
