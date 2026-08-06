@@ -27,7 +27,7 @@ EXPERIENCE:
 - Evaluated on a 110-item regulatory benchmark: 0.82 source accuracy, 0.81 citation quality, 0.76 faithfulness, 0.74 answer relevance (RAGAS + custom legal metrics).
 
 3. Research Assistant, Data Science - COMSATS University Islamabad (Jul 2023 - Jul 2024)
-- Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC records; Random Forest best (93.15% accuracy, 0.9887 AUC).
+- Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC records; Random Forest best at 93.15% accuracy.
 - Deployed via REST APIs with SHAP-based interpretability.
 - Co-authored Springer paper (sleep-efficiency prediction, first author), presented at ICSMAI 2024.
 
@@ -47,7 +47,7 @@ PROJECTS:
 
 2. Autonomous Voice Agent (Systems Engineering) - High-throughput outbound AI calling system. 54% latency reduction, 2,100+ concurrent sessions, 25% lead conversion lift. Tech: Python, FastAPI, Retell AI, AsyncIO, PostgreSQL.
 
-3. DiabetesSense (Machine Learning) - Diabetes risk prediction: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest best at 93.15% accuracy / 0.9887 AUC, deployed as React + Flask screening app. Tech: Python, scikit-learn, SHAP, React.js, Flask.
+3. DiabetesSense (Machine Learning) - Diabetes risk prediction: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest best at 93.15% accuracy, deployed as React + Flask screening app. Tech: Python, scikit-learn, SHAP, React.js, Flask.
 
 4. Jobzyl (Full-stack) - Job-search aggregator searching 20 live boards across 60+ countries in parallel (Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more), first results streamed in ~1.4s over SSE. ATS scoring runs client-side; the CV is only sent to the server if the user saves it to their account, where it is encrypted at rest. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
 

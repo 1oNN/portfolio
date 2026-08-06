@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Hammad Ahmad",
   },
   description:
-    "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
+    "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Applied AI (Merit), University of Bradford.",
   keywords: [
     "AI Engineer",
     "Machine Learning",
@@ -45,14 +45,19 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Hammad Ahmad" }],
   creator: "Hammad Ahmad",
+  // Deliberately NO openGraph.title / openGraph.description / twitter.title /
+  // twitter.description / twitter.images here. App Router merges metadata
+  // shallowly: any value pinned at the root sticks to every descendant that
+  // does not override the whole object, which is why every child page used to
+  // share the homepage's OG and Twitter text. Left unset, Next derives them
+  // per page from that page's own title/description, and twitter falls back to
+  // openGraph.images - so a route with its own opengraph-image.tsx gets its own
+  // card image on both networks.
   openGraph: {
     type: "website",
     locale: "en_GB",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
     siteName: "Hammad Ahmad",
-    title: "Hammad Ahmad - AI/ML Engineer & Researcher",
-    description:
-      "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
     images: [
       {
         url: "/og.png",
@@ -64,10 +69,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hammad Ahmad - AI/ML Engineer & Researcher",
-    description:
-      "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure.",
-    images: ["/og.png"],
   },
   robots: {
     index: true,
@@ -96,7 +97,7 @@ const jsonLd = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
   jobTitle: "AI/ML Engineer & Researcher",
   description:
-    "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
+    "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Applied AI (Merit), University of Bradford.",
   image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"}/profile.png`,
   email: "mailto:hammadahmad.ml@gmail.com",
   alumniOf: [

@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Hammad Ahmad - AI/ML Engineer",
     short_name: "Hammad Ahmad",
     description:
-      "Graduate AI & Machine Learning Engineer specialising in LLMs, RAG systems, and scalable ML infrastructure. MSc Applied AI, University of Bradford.",
+      "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Applied AI (Merit), University of Bradford.",
     start_url: "/",
     display: "browser",
     background_color: "#0d1b2a",

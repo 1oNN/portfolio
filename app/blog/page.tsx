@@ -11,6 +11,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Writing",
   description: "Notes and case studies on AI/ML engineering, research, and the systems I build.",
+  alternates: { canonical: "/blog" },
 };
 
 const FILTERS = [

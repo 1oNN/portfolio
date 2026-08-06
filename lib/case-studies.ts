@@ -111,7 +111,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     approach: [
       "Built on BRFSS 2015 - 253,680 CDC health records, 22 features, and an 86/14 class imbalance handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
-      "Random Forest won decisively: 93.15% accuracy, 98.4% sensitivity, 87.9% specificity, 0.9887 AUC. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
+      "Random Forest won decisively at 93.15% accuracy, with Decision Tree second at 91.22% and the linear and boosting families clustered in the mid-70s. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
       "Persisted the winning model with joblib behind a Flask REST API with a React.js frontend: a 19-question, lab-free questionnaire that returns a risk classification plus a future-risk probability and lifestyle recommendations keyed to the user's dominant risk factors.",
       "During the follow-on research assistantship, extended the deployed model with SHAP and LIME attribution for per-prediction transparency.",
     ],
@@ -134,7 +134,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "93.15% accuracy, 98.4% sensitivity, and 0.9887 AUC on the held-out split - best of the 11-model benchmark. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
+      "93.15% accuracy on the held-out split - best of the 11-model benchmark. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
       "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [

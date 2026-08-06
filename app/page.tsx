@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import LeftRail from "@/components/layout/LeftRail";
 import Footer from "@/components/layout/Footer";
 import About from "@/components/sections/About";
@@ -8,6 +9,13 @@ import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
 import TerminalLauncher from "@/components/interactive/TerminalLauncher";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
+
+// Title and description inherit from the root layout; only the canonical is
+// page-specific (see the note in app/projects/page.tsx on why canonicals are
+// never set at the root).
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

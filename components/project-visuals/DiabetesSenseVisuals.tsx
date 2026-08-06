@@ -117,7 +117,7 @@ export function DiabetesSenseHero({ accent, className }: Props) {
         Pearson correlation with diabetes status · prevalence peaks at 63.2% in the 70-74 age band
       </text>
       <text x="40" y="470" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.5">
-        Random Forest on these features: 93.15% accuracy · 0.9887 AUC
+        Random Forest on these features: 93.15% accuracy, best of 11 models
       </text>
     </svg>
   );
@@ -213,7 +213,7 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
       <Box x={20} y={120} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
       <Box x={210} y={120} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
       <Box x={400} y={120} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
-      <Box x={600} y={120} w={140} h={60} title="Random Forest" sub="93.15% acc · 0.9887 AUC" highlight delay={0.45} />
+      <Box x={600} y={120} w={140} h={60} title="Random Forest" sub="93.15% accuracy" highlight delay={0.45} />
 
       <Box x={770} y={48} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
       <Box x={770} y={202} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />

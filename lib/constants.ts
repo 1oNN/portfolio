@@ -43,14 +43,14 @@ export const PROJECTS: Project[] = [
     title: "DiabetesSense",
     tagline: "93% accurate diabetes risk prediction from an 11-model benchmark",
     longDescription:
-      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance handled with random over-sampling). Random Forest won: 93.15% accuracy, 98.4% sensitivity, 0.9887 AUC. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
+      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance handled with random over-sampling). Random Forest won at 93.15% accuracy, ahead of Decision Tree (91.22%) and well clear of Logistic Regression (74.54%). Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
     tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
       { value: "93.15%", label: "Accuracy (Random Forest)" },
-      { value: "0.99", label: "AUC" },
+      { value: "11", label: "Models benchmarked" },
       { value: "253K", label: "Health records" },
     ],
   },
@@ -145,7 +145,7 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Jul 2024",
     current: false,
     responsibilities: [
-      "Benchmarked 11 ML classifiers for diabetes risk prediction on 253,680 CDC records; Random Forest best at 93.15% accuracy and 0.9887 AUC.",
+      "Benchmarked 11 ML classifiers for diabetes risk prediction on 253,680 CDC records; Random Forest best at 93.15% accuracy.",
       "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
       "Co-authored Springer book chapter; presented results at ICSMAI 2024, Saidia, Morocco.",

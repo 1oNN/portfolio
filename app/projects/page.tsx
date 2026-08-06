@@ -8,9 +8,13 @@ import ListingCard from "@/components/case-study/ListingCard";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { Project } from "@/types";
 
+// Canonicals are set per page, never at the root: a root-level canonical is
+// inherited by every descendant that does not override it, which would declare
+// each page a duplicate of the homepage.
 export const metadata: Metadata = {
   title: "Projects",
   description: "Selected engineering and research projects by Hammad Ahmad - AI/ML Engineer.",
+  alternates: { canonical: "/projects" },
 };
 
 const FILTERS = [

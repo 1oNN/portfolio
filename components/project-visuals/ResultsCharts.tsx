@@ -226,7 +226,7 @@ export function DiabetesSenseResults({ accent, className }: Props) {
       })}
 
       <text x="40" y="432" fontFamily={MONO} fontSize="9" fill={muted} opacity="0.7">
-        Random Forest also leads AUC (0.9887) and sensitivity (98.4%) · BRFSS 2015, random over-sampled
+        Random Forest leads every model in the benchmark · BRFSS 2015, random over-sampled
       </text>
     </svg>
   );

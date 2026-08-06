@@ -207,7 +207,7 @@ export const SEED_POSTS: BlogPost[] = [
     createdAt: "2026-07-20T10:00:00.000Z",
     updatedAt: "2026-07-20T10:00:00.000Z",
     content: [
-      "My BSc thesis at COMSATS asked a plain question: from a public health questionnaire, how well can you predict diabetes risk? The dataset was BRFSS 2015 - 253,680 CDC health records, 22 features - and the answer ended up being 93.15% accuracy with a 0.9887 AUC. But the number I quote is the last thing that happened. The decisions that produced it came earlier, and none of them were about picking a fancier model.",
+      "My BSc thesis at COMSATS asked a plain question: from a public health questionnaire, how well can you predict diabetes risk? The dataset was BRFSS 2015 - 253,680 CDC health records, 22 features - and the answer ended up being 93.15% accuracy. But the number I quote is the last thing that happened. The decisions that produced it came earlier, and none of them were about picking a fancier model.",
       "",
       "## The imbalance decides before the model does",
       "",
@@ -232,7 +232,7 @@ export const SEED_POSTS: BlogPost[] = [
       "",
       "## Accuracy is not the metric that matters",
       "",
-      "For a screening tool, the expensive mistake is the miss. Telling a healthy person to get a check-up costs an appointment; telling a diabetic person they are fine costs years of untreated progression. The winning model's numbers that actually matter are 98.4% sensitivity against 87.9% specificity - it almost never misses a positive case, at the price of some false alarms. For screening, that is the right side of the trade to be on.",
+      "For a screening tool, the expensive mistake is the miss. Telling a healthy person to get a check-up costs an appointment; telling a diabetic person they are fine costs years of untreated progression. So the model was tuned to catch positives rather than to look tidy on a single headline metric - accepting more false alarms in exchange for missing fewer real cases. For screening, that is the right side of the trade to be on.",
       "",
       "## The constraint that shaped everything: no lab tests",
       "",
