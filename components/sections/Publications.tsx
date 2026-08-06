@@ -88,8 +88,7 @@ export default function Publications() {
           <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Graph-augmented retrieval, LLM faithfulness evaluation, systems optimisation for
             high-throughput ML pipelines, and interpretable predictive modelling for clinical
-            applications. Currently exploring MSCA-eligible opportunities - earliest start date
-            October 2026.
+            applications. Open to funded PhD positions in the EU and UK.
           </p>
           <a
             href={ORCID_URL}

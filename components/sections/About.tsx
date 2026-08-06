@@ -5,12 +5,12 @@ import { AVAILABLE_CVS } from "@/lib/cv-config";
 
 const SKILL_GROUPS = [
   {
-    label: "Languages",
-    skills: ["Python", "C++", "SQL", "TypeScript", "JavaScript"],
+    label: "Programming languages",
+    skills: ["Python", "SQL", "TypeScript", "JavaScript"],
   },
   {
     label: "AI & ML",
-    skills: ["PyTorch", "TensorFlow", "scikit-learn", "LLMs/NLP", "RAG", "Sentence Transformers", "MLflow", "Retell AI"],
+    skills: ["PyTorch", "TensorFlow", "scikit-learn", "LLMs/NLP", "RAG", "Sentence Transformers", "Retell AI"],
   },
   {
     label: "Infrastructure",
@@ -18,7 +18,7 @@ const SKILL_GROUPS = [
   },
   {
     label: "Data Engineering",
-    skills: ["Neo4j", "PostgreSQL", "MongoDB", "pandas/NumPy"],
+    skills: ["Neo4j", "PostgreSQL", "pandas/NumPy"],
   },
   {
     label: "Frontend",
@@ -53,8 +53,8 @@ export default function About() {
               <p>
                 I&apos;m an AI/ML engineer with an MSc in Applied Artificial Intelligence from the
                 University of Bradford. My work sits at the intersection of production systems
-                engineering and applied research - I&apos;ve spent the last two years building
-                things that ship, not just things that benchmark well.
+                engineering and applied research: measuring a system honestly, then making it
+                fast enough to run in front of real users.
               </p>
               <p>
                 At Outlyst, I reduced call latency by 54% across 2,100+ concurrent AI voice
@@ -74,7 +74,7 @@ export default function About() {
               className="mt-4 font-mono text-[10px] uppercase tracking-widest"
               style={{ color: "var(--text-muted)" }}
             >
-              {LANGUAGES.map((l) => `${l.code} ${l.level}`).join(" · ")}
+              Spoken languages: {LANGUAGES.map((l) => `${l.code} ${l.level}`).join(" · ")}
             </p>
 
             {AVAILABLE_CVS.length > 0 && (

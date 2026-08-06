@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
-      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
     tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
@@ -103,6 +103,23 @@ export const PROJECTS: Project[] = [
 ];
 
 export const EXPERIENCE: Experience[] = [
+  {
+    id: "independent-jobzyl",
+    company: "Independent",
+    role: "AI / Machine Learning Engineer - Jobzyl",
+    type: "engineering",
+    location: "Bradford, UK (Remote)",
+    startDate: "Apr 2026",
+    endDate: "Present",
+    current: true,
+    responsibilities: [
+      "Designed and shipped Jobzyl (jobzyl.com), a multi-tenant job aggregator searching 20 live boards across 60+ countries in parallel, with first results in about 1.4 seconds.",
+      "Built the aggregation layer as a FastAPI service on AWS App Runner: per-board rate limits, Server-Sent Events streaming search progress as each board responds, and scheduled 6-hourly cache refreshes behind the live fan-out.",
+      "Implemented ATS scoring that runs client-side - the CV is parsed in-browser and only sent to the server if the user saves it to their account, where it is encrypted at rest.",
+      "Modelled multi-tenant data on Supabase Postgres with row-level security and PKCE OAuth.",
+      "Alongside this, working in quality control in the food industry.",
+    ],
+  },
   {
     id: "outlyst",
     company: "Outlyst",
@@ -201,6 +218,7 @@ export const ORCID_URL = `https://orcid.org/${ORCID_ID}`;
 export const SOCIAL_LINKS = [
   { platform: "GitHub", url: "https://github.com/1oNN", icon: "FiGithub" },
   { platform: "LinkedIn", url: "https://linkedin.com/in/hammadahmad123", icon: "FiLinkedin" },
+  { platform: "ORCID", url: ORCID_URL, icon: "SiOrcid" },
   { platform: "Email", url: `mailto:${CONTACT_EMAIL}`, icon: "FiMail" },
 ] as const;
 
@@ -217,11 +235,11 @@ export const AGENT_SUGGESTIONS = [
 export const TERMINAL_COMMANDS: Record<string, string> = {
   help: "Available commands: about, skills, experience, contact, whoami, ls, pwd, date, clear, exit",
   about:
-    "Hammad Ahmad - AI/ML Engineer & Researcher.\nMSc Applied AI @ University of Bradford.\nSpecialising in LLMs, RAG systems, and high-performance ML infrastructure.",
+    "Hammad Ahmad - AI/ML Engineer & Researcher.\nMSc Applied AI @ University of Bradford.\nSpecialising in LLMs, RAG systems, and latency optimisation.",
   skills:
     "Core: Python · PyTorch · FastAPI · Neo4j · RAG · LLMs\nAlso: TypeScript · React · Docker · AWS · PostgreSQL",
   experience:
-    "→ Outlyst (Oct 2025 - Mar 2026): AI / Machine Learning Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jul 2023-Jul 2024): Research Assistant (Data Science)",
+    "→ Independent (Apr 2026-present): AI / Machine Learning Engineer, Jobzyl\n→ Outlyst (Oct 2025 - Mar 2026): AI / Machine Learning Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jul 2023-Jul 2024): Research Assistant (Data Science)",
   contact:
     "Email: hammadahmad.ml@gmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1oNN",
   whoami: "hammad@portfolio:~$",

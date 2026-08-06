@@ -3,6 +3,7 @@ import path from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { SiOrcid } from "react-icons/si";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
 import CountUp from "@/components/interactive/CountUp";
@@ -19,15 +20,19 @@ function findProfilePhoto(): string | null {
   return null;
 }
 
+// Each figure carries its source: three unlabelled numbers read as one
+// achievement set, which they are not - two are from Outlyst, one is from a
+// public-dataset model benchmark.
 const STATS = [
-  { value: "54%", label: "Latency cut" },
-  { value: "93%", label: "Model accuracy" },
-  { value: "2,100+", label: "Concurrent sessions" },
+  { value: "54%", label: "Latency cut", source: "Outlyst" },
+  { value: "93%", label: "Model accuracy", source: "BRFSS benchmark" },
+  { value: "2,100+", label: "Concurrent sessions", source: "Outlyst" },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {
   FiGithub: <FiGithub size={18} />,
   FiLinkedin: <FiLinkedin size={18} />,
+  SiOrcid: <SiOrcid size={18} />,
   FiMail: <FiMail size={18} />,
 };
 
@@ -81,7 +86,7 @@ export default function LeftRail() {
           <strong className="font-semibold text-[var(--text-primary)]">
             graph-augmented retrieval
           </strong>
-          , and high-throughput ML infrastructure.
+          , and the latency work that makes them usable in production.
         </p>
 
         {/* Compact metric row - mono, accent numerals */}
@@ -96,6 +101,9 @@ export default function LeftRail() {
               </div>
               <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                 {stat.label}
+              </div>
+              <div className="mt-0.5 font-mono text-[9px] tracking-wide text-[var(--text-muted)] opacity-70">
+                {stat.source}
               </div>
             </div>
           ))}

@@ -1,10 +1,12 @@
 import ContactForm from "@/components/sections/ContactForm";
 import { CONTACT_EMAIL, SOCIAL_LINKS } from "@/lib/constants";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { SiOrcid } from "react-icons/si";
 
 const iconMap: Record<string, React.ReactNode> = {
   FiGithub: <FiGithub size={18} />,
   FiLinkedin: <FiLinkedin size={18} />,
+  SiOrcid: <SiOrcid size={18} />,
   FiMail: <FiMail size={18} />,
 };
 
@@ -38,10 +40,10 @@ export default function Contact() {
           className="mx-auto mt-5 max-w-xl text-base leading-relaxed"
           style={{ color: "var(--text-secondary)" }}
         >
-          I&apos;m open to full-time AI/ML engineering and research roles, and MSCA-eligible for
-          PhD or postdoc positions in the EU. If you&apos;re hiring for an AI/ML team, supervising
-          research, or just want to compare notes on retrieval systems, email is the fastest way
-          to reach me.
+          I&apos;m available now for full-time AI/ML engineering and research roles, and open to
+          funded PhD positions in the EU and UK. If you&apos;re hiring for an AI/ML team,
+          supervising research, or just want to compare notes on retrieval systems, email is the
+          fastest way to reach me.
         </p>
 
         {/* The one dominant CTA */}
@@ -70,7 +72,10 @@ export default function Contact() {
           </span>
           <span style={{ color: "var(--text-secondary)" }}>Available for work</span>
           <span aria-hidden="true">·</span>
-          <span>Bradford, UK · open to relocation · replies within a day</span>
+          <span>
+            Bradford, UK · open to relocation · UK Graduate visa to Dec 2027 · replies within a
+            day
+          </span>
         </p>
 
         {/* Socials - quiet icon row */}

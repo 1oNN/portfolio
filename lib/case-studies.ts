@@ -244,13 +244,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",
     status: "Shipped",
-    timeline: "",
+    timeline: "Apr 2026 - present",
     role: "Solo full-stack project",
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
     links: { live: "https://jobzyl.com" },
     problem: [
-      "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV. Aggregator products exist, but they're either unauthenticated ad farms or so slow that the data is stale by the time you load it.",
-      "The interesting full-stack problem isn't fetching listings - it's making a real-time, multi-tenant aggregator with row-level security, live progress streaming, and ATS scoring that runs client-side: the CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest.",
+      "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV.",
+      "The interesting full-stack problem isn't fetching listings - it's making a multi-tenant aggregator that fans out live over a warm cache, with row-level security, live progress streaming, and ATS scoring that runs client-side: the CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest.",
     ],
     approach: [
       "Twenty live job boards searched in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries. The aggregation layer is a FastAPI service on AWS App Runner with per-board rate limits and Server-Sent Events streaming search progress back as each board responds. It's live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches, and first results land in about 1.4 seconds instead of a single bulk response.",
@@ -265,7 +265,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
       {
         title: "Client-side ATS scoring",
-        body: "Server-side scoring would let us cache results and run more sophisticated extraction, but it would also mean storing every CV ever uploaded. Privacy is the actual product feature here, not a compliance afterthought.",
+        body: "Server-side scoring would let us cache results and run more sophisticated extraction, but it would also make a stored CV the default rather than an explicit choice the user makes. Keeping the scoring local means the data minimisation is structural, not a policy promise.",
       },
       {
         title: "SSE over WebSocket",
@@ -282,7 +282,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Operationally: PKCE OAuth for Google and LinkedIn, scheduled cache refreshes, admin dashboard with persistent audit log, and search analytics for understanding which boards return useful results per query type.",
     ],
     reflections: [
-      "The interesting next step is shifting some scoring server-side without breaking the privacy promise - federated or homomorphic patterns where the CV embedding stays local but the score computation can use server-side job-side embeddings. Probably not worth it for v1; potentially the next moat.",
+      "The interesting next step is shifting some scoring server-side while keeping the CV itself local - federated or homomorphic patterns where the CV embedding stays in the browser but the score computation can use server-side job-side embeddings. Probably not worth it for v1; potentially the next moat.",
     ],
     related: ["ai-voice-agent", "finlaw-uk"],
   },
