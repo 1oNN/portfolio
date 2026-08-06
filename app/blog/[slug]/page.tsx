@@ -1,3 +1,4 @@
+import { toJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -77,7 +78,7 @@ export default async function BlogPostPage({ params }: Props) {
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(jsonLd) }}
       />
 
       {/* Scroll-driven reading progress (CSS-only; hidden where unsupported) */}

@@ -1,3 +1,4 @@
+import { toJsonLd } from "@/lib/json-ld";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PROJECTS } from "@/lib/constants";
@@ -73,11 +74,11 @@ export default async function ProjectPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(jsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumbLd) }}
       />
       <CaseStudyLayout project={project} caseStudy={caseStudy} />
     </>

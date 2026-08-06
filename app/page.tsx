@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { PUBLICATIONS, ORCID_URL } from "@/lib/constants";
+import { toJsonLd } from "@/lib/json-ld";
 import LeftRail from "@/components/layout/LeftRail";
 import Footer from "@/components/layout/Footer";
 import About from "@/components/sections/About";
@@ -17,9 +19,48 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
+
+// ScholarlyArticle for the peer-reviewed paper, scoped to this page because
+// this is where the citation is rendered (the Person schema lives in the root
+// layout and applies sitewide). Title/year/DOI are derived from PUBLICATIONS so
+// they cannot drift from the visible citation; the co-author names, proceedings
+// volume and page range are the ones Crossref records against the DOI, which the
+// display string only carries in abbreviated form.
+const publicationLd = PUBLICATIONS.map((pub) => ({
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  headline: pub.title,
+  name: pub.title,
+  datePublished: pub.year,
+  pagination: "3-15",
+  isPartOf: {
+    "@type": "Book",
+    name: "Advances in Smart Medical, IoT & Artificial Intelligence",
+    isPartOf: { "@type": "BookSeries", name: "Information Systems Engineering and Management" },
+  },
+  publisher: { "@type": "Organization", name: "Springer Nature" },
+  author: [
+    { "@type": "Person", name: "Hammad Ahmad", url: SITE_URL, sameAs: ORCID_URL },
+    { "@type": "Person", name: "M. Umar Khan" },
+    { "@type": "Person", name: "Maleeha Azam" },
+  ],
+  ...(pub.doi
+    ? { identifier: { "@type": "PropertyValue", propertyID: "DOI", value: pub.doi }, url: `https://doi.org/${pub.doi}` }
+    : {}),
+}));
+
 export default function HomePage() {
   return (
     <>
+      {publicationLd.map((ld) => (
+        <script
+          key={ld.headline}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: toJsonLd(ld) }}
+        />
+      ))}
+
       {/* Page-level atmosphere: grid fading from the top-left + accent wash */}
       <div
         className="grid-bg pointer-events-none fixed inset-0 opacity-40 [mask-image:radial-gradient(ellipse_70%_50%_at_20%_0%,black,transparent_65%)]"
