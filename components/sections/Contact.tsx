@@ -72,10 +72,7 @@ export default function Contact() {
           </span>
           <span style={{ color: "var(--text-secondary)" }}>Available for work</span>
           <span aria-hidden="true">·</span>
-          <span>
-            Bradford, UK · open to relocation · UK Graduate visa to Dec 2027 · replies within a
-            day
-          </span>
+          <span>Bradford, UK · open to relocation · replies within a day</span>
         </p>
 
         {/* Socials - quiet icon row */}
