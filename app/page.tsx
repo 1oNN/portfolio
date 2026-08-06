@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PUBLICATIONS, ORCID_URL } from "@/lib/constants";
 import { toJsonLd } from "@/lib/json-ld";
+import { pageOpenGraph, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/metadata";
 import LeftRail from "@/components/layout/LeftRail";
 import Footer from "@/components/layout/Footer";
 import About from "@/components/sections/About";
@@ -12,14 +13,18 @@ import Contact from "@/components/sections/Contact";
 import TerminalLauncher from "@/components/interactive/TerminalLauncher";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 
-// Title and description inherit from the root layout; only the canonical is
-// page-specific (see the note in app/projects/page.tsx on why canonicals are
-// never set at the root).
+// Title and description inherit from the root layout; the canonical and the
+// openGraph block are page-specific (see the note in app/projects/page.tsx on
+// why canonicals are never set at the root, and lib/metadata.ts on why every
+// page has to restate the whole openGraph object).
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+  openGraph: pageOpenGraph({
+    path: "/",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  }),
 };
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
 
 // ScholarlyArticle for the peer-reviewed paper, scoped to this page because
 // this is where the citation is rendered (the Person schema lives in the root

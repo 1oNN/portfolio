@@ -1,4 +1,5 @@
 import { toJsonLd } from "@/lib/json-ld";
+import { AUTHOR_NAME, pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PROJECTS } from "@/lib/constants";
@@ -23,18 +24,18 @@ export const dynamicParams = false;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.id === slug);
-  if (!project) return { title: "Project Not Found" };
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
+  if (!project) return { title: "Project Not Found", robots: { index: false } };
   return {
     title: `${project.title} · Case Study`,
     description: project.tagline,
-    alternates: { canonical: `${siteUrl}/projects/${project.id}` },
-    openGraph: {
-      type: "article",
+    alternates: { canonical: `${SITE_URL}/projects/${project.id}` },
+    openGraph: pageOpenGraph({
+      path: `/projects/${project.id}`,
       title: project.title,
       description: project.tagline,
-      url: `${siteUrl}/projects/${project.id}`,
-    },
+      image: "route",
+      article: {},
+    }),
   };
 }
 
@@ -49,14 +50,17 @@ export default async function ProjectPage({ params }: Props) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
+  const siteUrl = SITE_URL;
   const canonicalUrl = `${siteUrl}/projects/${project.id}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     headline: project.title,
     description: project.tagline,
-    author: { "@type": "Person", name: "Hammad Ahmad", url: siteUrl },
+    author: { "@type": "Person", name: AUTHOR_NAME, url: siteUrl },
+    publisher: { "@type": "Person", name: AUTHOR_NAME, url: siteUrl },
+    image: `${canonicalUrl}/opengraph-image`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     url: canonicalUrl,
     keywords: project.tech.join(", "),
   };

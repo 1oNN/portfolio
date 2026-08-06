@@ -2,16 +2,27 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { getAllPosts } from "@/lib/blog-db";
+import { toJsonLd } from "@/lib/json-ld";
+import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import PostCard from "@/components/blog/PostCard";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { BlogPost } from "@/types";
 
 export const revalidate = 60;
 
+const PAGE_TITLE = "Writing & notes";
+const PAGE_DESCRIPTION =
+  "Notes and case studies on AI/ML engineering, research, and the systems I build.";
+
 export const metadata: Metadata = {
   title: "Writing",
-  description: "Notes and case studies on AI/ML engineering, research, and the systems I build.",
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: "/blog" },
+  openGraph: pageOpenGraph({
+    path: "/blog",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  }),
 };
 
 const FILTERS = [
@@ -34,8 +45,34 @@ export default async function BlogPage({ searchParams }: Props) {
   const posts = await getAllPosts(true);
   const filtered: BlogPost[] = active === "all" ? posts : posts.filter((p) => p.type === active);
 
+  // Always the unfiltered list: the canonical for every ?type= variant is
+  // /blog, so the structured data has to describe the canonical page, not the
+  // filtered view the visitor happens to be looking at.
+  const collectionLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: `${SITE_URL}/blog`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: post.title,
+        description: post.excerpt,
+        url: `${SITE_URL}/blog/${post.slug}`,
+      })),
+    },
+  };
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(collectionLd) }}
+      />
       <AnalyticsBeacon page="/blog" />
       {/* Sticky header */}
       <header

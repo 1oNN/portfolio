@@ -3,6 +3,8 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import { PROJECTS } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
+import { toJsonLd } from "@/lib/json-ld";
+import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import FeaturedCard from "@/components/case-study/FeaturedCard";
 import ListingCard from "@/components/case-study/ListingCard";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
@@ -11,10 +13,40 @@ import type { Project } from "@/types";
 // Canonicals are set per page, never at the root: a root-level canonical is
 // inherited by every descendant that does not override it, which would declare
 // each page a duplicate of the homepage.
+const PAGE_TITLE = "Projects & case studies";
+const PAGE_DESCRIPTION =
+  "Selected engineering and research projects by Hammad Ahmad - AI/ML Engineer.";
+
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected engineering and research projects by Hammad Ahmad - AI/ML Engineer.",
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: "/projects" },
+  openGraph: pageOpenGraph({
+    path: "/projects",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  }),
+};
+
+// ItemList so the listing reads as a collection rather than six loose links.
+// Derived from PROJECTS, so it cannot drift from what the page renders.
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  url: `${SITE_URL}/projects`,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: PROJECTS.length,
+    itemListElement: PROJECTS.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: p.title,
+      description: p.tagline,
+      url: `${SITE_URL}/projects/${p.id}`,
+    })),
+  },
 };
 
 const FILTERS = [
@@ -46,6 +78,10 @@ export default async function ProjectsPage({ searchParams }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(collectionLd) }}
+      />
       <AnalyticsBeacon page="/projects" />
       {/* Sticky header */}
       <header

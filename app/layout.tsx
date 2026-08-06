@@ -1,4 +1,5 @@
 import { toJsonLd } from "@/lib/json-ld";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/metadata";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
@@ -27,11 +28,10 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"),
   title: {
-    default: "Hammad Ahmad - AI/ML Engineer & Researcher",
+    default: SITE_TITLE,
     template: "%s | Hammad Ahmad",
   },
-  description:
-    "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Applied AI (Merit), University of Bradford.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "AI Engineer",
     "Machine Learning",
@@ -54,10 +54,14 @@ export const metadata: Metadata = {
   // per page from that page's own title/description, and twitter falls back to
   // openGraph.images - so a route with its own opengraph-image.tsx gets its own
   // card image on both networks.
+  // No `url` here on purpose: it would be inherited by every page that does not
+  // set its own openGraph, so /blog and /projects used to advertise the
+  // homepage as their og:url while their canonical said otherwise. Public pages
+  // build a complete block via pageOpenGraph(); this is only the fallback for
+  // routes that do not (admin, error), which are noindex anyway.
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
     siteName: "Hammad Ahmad",
     images: [
       {
@@ -95,11 +99,10 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Hammad Ahmad",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk",
+  url: SITE_URL,
   jobTitle: "AI/ML Engineer & Researcher",
-  description:
-    "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Applied AI (Merit), University of Bradford.",
-  image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk"}/profile.png`,
+  description: SITE_DESCRIPTION,
+  image: `${SITE_URL}/profile.png`,
   email: "mailto:hammadahmad.ml@gmail.com",
   alumniOf: [
     { "@type": "CollegeOrUniversity", name: "University of Bradford" },

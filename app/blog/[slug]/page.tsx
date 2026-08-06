@@ -1,4 +1,5 @@
 import { toJsonLd } from "@/lib/json-ld";
+import { AUTHOR_NAME, pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -18,21 +19,24 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post || !post.published) return { title: "Post Not Found" };
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
+  // An unknown or unpublished slug 404s in the body, but metadata is resolved
+  // first and would otherwise inherit robots.index from the root.
+  if (!post || !post.published) return { title: "Post Not Found", robots: { index: false } };
   return {
     title: post.title,
     description: post.excerpt,
-    alternates: { canonical: `${siteUrl}/blog/${post.slug}` },
-    openGraph: {
-      type: "article",
+    alternates: { canonical: `${SITE_URL}/blog/${post.slug}` },
+    openGraph: pageOpenGraph({
+      path: `/blog/${post.slug}`,
       title: post.title,
       description: post.excerpt,
-      url: `${siteUrl}/blog/${post.slug}`,
-      publishedTime: post.createdAt,
-      modifiedTime: post.updatedAt,
-      tags: post.tags,
-    },
+      image: "route",
+      article: {
+        publishedTime: post.createdAt,
+        modifiedTime: post.updatedAt,
+        tags: post.tags,
+      },
+    }),
   };
 }
 
@@ -61,7 +65,8 @@ export default async function BlogPostPage({ params }: Props) {
   const newer = idx > 0 ? posts[idx - 1] : null;
   const older = idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hammadahmad.co.uk";
+  const siteUrl = SITE_URL;
+  const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -69,9 +74,23 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.excerpt,
     datePublished: post.createdAt,
     dateModified: post.updatedAt,
-    author: { "@type": "Person", name: "Hammad Ahmad", url: siteUrl },
-    url: `${siteUrl}/blog/${post.slug}`,
+    author: { "@type": "Person", name: AUTHOR_NAME, url: siteUrl },
+    publisher: { "@type": "Person", name: AUTHOR_NAME, url: siteUrl },
+    // The route's own dynamic OG image, so the article carries the same
+    // artwork in search results that it does in a social unfurl.
+    image: `${canonicalUrl}/opengraph-image`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+    url: canonicalUrl,
     keywords: post.tags.join(", "),
+  };
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Writing", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: canonicalUrl },
+    ],
   };
 
   return (
@@ -79,6 +98,10 @@ export default async function BlogPostPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: toJsonLd(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumbLd) }}
       />
 
       {/* Scroll-driven reading progress (CSS-only; hidden where unsupported) */}
