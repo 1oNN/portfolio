@@ -51,12 +51,17 @@ function clean(value: string | undefined): string | undefined {
 }
 
 /**
- * Non-sensitive shape of the resolved credentials, for diagnosing a bad paste
- * without ever revealing the values. An AWS access key id is 20 characters and
- * a secret access key is 40; anything else means the value is truncated or has
- * picked up extra characters.
+ * Lengths only, for diagnosing a bad paste. An AWS access key id is 20
+ * characters and a secret access key is 40 - both facts are public - so a
+ * length that is not those numbers says the value is truncated or carrying
+ * extra characters, and a raw length differing from the cleaned one says it
+ * had whitespace or quotes around it.
+ *
+ * Deliberately NO fragment of either value, not even a prefix: lengths cannot
+ * be worked back into a credential, a prefix is a piece of one. This whole
+ * function exists only until the contact form sends, then it comes out.
  */
-export function credentialShape(): Record<string, unknown> {
+export function credentialShape(): Record<string, number> {
   const rawId = process.env.APP_AWS_ACCESS_KEY_ID;
   const rawSecret = process.env.APP_AWS_SECRET_ACCESS_KEY;
   return {
@@ -64,7 +69,6 @@ export function credentialShape(): Record<string, unknown> {
     idLenClean: clean(rawId)?.length ?? 0,
     secretLen: rawSecret?.length ?? 0,
     secretLenClean: clean(rawSecret)?.length ?? 0,
-    idPrefix: clean(rawId)?.slice(0, 4) ?? "",
   };
 }
 
