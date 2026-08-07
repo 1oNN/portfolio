@@ -4,6 +4,7 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent-system-prompt";
 import { GUARD_REFUSAL, isInjectionAttempt, leaksSystemPrompt } from "@/lib/agent-guard";
+import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
 
 // Per-IP rate limit: 20 requests/hour. Resets on cold start - acceptable
 // for a portfolio agent since abuse cost is primarily GROQ quota, not data.
@@ -24,10 +25,7 @@ function checkRateLimit(ip: string): boolean {
 let dynamoClient: DynamoDBDocumentClient | null = null;
 function getDynamoClient(): DynamoDBDocumentClient {
   if (!dynamoClient) {
-    // Credentials come from the SDK's default chain - see the note in
-    // app/api/contact/route.ts on why the explicit key pair cannot work in the
-    // Amplify SSR Lambda (temporary credentials need AWS_SESSION_TOKEN too).
-    const dynamo = new DynamoDBClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
+    const dynamo = new DynamoDBClient(awsClientConfig());
     dynamoClient = DynamoDBDocumentClient.from(dynamo);
   }
   return dynamoClient;
@@ -149,7 +147,7 @@ export async function POST(req: NextRequest) {
   }
 
   const table = process.env.DYNAMODB_AGENT_TABLE;
-  if (table && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+  if (table && hasAwsCredentials()) {
     getDynamoClient()
       .send(
         new PutCommand({

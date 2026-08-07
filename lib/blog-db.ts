@@ -12,6 +12,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import type { BlogPost } from "@/types";
 import { SEED_POSTS } from "./seed-posts";
+import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
 
 const TABLE_NAME = process.env.DYNAMODB_BLOG_TABLE ?? "portfolio-blog";
 const LOCAL_FILE = path.join(process.cwd(), "data", "blog-posts.json");
@@ -35,7 +36,7 @@ function withSeeds(posts: BlogPost[], publishedOnly: boolean): BlogPost[] {
 }
 
 function isDynamoConfigured(): boolean {
-  return !!(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY);
+  return hasAwsCredentials();
 }
 
 function isProduction(): boolean {
@@ -56,10 +57,7 @@ function isAuthError(err: unknown): boolean {
 let dynamoClient: DynamoDBDocumentClient | null = null;
 function getDynamo(): DynamoDBDocumentClient {
   if (!dynamoClient) {
-    // Credentials come from the SDK's default chain - see the note in
-    // app/api/contact/route.ts on why the explicit key pair cannot work in the
-    // Amplify SSR Lambda (temporary credentials need AWS_SESSION_TOKEN too).
-    const dynamo = new DynamoDBClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
+    const dynamo = new DynamoDBClient(awsClientConfig());
     dynamoClient = DynamoDBDocumentClient.from(dynamo);
   }
   return dynamoClient;

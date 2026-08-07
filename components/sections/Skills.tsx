@@ -203,11 +203,7 @@ export default function Skills() {
                 ))}
                 .
               </p>
-          ) : (
-            <p className="text-sm text-[var(--text-muted)]">
-              A dot means there is a case study you can read.
-            </p>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

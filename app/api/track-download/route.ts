@@ -5,6 +5,7 @@ import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { v4 as uuidv4 } from "uuid";
 
 import { AVAILABLE_CVS, type CvEntry } from "@/lib/cv-config";
+import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
 
 type CvType = CvEntry["cvType"];
 
@@ -16,11 +17,8 @@ const CV_LABELS: Record<CvType, string> = {
 
 const VALID_CV_TYPES = AVAILABLE_CVS.map((cv) => cv.cvType);
 
-// Credentials come from the SDK's default chain - see the note in
-// app/api/contact/route.ts on why the explicit key pair cannot work in the
-// Amplify SSR Lambda (temporary credentials need AWS_SESSION_TOKEN too).
 function getDynamoClient(): DynamoDBDocumentClient {
-  const dynamo = new DynamoDBClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
+  const dynamo = new DynamoDBClient(awsClientConfig());
   return DynamoDBDocumentClient.from(dynamo);
 }
 
@@ -39,7 +37,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const table = process.env.DYNAMODB_DOWNLOADS_TABLE;
-  const awsConfigured = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+  const awsConfigured = hasAwsCredentials();
 
   if (awsConfigured && table) {
     const dynamo = getDynamoClient();
@@ -65,7 +63,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Optional SES email notification - fire-and-forget
     const sesEmail = process.env.SES_FROM_EMAIL;
     if (sesEmail) {
-      const ses = new SESClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
+      const ses = new SESClient(awsClientConfig());
 
       ses
         .send(
