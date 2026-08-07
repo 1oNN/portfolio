@@ -68,8 +68,8 @@ export const PROJECTS: Project[] = [
     // the 11-model comparison chart, where it sits in the context of every
     // other model's score rather than standing alone as a headline.
     longDescription:
-      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance, resampling confined to the training folds). Random Forest led at 93% accuracy and was strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
-    tech: ["Python", "scikit-learn", "SHAP", "React.js", "JavaScript", "Flask", "REST API", "pandas"],
+      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance, resampling confined to the training folds). Random Forest led at 93% accuracy and was strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire.",
+    tech: ["Python", "scikit-learn", "React.js", "JavaScript", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     githubUrl: "https://github.com/1oNN/diabetes-app",
@@ -176,7 +176,7 @@ export const EXPERIENCE: Experience[] = [
     current: false,
     responsibilities: [
       "Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records, resampling confined to the training folds; Random Forest led at 93% accuracy and performed best on ROC-AUC and sensitivity.",
-      "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
+      "Deployed predictive models via REST APIs with correlation-driven risk-factor analysis surfacing the drivers behind each score.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
       "First and corresponding author on a Springer conference paper; presented at ICSMAI 2024, Saidia, Morocco.",
     ],
@@ -265,7 +265,6 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "Ensemble methods", alias: ["Random Forest"] },
       { name: "Ollama" },
       { name: "Whisper" },
-      { name: "SHAP" },
     ],
   },
   {

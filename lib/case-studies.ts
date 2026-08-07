@@ -110,7 +110,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     status: "Shipped",
     timeline: "Jul 2023 - Jul 2024",
     role: "BSc thesis (with Inshra Javed), COMSATS University Islamabad",
-    primaryStack: ["scikit-learn", "SHAP", "React.js", "Flask"],
+    primaryStack: ["scikit-learn", "React.js", "Flask", "pandas"],
     tackles:
       "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
     delivers:
@@ -126,7 +126,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       // prevalence figure for the 70-74 band.
       "The tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity, then the instance-based models, and the linear baseline last. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
       "Persisted the winning model with joblib behind a Flask REST API with a React.js frontend: a 19-question, lab-free questionnaire that returns a risk classification plus a future-risk probability and lifestyle recommendations keyed to the user's dominant risk factors.",
-      "During the follow-on research assistantship, extended the deployed model with SHAP and LIME attribution for per-prediction transparency.",
     ],
     decisions: [
       {
@@ -138,10 +137,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         // Training-fold confinement is stated on both CVs, so it is safe to
         // say here - it was the open question this decision card left blank.
         body: "All three balancing techniques were run head-to-head on the 86/14 imbalance, with resampling confined to the training folds so the held-out split stayed untouched. Synthetic interpolation (SMOTE/ADASYN) blurred the categorical questionnaire features; plain random over-sampling preserved the feature distributions and produced the strongest downstream classifier.",
-      },
-      {
-        title: "SHAP over LIME",
-        body: "Applied during the research assistantship on the deployed model: LIME's local linear approximations are fast but unstable across runs on the same input. SHAP gives consistent attributions, so someone asking 'why this score?' gets the same answer twice. Reproducibility is non-negotiable for clinical use.",
       },
       {
         title: "Lab-free questionnaire over clinical inputs",

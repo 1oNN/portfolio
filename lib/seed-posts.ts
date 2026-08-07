@@ -240,11 +240,11 @@ export const SEED_POSTS: BlogPost[] = [
       "",
       "## A prediction without a why is a black box",
       "",
-      "Clinical adoption research is blunt about this: when clinicians cannot trace a prediction to features they recognise, they reject the tool - even when it outperforms their judgement. The thesis handled this with correlation-driven risk-factor analysis: general health was the strongest correlate at -0.41, then high blood pressure at +0.38, high cholesterol and BMI at +0.29 each, with prevalence peaking at 63.2% in the 70-74 age band. During the research assistantship that followed, we added SHAP attribution to the deployed model - and chose SHAP over LIME specifically because LIME's local approximations are unstable across runs on the same input. An explanation that changes between refreshes is worse than no explanation.",
+      "Clinical adoption research is blunt about this: when clinicians cannot trace a prediction to features they recognise, they reject the tool - even when it outperforms their judgement. The thesis handled this with correlation-driven risk-factor analysis: general health was the strongest correlate at -0.41, then high blood pressure at +0.38, high cholesterol and BMI at +0.29 each, with prevalence peaking at 63.2% in the 70-74 age band. Those are drivers a clinician already reasons with, which is the point: the explanation has to be in their vocabulary, not the model's.",
       "",
       "## What I would do differently",
       "",
-      "Ship the attribution in v1 instead of retrofitting it - a risk score without \"why this score\" is exactly the black box the thesis argued against. And before anything touches a real clinic: calibration and population-shift detection. 93% on one curated dataset does not transfer to a different hospital's intake unchecked, and Platt-scaled probabilities plus a shift detector are the difference between a paper result and a safe tool.",
+      "Ship per-prediction attribution, not just population-level correlations - a risk score without \"why this score for this person\" is exactly the black box the thesis argued against. And before anything touches a real clinic: calibration and population-shift detection. 93% on one curated dataset does not transfer to a different hospital's intake unchecked, and Platt-scaled probabilities plus a shift detector are the difference between a paper result and a safe tool.",
     ].join("\n"),
   },
 ];

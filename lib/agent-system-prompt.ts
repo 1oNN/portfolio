@@ -52,7 +52,7 @@ EXPERIENCE:
 4. Research Assistant, Data Science - COMSATS University Islamabad (Jul 2023 - Jul 2024)
 - Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records, resampling confined to the training folds; Random Forest led at 93% accuracy and performed best on ROC-AUC and sensitivity.
 - Quote the accuracy as 93%, not to two decimal places. Always pair it with ROC-AUC and sensitivity: on an 86/14 imbalance, accuracy alone is a weak claim and a predict-everyone-negative model would score 86%.
-- Deployed via REST APIs with SHAP-based interpretability.
+- Deployed via REST APIs with correlation-driven risk-factor analysis behind each score.
 - First and corresponding author on a Springer conference paper (sleep-efficiency prediction), presented at ICSMAI 2024.
 
 EDUCATION:
@@ -71,7 +71,7 @@ PROJECTS:
 
 2. Autonomous Voice Agent (Systems Engineering) - Outbound AI calling system. Mean call latency cut 54%, from 2.4s to 1.1s, across 2,100+ calls handled. Tech: Python, FastAPI, Retell AI, AsyncIO, PostgreSQL.
 
-3. DiabetesSense (Machine Learning) - Diabetes risk screening: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest strongest on ROC-AUC and sensitivity, deployed as a React + Flask screening app with a 19-question lab-free questionnaire. Tech: Python, scikit-learn, SHAP, React.js, Flask.
+3. DiabetesSense (Machine Learning) - Diabetes risk screening: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest strongest on ROC-AUC and sensitivity, deployed as a React + Flask screening app with a 19-question lab-free questionnaire. Tech: Python, scikit-learn, React.js, Flask, pandas.
 
 4. Jobzyl (Full-stack) - Job-search aggregator searching 20 live boards across 60+ countries in parallel (Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more), first results streamed in ~1.4s over SSE. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. ATS scoring runs client-side; the CV is only sent to the server if the user saves it to their account, where it is encrypted at rest. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
 

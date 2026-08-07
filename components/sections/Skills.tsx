@@ -122,6 +122,33 @@ export default function Skills() {
                 {group.skills.map((skill) => {
                   const isActive = active === skill.name;
                   const hasProjects = skill.projects.length > 0;
+                  const chip = (
+                    <>
+                      {SKILL_ICONS[skill.name] && (
+                        <span aria-hidden="true" className="text-[13px] leading-none opacity-90">
+                          {SKILL_ICONS[skill.name]}
+                        </span>
+                      )}
+                      {skill.name}
+                    </>
+                  );
+                  const base =
+                    "inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-[11px]";
+
+                  // Only skills with a case study are interactive. The rest are
+                  // plain chips: clicking them used to produce a generic line
+                  // of filler, repeated identically for every one of them.
+                  if (!hasProjects) {
+                    return (
+                      <span
+                        key={skill.name}
+                        className={`${base} bg-[var(--surface-elevated)] text-[var(--text-secondary)]`}
+                      >
+                        {chip}
+                      </span>
+                    );
+                  }
+
                   return (
                     <button
                       key={skill.name}
@@ -132,26 +159,19 @@ export default function Skills() {
                       onMouseLeave={() => setHovered(null)}
                       onFocus={() => setHovered(skill.name)}
                       onBlur={() => setHovered(null)}
-                      className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-[11px] transition-colors duration-150 ${
+                      className={`${base} transition-colors duration-150 ${
                         isActive
                           ? "bg-[var(--accent)] text-[var(--accent-contrast)]"
                           : "bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
                       }`}
                     >
-                      {SKILL_ICONS[skill.name] && (
-                        <span aria-hidden="true" className="text-[13px] leading-none opacity-90">
-                          {SKILL_ICONS[skill.name]}
-                        </span>
-                      )}
-                      {skill.name}
-                      {hasProjects && (
-                        <span
-                          aria-hidden="true"
-                          className={`inline-block h-1 w-1 rounded-full ${
-                            isActive ? "bg-[var(--accent-contrast)]" : "bg-[var(--accent)]"
-                          }`}
-                        />
-                      )}
+                      {chip}
+                      <span
+                        aria-hidden="true"
+                        className={`inline-block h-1 w-1 rounded-full ${
+                          isActive ? "bg-[var(--accent-contrast)]" : "bg-[var(--accent)]"
+                        }`}
+                      />
                     </button>
                   );
                 })}
@@ -166,8 +186,7 @@ export default function Skills() {
           aria-live="polite"
           className="mt-7 min-h-[3.25rem] border-t border-[var(--border)] pt-5"
         >
-          {activeSkill ? (
-            activeSkill.projects.length > 0 ? (
+          {activeSkill && activeSkill.projects.length > 0 ? (
               <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
                 <span className="font-mono text-[var(--accent)]">{activeSkill.name}</span> is used
                 in{" "}
@@ -184,17 +203,6 @@ export default function Skills() {
                 ))}
                 .
               </p>
-            ) : (
-              /* Never state an absence. A portfolio volunteering what is NOT
-                 behind a skill reads as a confession, and the earlier wording
-                 ("no case study behind it") actively undersold work that is
-                 real - it just has no public write-up. */
-              <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-                <span className="font-mono text-[var(--accent)]">{activeSkill.name}</span> is part
-                of my day-to-day toolkit, from the MSc and research work through to what I build
-                now.
-              </p>
-            )
           ) : (
             <p className="text-sm text-[var(--text-muted)]">
               A dot means there is a case study you can read.
