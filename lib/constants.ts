@@ -15,7 +15,7 @@ export const PROJECTS: Project[] = [
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
       "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
-    tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
+    tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
     tagline: "Graph-augmented RAG for UK financial regulation",
     longDescription:
       "FinLaw-UK is my MSc dissertation - a graph-augmented RAG pipeline over PRA/FCA/FRC and statutory corpora. Every clause lives twice: as a Neo4j graph node for structural precision and as a dense embedding for semantic recall; the graph then acts as a validation layer that deprioritises retrieved clauses without graph support and flags uncited rules as potential hallucinations.",
-    tech: ["Python", "Mistral 7B", "Ollama", "Neo4j", "RAG", "Sentence Transformers", "RAGAS", "React.js"],
+    tech: ["Python", "Mistral 7B", "Ollama", "Neo4j", "RAG", "Sentence Transformers", "RAGAS", "React.js", "JavaScript"],
     category: "research",
     featured: true,
     githubUrl: "https://github.com/1oNN/finlaw-uk",
@@ -47,7 +47,7 @@ export const PROJECTS: Project[] = [
     tagline: "Cutting voice-agent latency 54%, from 2.4s to 1.1s",
     longDescription:
       "Built at Outlyst - FastAPI inference backend for a Retell AI voice agent. Profiled with py-spy to isolate event-loop blocking, restructured asyncpg connection pools, and parallelised tool calls with asyncio.gather(). Mean call latency fell from 2.4s to 1.1s across 2,100+ outbound calls.",
-    tech: ["Python", "FastAPI", "Retell AI", "AsyncIO", "PostgreSQL", "Docker", "CI/CD"],
+    tech: ["Python", "FastAPI", "Retell AI", "AsyncIO", "PostgreSQL", "Docker", "Linux", "CI/CD"],
     category: "engineering",
     featured: true,
     // Proprietary Outlyst work - deliberately no public repo link
@@ -69,7 +69,7 @@ export const PROJECTS: Project[] = [
     // other model's score rather than standing alone as a headline.
     longDescription:
       "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance, resampling confined to the training folds). Random Forest led at 93% accuracy and was strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
-    tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
+    tech: ["Python", "scikit-learn", "SHAP", "React.js", "JavaScript", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     githubUrl: "https://github.com/1oNN/diabetes-app",
@@ -85,7 +85,7 @@ export const PROJECTS: Project[] = [
     tagline: "Retell call exporter with local Whisper transcription",
     longDescription:
       "Companion tooling for the Retell stack: a FastAPI + Next.js tool that exports call recordings and metadata, then transcribes them with locally-run Whisper (large-v3, GPU-accelerated when available). Call audio never leaves the machine; an async job manager streams progress and logs over server-sent events.",
-    tech: ["Python", "FastAPI", "Whisper", "Next.js", "SSE", "Docker"],
+    tech: ["Python", "FastAPI", "Whisper", "Next.js", "React.js", "TypeScript", "SSE", "Docker", "Linux"],
     category: "engineering",
     featured: false,
     githubUrl: "https://github.com/1oNN/VoiceFlow",
@@ -100,7 +100,7 @@ export const PROJECTS: Project[] = [
     tagline: "Published ML research served as a lifestyle-factor prediction app",
     longDescription:
       "Companion app to my peer-reviewed paper on ML methods for sleep-efficiency prediction. Four models compared on 452 study records; Random Forest won at R² 0.8569 / MSE 0.0027. The app takes age, sleep-stage percentages, awakenings, caffeine, alcohol, exercise, and smoking status, then returns an efficiency score, a classification, and recommendations keyed to the result.",
-    tech: ["Python", "scikit-learn", "Random Forest", "Flask", "Docker"],
+    tech: ["Python", "scikit-learn", "Random Forest", "Flask", "Docker", "Linux"],
     category: "research",
     featured: false,
     githubUrl: "https://github.com/1oNN/sleep-efficiency-app",
@@ -237,6 +237,13 @@ export const PUBLICATIONS: Publication[] = [
 export interface Skill {
   name: string;
   alias?: string[];
+  /**
+   * Explicit project ids for capabilities that are genuinely part of a build
+   * but are not a named dependency, so they never appear in a `tech` array -
+   * the retrieval techniques in FinLaw-UK, for instance. Listed here rather
+   * than padded into `tech` so the project cards stay readable.
+   */
+  usedIn?: string[];
 }
 
 export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
@@ -251,10 +258,10 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "MLflow" },
       { name: "RAG" },
       { name: "Sentence Transformers" },
-      { name: "Cross-encoder re-ranking" },
+      { name: "Cross-encoder re-ranking", usedIn: ["finlaw-uk"] },
       { name: "RAGAS", alias: ["RAGAS"] },
-      { name: "Vector embeddings" },
-      { name: "Semantic search" },
+      { name: "Vector embeddings", usedIn: ["finlaw-uk"] },
+      { name: "Semantic search", usedIn: ["finlaw-uk"] },
       { name: "Ensemble methods", alias: ["Random Forest"] },
       { name: "Ollama" },
       { name: "Whisper" },

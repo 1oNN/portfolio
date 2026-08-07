@@ -2,9 +2,66 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  SiAmazon,
+  SiApachespark,
+  SiCplusplus,
+  SiDocker,
+  SiFastapi,
+  SiFlask,
+  SiGit,
+  SiGithubactions,
+  SiGooglecloud,
+  SiJavascript,
+  SiLinux,
+  SiMlflow,
+  SiNextdotjs,
+  SiOpenai,
+  SiPandas,
+  SiPostgresql,
+  SiPytorch,
+  SiPython,
+  SiReact,
+  SiScikitlearn,
+  SiSupabase,
+  SiTensorflow,
+  SiTypescript,
+} from "react-icons/si";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { PROJECTS, SKILL_GROUPS, type Skill } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
+
+/**
+ * Brand marks where react-icons actually ships one. Deliberately partial:
+ * Neo4j, Ollama, XGBoost and the concept-level skills (RAG, semantic search)
+ * have no icon in the set, and a wrong-but-close glyph is worse than none, so
+ * those render as text only.
+ */
+const SKILL_ICONS: Record<string, React.ReactNode> = {
+  PyTorch: <SiPytorch />,
+  TensorFlow: <SiTensorflow />,
+  "scikit-learn": <SiScikitlearn />,
+  MLflow: <SiMlflow />,
+  Whisper: <SiOpenai />,
+  "Ensemble methods": <SiApachespark />,
+  Python: <SiPython />,
+  TypeScript: <SiTypescript />,
+  JavaScript: <SiJavascript />,
+  "C++": <SiCplusplus />,
+  FastAPI: <SiFastapi />,
+  Flask: <SiFlask />,
+  React: <SiReact />,
+  "Next.js": <SiNextdotjs />,
+  PostgreSQL: <SiPostgresql />,
+  Supabase: <SiSupabase />,
+  "pandas / NumPy": <SiPandas />,
+  Docker: <SiDocker />,
+  Git: <SiGit />,
+  "GitHub Actions": <SiGithubactions />,
+  AWS: <SiAmazon />,
+  GCP: <SiGooglecloud />,
+  Linux: <SiLinux />,
+};
 
 /**
  * Which projects evidence a given skill, matched against each project's `tech`
@@ -14,6 +71,7 @@ import { getCaseStudy } from "@/lib/case-studies";
 function projectsUsing(skill: Skill) {
   const needles = [skill.name, ...(skill.alias ?? [])].map((s) => s.toLowerCase());
   return PROJECTS.filter((p) => {
+    if (skill.usedIn?.includes(p.id)) return true;
     const stack = [...p.tech, ...(getCaseStudy(p.id)?.primaryStack ?? [])].map((t) =>
       t.toLowerCase()
     );
@@ -51,7 +109,7 @@ export default function Skills() {
           size="lg"
           eyebrow="Toolkit"
           title="Technical skills"
-          description="Pick one to see where it is actually used. Anything without a project behind it is something I have worked with but have not shipped here."
+          description="Pick one to see the work behind it."
         />
 
         <div className="mt-8 space-y-7">
@@ -74,17 +132,22 @@ export default function Skills() {
                       onMouseLeave={() => setHovered(null)}
                       onFocus={() => setHovered(skill.name)}
                       onBlur={() => setHovered(null)}
-                      className={`rounded px-2 py-0.5 font-mono text-[11px] transition-colors duration-150 ${
+                      className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-[11px] transition-colors duration-150 ${
                         isActive
                           ? "bg-[var(--accent)] text-[var(--accent-contrast)]"
                           : "bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
                       }`}
                     >
+                      {SKILL_ICONS[skill.name] && (
+                        <span aria-hidden="true" className="text-[13px] leading-none opacity-90">
+                          {SKILL_ICONS[skill.name]}
+                        </span>
+                      )}
                       {skill.name}
                       {hasProjects && (
                         <span
                           aria-hidden="true"
-                          className={`ml-1.5 inline-block h-1 w-1 rounded-full align-middle ${
+                          className={`inline-block h-1 w-1 rounded-full ${
                             isActive ? "bg-[var(--accent-contrast)]" : "bg-[var(--accent)]"
                           }`}
                         />
@@ -122,14 +185,19 @@ export default function Skills() {
                 .
               </p>
             ) : (
+              /* Never state an absence. A portfolio volunteering what is NOT
+                 behind a skill reads as a confession, and the earlier wording
+                 ("no case study behind it") actively undersold work that is
+                 real - it just has no public write-up. */
               <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-                <span className="font-mono text-[var(--accent)]">{activeSkill.name}</span> is on my
-                CV but has no case study on this site behind it.
+                <span className="font-mono text-[var(--accent)]">{activeSkill.name}</span> is part
+                of my day-to-day toolkit, from the MSc and research work through to what I build
+                now.
               </p>
             )
           ) : (
             <p className="text-sm text-[var(--text-muted)]">
-              A dot marks a skill with a project behind it.
+              A dot means there is a case study you can read.
             </p>
           )}
         </div>
