@@ -4,7 +4,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import type { ApiResponse } from "@/types";
-import { awsClientConfig } from "@/lib/aws";
+import { awsClientConfig, credentialShape } from "@/lib/aws";
 
 const contactAttempts = new Map<string, { count: number; resetAt: number }>();
 
@@ -190,6 +190,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
             // credential, no message content. REMOVE once the form is fixed.
             code: errName,
             region: awsClientConfig().region,
+            creds: credentialShape(),
           },
           { status: 500 }
         );

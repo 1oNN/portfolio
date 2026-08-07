@@ -25,13 +25,47 @@ export function awsClientConfig(): {
   const region =
     process.env.APP_AWS_REGION ?? process.env.AWS_REGION ?? "eu-west-2";
 
-  const accessKeyId = process.env.APP_AWS_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.APP_AWS_SECRET_ACCESS_KEY;
+  const accessKeyId = clean(process.env.APP_AWS_ACCESS_KEY_ID);
+  const secretAccessKey = clean(process.env.APP_AWS_SECRET_ACCESS_KEY);
 
   if (accessKeyId && secretAccessKey) {
     return { region, credentials: { accessKeyId, secretAccessKey } };
   }
   return { region };
+}
+
+/**
+ * Strips surrounding quotes and any whitespace from a credential.
+ *
+ * A key pasted into a console with a stray space, a trailing newline, or the
+ * quotes it was copied inside is still "present" as far as the SDK is
+ * concerned - it just signs with the wrong string and AWS rejects the request
+ * as IncompleteSignature, which is what production was returning. Neither an
+ * access key id nor a secret can legitimately contain whitespace or a quote,
+ * so removing them can only help.
+ */
+function clean(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const trimmed = value.trim().replace(/^["']|["']$/g, "").replace(/\s+/g, "");
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+/**
+ * Non-sensitive shape of the resolved credentials, for diagnosing a bad paste
+ * without ever revealing the values. An AWS access key id is 20 characters and
+ * a secret access key is 40; anything else means the value is truncated or has
+ * picked up extra characters.
+ */
+export function credentialShape(): Record<string, unknown> {
+  const rawId = process.env.APP_AWS_ACCESS_KEY_ID;
+  const rawSecret = process.env.APP_AWS_SECRET_ACCESS_KEY;
+  return {
+    idLen: rawId?.length ?? 0,
+    idLenClean: clean(rawId)?.length ?? 0,
+    secretLen: rawSecret?.length ?? 0,
+    secretLenClean: clean(rawSecret)?.length ?? 0,
+    idPrefix: clean(rawId)?.slice(0, 4) ?? "",
+  };
 }
 
 /**
