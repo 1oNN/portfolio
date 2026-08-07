@@ -6,6 +6,7 @@ import { getCaseStudy } from "@/lib/case-studies";
 import { toJsonLd } from "@/lib/json-ld";
 import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import ListingCard from "@/components/case-study/ListingCard";
+import Footer from "@/components/layout/Footer";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { Project } from "@/types";
 
@@ -205,6 +206,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { getAllPosts } from "@/lib/blog-db";
 import { toJsonLd } from "@/lib/json-ld";
 import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import PostCard from "@/components/blog/PostCard";
+import Footer from "@/components/layout/Footer";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 import type { BlogPost } from "@/types";
 
@@ -177,6 +178,7 @@ export default async function BlogPage({ searchParams }: Props) {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

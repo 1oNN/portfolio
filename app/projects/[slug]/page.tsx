@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PROJECTS } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
 import CaseStudyLayout from "@/components/case-study/CaseStudyLayout";
+import Footer from "@/components/layout/Footer";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -85,6 +86,7 @@ export default async function ProjectPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumbLd) }}
       />
       <CaseStudyLayout project={project} caseStudy={caseStudy} />
+      <Footer />
     </>
   );
 }

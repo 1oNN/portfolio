@@ -9,6 +9,7 @@ import { parseMarkdownDoc } from "@/lib/markdown";
 import { readingTime } from "@/lib/reading-time";
 import TableOfContents from "@/components/blog/TableOfContents";
 import CopyLink from "@/components/blog/CopyLink";
+import Footer from "@/components/layout/Footer";
 
 export const revalidate = 60;
 
@@ -234,6 +235,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -114,14 +114,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     tackles:
       "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
     delivers:
-      "An 11-model benchmark on 253,680 BRFSS records, won by Random Forest at 93% accuracy and strongest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
+      "An 11-model benchmark on the 253,680-record CDC BRFSS 2015 dataset, won by Random Forest at 93% accuracy and strongest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
     links: {},
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
       "Adoption literature on clinical ML is consistent: when clinicians can't trace a prediction back to features they recognise, they reject the tool - even when the tool is more accurate than their own judgement. The interpretability layer isn't optional polish; it's the load-bearing part.",
     ],
     approach: [
-      "Built on BRFSS 2015 - 253,680 CDC health records, 22 features, and an 86/14 class imbalance handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
+      "Built on the CDC BRFSS 2015 dataset - 253,680 records, 22 features, and a 14% positive class handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
       // TODO verify against the raw dataset before republishing: the 63.2%
       // prevalence figure for the 70-74 band.
       "The tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity, then the instance-based models, and the linear baseline last. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",

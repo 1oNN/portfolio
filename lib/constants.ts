@@ -76,7 +76,7 @@ export const PROJECTS: Project[] = [
     metrics: [
       { value: "93%", label: "Accuracy (Random Forest)" },
       { value: "11", label: "Models benchmarked" },
-      { value: "253,680", label: "Records" },
+      { value: "253,680", label: "CDC BRFSS records" },
     ],
   },
   {
