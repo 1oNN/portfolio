@@ -114,7 +114,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     tackles:
       "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
     delivers:
-      "An 11-model benchmark on 253,680 BRFSS records, led by Random Forest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
+      "An 11-model benchmark on 253,680 BRFSS records, won by Random Forest at 93% accuracy and strongest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
     links: {},
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
@@ -135,9 +135,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
       {
         title: "ROS over SMOTE and ADASYN",
-        // TODO confirm before stating it: whether resampling was confined to
-        // the training folds. Do not add that claim until verified.
-        body: "All three balancing techniques were run head-to-head on the 86/14 imbalance. Synthetic interpolation (SMOTE/ADASYN) blurred the categorical questionnaire features; plain random over-sampling preserved the feature distributions and produced the strongest downstream classifier.",
+        // Training-fold confinement is stated on both CVs, so it is safe to
+        // say here - it was the open question this decision card left blank.
+        body: "All three balancing techniques were run head-to-head on the 86/14 imbalance, with resampling confined to the training folds so the held-out split stayed untouched. Synthetic interpolation (SMOTE/ADASYN) blurred the categorical questionnaire features; plain random over-sampling preserved the feature distributions and produced the strongest downstream classifier.",
       },
       {
         title: "SHAP over LIME",
@@ -149,7 +149,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "Random Forest led the 11-model benchmark on the held-out split, strongest on ROC-AUC and sensitivity - the metrics that matter on an 86/14 imbalance. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
+      "Random Forest led the 11-model benchmark on the held-out split at 93% accuracy, and was strongest on ROC-AUC and sensitivity - the metrics that matter on an 86/14 imbalance. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
       "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [

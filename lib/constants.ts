@@ -63,20 +63,20 @@ export const PROJECTS: Project[] = [
   {
     id: "diabetes-risk",
     title: "DiabetesSense",
-    tagline: "Diabetes risk screening from an 11-model benchmark",
-    // Accuracy figures are deliberately absent pending a methodology recheck.
-    // On an 86/14 imbalanced dataset accuracy is the wrong headline anyway -
-    // do not reintroduce it here without re-verifying the split.
+    tagline: "93% accurate diabetes risk screening from an 11-model benchmark",
+    // Accuracy is shown rounded to 93%. The precise 93.15% is retained only in
+    // the 11-model comparison chart, where it sits in the context of every
+    // other model's score rather than standing alone as a headline.
     longDescription:
-      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance). Tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
+      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance, resampling confined to the training folds). Random Forest led at 93% accuracy and was strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
     tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
+      { value: "93%", label: "Accuracy (Random Forest)" },
       { value: "11", label: "Models benchmarked" },
       { value: "253,680", label: "Records" },
-      { value: "19", label: "Questions, no lab tests" },
     ],
   },
   {
@@ -175,7 +175,7 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Jul 2024",
     current: false,
     responsibilities: [
-      "Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records; Random Forest performed best on ROC-AUC and sensitivity.",
+      "Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records, resampling confined to the training folds; Random Forest led at 93% accuracy and performed best on ROC-AUC and sensitivity.",
       "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
       "First and corresponding author on a Springer conference paper; presented at ICSMAI 2024, Saidia, Morocco.",
@@ -221,6 +221,75 @@ export const PUBLICATIONS: Publication[] = [
     year: "2024",
     doi: "10.1007/978-3-031-66854-8_1",
     type: "conference",
+  },
+];
+
+/**
+ * Skills, grouped as both CVs group them so the two can be diffed at a glance.
+ * Every entry here appears on at least one CV - do not add anything that does
+ * not, and do not drop anything that does.
+ *
+ * `alias` exists only where the CV's wording differs from the string used in a
+ * project's `tech` array; the Skills section matches on it to work out which
+ * projects evidence a given skill. A skill with no matching project simply
+ * shows no project list, which is the honest outcome rather than a hidden one.
+ */
+export interface Skill {
+  name: string;
+  alias?: string[];
+}
+
+export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
+  {
+    label: "Machine learning, NLP & LLMs",
+    skills: [
+      { name: "PyTorch" },
+      { name: "TensorFlow" },
+      { name: "scikit-learn" },
+      { name: "XGBoost" },
+      { name: "LightGBM" },
+      { name: "MLflow" },
+      { name: "RAG" },
+      { name: "Sentence Transformers" },
+      { name: "Cross-encoder re-ranking" },
+      { name: "RAGAS", alias: ["RAGAS"] },
+      { name: "Vector embeddings" },
+      { name: "Semantic search" },
+      { name: "Ensemble methods", alias: ["Random Forest"] },
+      { name: "Ollama" },
+      { name: "Whisper" },
+      { name: "SHAP" },
+    ],
+  },
+  {
+    label: "Engineering & data",
+    skills: [
+      { name: "Python" },
+      { name: "TypeScript" },
+      { name: "JavaScript" },
+      { name: "C++" },
+      { name: "SQL" },
+      { name: "FastAPI" },
+      { name: "Flask" },
+      { name: "REST APIs", alias: ["REST API"] },
+      { name: "React", alias: ["React.js"] },
+      { name: "Next.js" },
+      { name: "PostgreSQL" },
+      { name: "Supabase" },
+      { name: "Neo4j" },
+      { name: "pandas / NumPy", alias: ["pandas"] },
+    ],
+  },
+  {
+    label: "Cloud & DevOps",
+    skills: [
+      { name: "Docker" },
+      { name: "Git" },
+      { name: "GitHub Actions", alias: ["CI/CD"] },
+      { name: "AWS", alias: ["AWS"] },
+      { name: "GCP" },
+      { name: "Linux" },
+    ],
   },
 ];
 

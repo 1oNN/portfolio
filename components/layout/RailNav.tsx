@@ -4,6 +4,7 @@ import { useEffect, useState, type MouseEvent } from "react";
 
 const SECTIONS = [
   { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "writing", label: "Writing" },

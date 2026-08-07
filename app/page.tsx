@@ -5,6 +5,7 @@ import { pageOpenGraph, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/met
 import LeftRail from "@/components/layout/LeftRail";
 import Footer from "@/components/layout/Footer";
 import About from "@/components/sections/About";
+import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
 import HomeProjects from "@/components/sections/HomeProjects";
 import HomeWriting from "@/components/sections/HomeWriting";
@@ -107,6 +108,7 @@ export default function HomePage() {
         <LeftRail />
         <main id="main" className="pb-16 lg:w-[54%] lg:py-24">
           <About />
+          <Skills />
           <Experience />
           <HomeProjects />
           <HomeWriting />

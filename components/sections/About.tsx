@@ -3,29 +3,6 @@ import CvDownloads from "@/components/sections/CvDownloads";
 import { EDUCATION } from "@/lib/constants";
 import { AVAILABLE_CVS } from "@/lib/cv-config";
 
-const SKILL_GROUPS = [
-  {
-    label: "Programming languages",
-    skills: ["Python", "SQL", "TypeScript", "JavaScript"],
-  },
-  {
-    label: "AI & ML",
-    skills: ["PyTorch", "TensorFlow", "scikit-learn", "LLMs/NLP", "RAG", "Sentence Transformers", "Retell AI"],
-  },
-  {
-    label: "Infrastructure",
-    skills: ["Docker", "CI/CD", "FastAPI", "Flask", "AWS", "GCP", "REST APIs"],
-  },
-  {
-    label: "Data Engineering",
-    skills: ["Neo4j", "PostgreSQL", "pandas/NumPy"],
-  },
-  {
-    label: "Frontend",
-    skills: ["React.js", "Next.js"],
-  },
-];
-
 // Short mono form of language proficiency - derived from the fuller facts
 // (English fluent/IELTS 7.0, Urdu native, German A1.2 learning).
 const LANGUAGES = [
@@ -42,7 +19,7 @@ export default function About() {
           size="lg"
           statement
           eyebrow="About"
-          title="Background & skills"
+          title="Background"
           description="ML engineer at heart, researcher by training - I build systems that are fast, explainable, and built to last."
         />
 
@@ -120,32 +97,9 @@ export default function About() {
             </div>
           </div>
 
-          {/* Skills - two-column flow under the bio */}
-          <div>
-            <div className="grid gap-6 sm:grid-cols-2">
-              {SKILL_GROUPS.map((group) => (
-                <div key={group.label}>
-                  <h3
-                    className="font-mono text-[10px] uppercase tracking-widest"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    {group.label}
-                  </h3>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {group.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="rounded px-2 py-0.5 font-mono text-[11px]"
-                        style={{ backgroundColor: "var(--surface-elevated)", color: "var(--text-secondary)" }}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Skills moved to their own section: sitting directly under
+              Education with identical mono group labels, they read as
+              Education sub-headings rather than a category of their own. */}
         </div>
       </div>
     </section>

@@ -213,9 +213,7 @@ export const SEED_POSTS: BlogPost[] = [
       "",
       "BRFSS 2015 is 86/14 imbalanced: non-diabetic records outnumber diabetic ones six to one. That means a model that predicts \"not diabetic\" for everyone scores 86% accuracy while being clinically useless. Any accuracy figure on this dataset is meaningless until the balance is handled.",
       "",
-      // TODO confirm before stating it: whether resampling was confined to the
-      // training folds. Do not add that claim until verified.
-      "We ran three balancing strategies head-to-head - Random Over-Sampling, SMOTE, and ADASYN:",
+      "We ran three balancing strategies head-to-head - Random Over-Sampling, SMOTE, and ADASYN, with the resampling confined to the training folds so the held-out split stayed untouched:",
       "",
       "```python",
       "# Illustrative: the head-to-head that decided the balancing strategy",

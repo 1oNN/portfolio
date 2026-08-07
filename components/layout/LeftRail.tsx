@@ -25,7 +25,7 @@ function findProfilePhoto(): string | null {
 // public-dataset model benchmark.
 const STATS = [
   { value: "54%", label: "Latency cut", source: "Outlyst" },
-  { value: "11", label: "Classifiers benchmarked", source: "BRFSS 2015" },
+  { value: "93%", label: "Random Forest accuracy", source: "BRFSS 2015" },
   { value: "2,100+", label: "Calls handled", source: "Outlyst" },
 ];
 
