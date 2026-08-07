@@ -25,8 +25,8 @@ function findProfilePhoto(): string | null {
 // public-dataset model benchmark.
 const STATS = [
   { value: "54%", label: "Latency cut", source: "Outlyst" },
-  { value: "93%", label: "Model accuracy", source: "BRFSS benchmark" },
-  { value: "2,100+", label: "Concurrent sessions", source: "Outlyst" },
+  { value: "11", label: "Classifiers benchmarked", source: "BRFSS 2015" },
+  { value: "2,100+", label: "Calls handled", source: "Outlyst" },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {

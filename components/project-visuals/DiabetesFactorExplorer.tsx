@@ -35,6 +35,7 @@ const FACTORS: Factor[] = [
   {
     name: "Age group",
     r: 0.27,
+    // TODO verify 63.2% against the raw BRFSS dataset before republishing.
     fact: "Prevalence climbs sharply from age 50 and peaks at 63.2% in the 70-74 band - the steepest demographic gradient in the dataset.",
   },
   {

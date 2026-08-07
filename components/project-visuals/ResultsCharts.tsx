@@ -312,7 +312,13 @@ export function SleepEfficiencyResults({ accent, className }: Props) {
   );
 }
 
-/* ─── Voice Agent: stable-concurrency comparison + impact chips ─────── */
+/* ─── Voice Agent: mean call latency, before and after profiling ─────────
+   Replaces a stable-concurrency comparison (~200 -> 2,100+) and three
+   business-impact chips (+25% conversions, 27 qualified leads, 100+ h/wk).
+   The concurrency figure was call volume misread as simultaneous load, and
+   the three commercial numbers are not independently verifiable. Latency is
+   the claim this case study actually evidences. Milliseconds, so the bar
+   lengths are honest: 2400 -> 1100 is the real ratio. */
 
 export function VoiceAgentResults({ accent, className }: Props) {
   const muted = "var(--text-muted)";
@@ -321,34 +327,28 @@ export function VoiceAgentResults({ accent, className }: Props) {
   const border = "var(--border)";
 
   const barX = 210;
-  const barScale = 560 / 2100;
-
-  const impacts = [
-    { big: "+25%", small: "lead conversions" },
-    { big: "27", small: "qualified leads" },
-    { big: "100+ h/wk", small: "staff time reclaimed" },
-  ];
+  const barScale = 560 / 2400;
 
   return (
     <svg
-      viewBox="0 0 900 310"
+      viewBox="0 0 900 250"
       className={`pv-interactive ${className ?? ""}`}
       role="img"
-      aria-label="Stable concurrent sessions rose from about 200 to over 2,100"
+      aria-label="Mean call latency fell from 2.4 seconds to 1.1 seconds, a 54 percent reduction"
       style={{ width: "100%", height: "auto" }}
     >
       <text x="40" y="34" fontFamily={MONO} fontSize="10" fontWeight="600" fill={muted} letterSpacing="2">
-        STABLE CONCURRENT SESSIONS
+        MEAN CALL LATENCY
       </text>
 
-      {[0, 500, 1000, 1500, 2000].map((t) => (
+      {[0, 600, 1200, 1800, 2400].map((t) => (
         <g key={t}>
           <line
             x1={barX + t * barScale} y1={58} x2={barX + t * barScale} y2={186}
             stroke={border} strokeWidth="1" strokeDasharray="2 4" opacity="0.5"
           />
           <text x={barX + t * barScale} y={202} textAnchor="middle" fontFamily={MONO} fontSize="9" fill={muted}>
-            {t.toLocaleString()}
+            {(t / 1000).toFixed(1)}s
           </text>
         </g>
       ))}
@@ -357,9 +357,9 @@ export function VoiceAgentResults({ accent, className }: Props) {
         <text x={40} y={87} fontFamily="ui-sans-serif, Inter, system-ui" fontSize="13" fontWeight="600" fill={text}>
           Before
         </text>
-        <rect x={barX} y={70} width={200 * barScale} height="26" rx="3" className="pv-grow-r" fill={surface} stroke={border} strokeWidth="1" style={{ animationDelay: "0.1s" }} />
-        <text x={barX + 200 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "0.5s" }}>
-          ~200 · degrades beyond
+        <rect x={barX} y={70} width={2400 * barScale} height="26" rx="3" className="pv-grow-r" fill={surface} stroke={border} strokeWidth="1" style={{ animationDelay: "0.1s" }} />
+        <text x={barX + 2400 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "0.6s" }}>
+          2.4s
         </text>
       </g>
 
@@ -367,24 +367,11 @@ export function VoiceAgentResults({ accent, className }: Props) {
         <text x={40} y={147} fontFamily="ui-sans-serif, Inter, system-ui" fontSize="13" fontWeight="600" fill={accent}>
           After
         </text>
-        <rect x={barX} y={130} width={2100 * barScale} height="26" rx="3" className="pv-grow-r" fill={accent} fillOpacity="0.85" style={{ animationDelay: "0.5s", animationDuration: "1s" }} />
-        <text x={barX + 2100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "1.4s" }}>
-          2,100+
+        <rect x={barX} y={130} width={1100 * barScale} height="26" rx="3" className="pv-grow-r" fill={accent} fillOpacity="0.85" style={{ animationDelay: "0.5s", animationDuration: "1s" }} />
+        <text x={barX + 1100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "1.4s" }}>
+          1.1s · −54%
         </text>
       </g>
-
-      {/* Business impact chips */}
-      {impacts.map((imp, i) => (
-        <g key={imp.small} transform={`translate(${40 + i * 230}, 230)`} className="pv-pop pv-hover-group" style={{ animationDelay: `${1 + i * 0.12}s` }}>
-          <rect width="210" height="56" rx="6" className="pv-node" fill={i === 0 ? `color-mix(in srgb, ${accent} 12%, transparent)` : surface} stroke={i === 0 ? accent : border} strokeWidth="1.25" />
-          <text x="16" y="24" fontFamily={MONO} fontSize="15" fontWeight="700" fill={i === 0 ? accent : "var(--text-primary)"}>
-            {imp.big}
-          </text>
-          <text x="16" y="42" fontFamily={MONO} fontSize="9" fill={muted} letterSpacing="1">
-            {imp.small.toUpperCase()}
-          </text>
-        </g>
-      ))}
     </svg>
   );
 }

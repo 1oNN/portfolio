@@ -44,33 +44,39 @@ export const PROJECTS: Project[] = [
   {
     id: "ai-voice-agent",
     title: "Autonomous Voice Agent",
-    tagline: "2,100+ concurrent AI sales calls at 1.1s latency",
+    tagline: "Cutting voice-agent latency 54%, from 2.4s to 1.1s",
     longDescription:
-      "Built at Outlyst - FastAPI inference backend for a Retell AI voice agent. Profiled with py-spy to isolate event-loop blocking, restructured asyncpg connection pools, and parallelised tool calls with asyncio.gather(). 2,100+ concurrent stateful sessions.",
+      "Built at Outlyst - FastAPI inference backend for a Retell AI voice agent. Profiled with py-spy to isolate event-loop blocking, restructured asyncpg connection pools, and parallelised tool calls with asyncio.gather(). Mean call latency fell from 2.4s to 1.1s across 2,100+ outbound calls.",
     tech: ["Python", "FastAPI", "Retell AI", "AsyncIO", "PostgreSQL", "Docker", "CI/CD"],
     category: "engineering",
     featured: true,
     // Proprietary Outlyst work - deliberately no public repo link
+    // 2,100+ is call VOLUME over the ~6-month contract, not concurrency. The
+    // site previously read it as simultaneous sessions, which is a different
+    // and unmeasured claim - do not reintroduce "concurrent" here.
     metrics: [
       { value: "54%", label: "Latency reduction" },
-      { value: "2,100+", label: "Concurrent sessions" },
-      { value: "25%", label: "Lead conversion lift" },
+      { value: "2,100+", label: "Calls handled" },
+      { value: "1.1s", label: "Mean call latency" },
     ],
   },
   {
     id: "diabetes-risk",
     title: "DiabetesSense",
-    tagline: "93% accurate diabetes risk prediction from an 11-model benchmark",
+    tagline: "Diabetes risk screening from an 11-model benchmark",
+    // Accuracy figures are deliberately absent pending a methodology recheck.
+    // On an 86/14 imbalanced dataset accuracy is the wrong headline anyway -
+    // do not reintroduce it here without re-verifying the split.
     longDescription:
-      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance handled with random over-sampling). Random Forest won at 93.15% accuracy, ahead of Decision Tree (91.22%) and well clear of Logistic Regression (74.54%). Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
+      "BSc thesis at COMSATS - benchmarked 11 classifiers on BRFSS 2015 (253,680 records, 86/14 class imbalance). Tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity. Shipped as a React.js + Flask app with a 19-question, lab-free risk questionnaire; SHAP/LIME attribution applied during the follow-on research assistantship.",
     tech: ["Python", "scikit-learn", "SHAP", "React.js", "Flask", "REST API", "pandas"],
     category: "ml",
     featured: true,
     githubUrl: "https://github.com/1oNN/diabetes-app",
     metrics: [
-      { value: "93.15%", label: "Accuracy (Random Forest)" },
       { value: "11", label: "Models benchmarked" },
-      { value: "253K", label: "Health records" },
+      { value: "253,680", label: "Records" },
+      { value: "19", label: "Questions, no lab tests" },
     ],
   },
   {
@@ -107,16 +113,21 @@ export const PROJECTS: Project[] = [
 
 export const EXPERIENCE: Experience[] = [
   {
+    // Not an employment entry: "Independent" as a company read as a job title
+    // the CV does not support. Framed as self-directed project work, and
+    // cross-referenced to the case study so the same work does not look like
+    // two separate things.
     id: "independent-jobzyl",
-    company: "Independent",
-    role: "AI / Machine Learning Engineer - Jobzyl",
+    company: "Jobzyl",
+    role: "Independent project work",
     type: "engineering",
-    location: "Bradford, UK (Remote)",
+    location: "Bradford, UK",
     startDate: "Apr 2026",
     endDate: "Present",
     current: true,
     responsibilities: [
-      "Designed and shipped Jobzyl (jobzyl.com), a multi-tenant job aggregator searching 20 live boards across 60+ countries in parallel, with first results in about 1.4 seconds.",
+      "Self-directed build, shipped to jobzyl.com - the full case study is under Projects.",
+      "Designed a multi-tenant job aggregator searching 20 live boards across 60+ countries in parallel, with first results in about 1.4 seconds.",
       "Built the aggregation layer as a FastAPI service on AWS App Runner: per-board rate limits, Server-Sent Events streaming search progress as each board responds, and scheduled 6-hourly cache refreshes behind the live fan-out.",
       "Implemented ATS scoring that runs client-side - the CV is parsed in-browser and only sent to the server if the user saves it to their account, where it is encrypted at rest.",
       "Modelled multi-tenant data on Supabase Postgres with row-level security and PKCE OAuth.",
@@ -132,10 +143,10 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Mar 2026",
     current: false,
     responsibilities: [
-      "Engineered and optimized the inference architecture for an autonomous AI voice agent (Retell AI, FastAPI), mitigating bottlenecks to support 2,100+ concurrent stateful interactions.",
-      "Enhanced agent capabilities to detect gatekeepers and schedule callbacks, boosting lead conversions by ~25% and generating 27 qualified leads.",
+      "Engineered and optimized the inference architecture for an autonomous AI voice agent (Retell AI, FastAPI), handling 2,100+ outbound calls.",
+      "Enhanced agent capabilities to detect gatekeepers and schedule callbacks rather than dead-ending the transfer.",
       "Conducted rigorous backend profiling to isolate inefficient asynchronous I/O and connection pooling, driving a 54% reduction in systemic latency (2.4s → 1.1s).",
-      "Built an internal micro-CRM, modeling and syncing structured contact data via automated extraction pipelines to save 100+ staff hours/week.",
+      "Built an internal micro-CRM with automated contact-extraction pipelines, removing external CRM licensing costs.",
     ],
   },
   {
@@ -148,8 +159,8 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Sep 2025",
     current: false,
     responsibilities: [
-      "Engineered FinLaw-UK, a Retrieval-Augmented Generation architecture integrating Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware regulatory retrieval.",
-      "Designed multi-modal representation learning pipelines using graph-augmented models and cross-encoder re-ranking architectures.",
+      "Engineered FinLaw-UK, a Retrieval-Augmented Generation architecture integrating Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware regulatory retrieval. This work was also my MSc dissertation project - the Education and Experience entries describe the same system, not two.",
+      "Built a hybrid retrieval pipeline: BM25 sparse retrieval fused with BGE-small dense embeddings via reciprocal rank fusion, then cross-encoder re-ranking, with graph-grounded citation verification over Neo4j.",
       "Evaluated on a 110-item regulatory benchmark: 0.76 faithfulness and 0.74 answer relevance (RAGAS), 0.82 source accuracy, 0.81 citation quality.",
       "Built reproducible experimental pipelines with structured evaluation protocols, extending RAGAS with custom citation-precision and legal-completeness metrics.",
     ],
@@ -164,10 +175,10 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Jul 2024",
     current: false,
     responsibilities: [
-      "Benchmarked 11 ML classifiers for diabetes risk prediction on 253,680 CDC records; Random Forest best at 93.15% accuracy.",
+      "Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records; Random Forest performed best on ROC-AUC and sensitivity.",
       "Deployed predictive models via REST APIs with SHAP-based interpretability for algorithmic transparency.",
       "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
-      "Co-authored Springer book chapter; presented results at ICSMAI 2024, Saidia, Morocco.",
+      "First and corresponding author on a Springer conference paper; presented at ICSMAI 2024, Saidia, Morocco.",
     ],
   },
 ];
@@ -183,7 +194,8 @@ export const EDUCATION: Education[] = [
     endDate: "Sep 2025",
     dissertation:
       "FinLaw-UK: A Graph-Augmented Retrieval Chatbot for Reliable and Transparent UK Financial Regulation",
-    focus: "Spatial and relational data modelling, graph networks, LLM evaluation, robustness benchmarking",
+    focus:
+      "Modules - Artificial Intelligence and Data Science (79), Business Data Analytics (79), Responsible AI: Ethics, Law and Governance (75)",
   },
   {
     id: "comsats-bs",
@@ -205,7 +217,7 @@ export const PUBLICATIONS: Publication[] = [
       "Comparative Analysis of Machine Learning Methods for Enhancing Sleep Efficiency and Prediction",
     authors: "Ahmad, H. (first & corresponding author), Khan, M.U., Azam, M.",
     venue:
-      "International Conference on Smart Medical, IoT & Artificial Intelligence (ICSMAI 2024), Springer Nature, pp. 3-15",
+      "ICSMAI 2024. In: Information Systems Engineering and Management, vol 12, eds. Serrhini & Ghoumid. Springer, Cham, pp. 3-15",
     year: "2024",
     doi: "10.1007/978-3-031-66854-8_1",
     type: "conference",

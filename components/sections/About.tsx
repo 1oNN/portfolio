@@ -57,9 +57,8 @@ export default function About() {
                 fast enough to run in front of real users.
               </p>
               <p>
-                At Outlyst, I reduced call latency by 54% across 2,100+ concurrent AI voice
-                interactions by profiling async I/O bottlenecks and restructuring connection
-                pooling. For my dissertation, I built FinLaw-UK - a graph-augmented RAG system
+                At Outlyst, I cut mean call latency 54% across 2,100+ outbound calls by profiling
+                async I/O bottlenecks and restructuring connection pooling. For my dissertation, I built FinLaw-UK - a graph-augmented RAG system
                 for UK financial regulation that uses a Neo4j knowledge graph to validate
                 citations and flag hallucinations, reaching 0.82 source accuracy with Mistral 7B.
               </p>

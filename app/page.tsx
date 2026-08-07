@@ -48,9 +48,17 @@ const publicationLd = PUBLICATIONS.map((pub) => ({
   isPartOf: {
     "@type": "Book",
     name: "Advances in Smart Medical, IoT & Artificial Intelligence",
-    isPartOf: { "@type": "BookSeries", name: "Information Systems Engineering and Management" },
+    editor: [
+      { "@type": "Person", name: "Serrhini" },
+      { "@type": "Person", name: "Ghoumid" },
+    ],
+    isPartOf: {
+      "@type": "BookSeries",
+      name: "Information Systems Engineering and Management",
+      volumeNumber: "12",
+    },
   },
-  publisher: { "@type": "Organization", name: "Springer Nature" },
+  publisher: { "@type": "Organization", name: "Springer", location: "Cham" },
   author: [
     { "@type": "Person", name: "Hammad Ahmad", url: SITE_URL, sameAs: ORCID_URL },
     { "@type": "Person", name: "M. Umar Khan" },

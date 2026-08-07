@@ -32,7 +32,7 @@ export function VoiceAgentHero({ accent, className }: Props) {
         MEAN CALL LATENCY
       </text>
       <text x="60" y="80" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
-        sustained across 2,100+ concurrent stateful sessions
+        measured on warm calls, before and after profiling
       </text>
 
       {/* Y-axis labels */}
@@ -104,19 +104,15 @@ export function VoiceAgentHero({ accent, className }: Props) {
         </text>
       </g>
 
-      {/* Delta callout */}
-      <g transform="translate(140, 380)" className="pv-pop pv-hover-group" style={{ animationDelay: "1.8s" }}>
+      {/* Delta callout - single, centred. The second callout was a CONCURRENCY
+          stat reading "2,100+ sessions"; 2,100+ is call volume over the
+          contract, not simultaneous load, and it now lives in the headline
+          metrics panel as "Calls handled". */}
+      <g transform="translate(300, 380)" className="pv-pop pv-hover-group" style={{ animationDelay: "1.8s" }}>
         <rect width="200" height="64" rx="6" ry="6" className="pv-node" fill={accent} fillOpacity="0.12" stroke={accent} strokeWidth="1.25" />
         <text x="16" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">REDUCTION</text>
         <text x="16" y="52" fontFamily="ui-sans-serif, Inter, system-ui" fontSize="22" fontWeight="700" fill={accent}>
           −54% · 1.3s
-        </text>
-      </g>
-      <g transform="translate(360, 380)" className="pv-pop pv-hover-group" style={{ animationDelay: "1.95s" }}>
-        <rect width="200" height="64" rx="6" ry="6" className="pv-node" fill={surface} stroke={border} strokeWidth="1" />
-        <text x="16" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">CONCURRENCY</text>
-        <text x="16" y="52" fontFamily="ui-sans-serif, Inter, system-ui" fontSize="22" fontWeight="700" fill={text}>
-          2,100+ sessions
         </text>
       </g>
     </svg>

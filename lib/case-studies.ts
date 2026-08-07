@@ -61,20 +61,20 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     role: "AI / Machine Learning Engineer @ Outlyst",
     primaryStack: ["FastAPI", "Retell AI", "AsyncIO", "PostgreSQL"],
     tackles:
-      "At 2.4s a voice agent sounds like a bad phone line and the prospect hangs up, and the system fell over past about 200 simultaneous calls.",
+      "At 2.4s a turn, a voice agent sounds like a bad phone line and the prospect starts talking over it. Under 1.2s it feels human enough that they stay on the call.",
     delivers:
-      "1.1s mean latency, a 54% cut with no horizontal scaling, holding 2,100+ concurrent stateful sessions without dropping any.",
+      "1.1s mean call latency, a 54% cut, with no horizontal scaling and no change to the model - the win came out of profiling, not architecture.",
     links: {},
     problem: [
-      "A voice agent's quality is dominated by latency. A 2.4-second response feels like a bad cell connection; under 1.2 seconds it feels human enough that the prospect stays on the call. The Outlyst voice agent was clearing 2.4s on warm calls and degrading further as concurrency rose - past 200 simultaneous sessions, response times spiked unpredictably and a fraction of sessions dropped entirely.",
+      "A voice agent's quality is dominated by latency. A 2.4-second response feels like a bad cell connection; under 1.2 seconds it feels human enough that the prospect stays on the call. The Outlyst voice agent was clearing 2.4s on warm calls, and response times spiked unpredictably under load.",
       "The hard part is that Retell AI handles speech recognition and TTS - the backend just answers structured tool calls - but the round-trip from ASR through inference and back is dominated by what we do in those middle hundreds of milliseconds. Profiling, not architecture redesign, was the actual problem.",
-      "Goal: get average call latency under 1.2s, hold it stable past 2,000 concurrent sessions, and do it without horizontal scaling that would have killed the unit economics.",
+      "Goal: get average call latency under 1.2s, and do it without horizontal scaling that would have killed the unit economics.",
     ],
     approach: [
       "I instrumented the FastAPI inference backend with py-spy and asyncio task tracing. The traces showed two bottlenecks the metrics dashboards had missed: a synchronous ORM call on each tool invocation that blocked the event loop, and a connection pool sized for the wrong concurrency profile - pools sized for HTTP request bursts, not long-lived websocket sessions.",
-      "Replaced the synchronous ORM with asyncpg for direct PostgreSQL access on the hot path. Restructured the connection pool sizing based on observed concurrent-session distribution rather than peak request rate. Parallelised independent tool calls with asyncio.gather() so a single user turn could query CRM, calendar, and contact-enrichment simultaneously instead of in sequence.",
+      "Replaced the synchronous ORM with asyncpg for direct PostgreSQL access on the hot path. Restructured the connection pool sizing around observed session lifetime rather than peak request rate. Parallelised independent tool calls with asyncio.gather() so a single user turn could query CRM, calendar, and contact-enrichment in parallel instead of in sequence.",
       "Built a lightweight gatekeeper-detection classifier that runs before the main inference loop, so we don't burn LLM tokens on receptionists who'll just transfer the call. Detected gatekeepers route to a callback scheduler instead of a dead-end transfer.",
-      "Added structured CRM sync via automated extraction pipelines, removing the manual data entry that was costing the team 100+ staff hours per week.",
+      "Added structured CRM sync via automated extraction pipelines, removing the manual data entry step between a completed call and a usable contact record.",
     ],
     decisions: [
       {
@@ -91,15 +91,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
       {
         title: "Gatekeeper classifier before inference",
-        body: "Cheap-and-fast filter beats expensive-and-smart. Detecting 'this is a receptionist, not the prospect' with a small classifier saves ~3-5 minutes of GPU time per gated call. It also routes those calls to a callback scheduler instead of dead-ending.",
+        body: "Cheap-and-fast filter beats expensive-and-smart. Detecting 'this is a receptionist, not the prospect' with a small classifier saves ~3-5 minutes of call time per gated call. It also routes those calls to a callback scheduler instead of dead-ending.",
       },
     ],
     results: [
-      "Mean call latency dropped from 2.4s to 1.1s - a 54% reduction - without horizontal scaling. The system now sustains 2,100+ concurrent stateful websocket sessions without session drop, where it previously degraded past 200.",
-      "Downstream business impact: 25% lift in lead conversions, 27 qualified leads generated through the gatekeeper-aware routing, and 100+ staff hours per week reclaimed from the automated CRM sync pipeline.",
+      "Mean call latency dropped from 2.4s to 1.1s - a 54% reduction - without horizontal scaling, across 2,100+ outbound calls over the contract.",
     ],
     reflections: [
-      "What I'd change: instrument event-loop lag from day one. The request-rate dashboards looked healthy right up until sessions dropped, because they never measured the thing that was actually saturating - time-to-yield inside the event loop. py-spy found in an afternoon what the dashboards had been hiding for weeks.",
+      "What I'd change: instrument event-loop lag from day one. The request-rate dashboards looked healthy right up until latency spiked, because they never measured the thing that was actually saturating - time-to-yield inside the event loop. py-spy found in an afternoon what the dashboards had been hiding for weeks.",
       "The next 200ms of latency reduction is going to come from the LLM inference itself, not the surrounding plumbing - speculative decoding, smaller fine-tuned models for the specific tool-call patterns, or moving the gatekeeper classifier to a co-located CPU model. The plumbing is mostly drained.",
     ],
     related: ["voiceflow", "finlaw-uk", "jobzyl"],
@@ -115,7 +114,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     tackles:
       "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
     delivers:
-      "An 11-model benchmark on 253,680 BRFSS records won by Random Forest at 93.15%, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
+      "An 11-model benchmark on 253,680 BRFSS records, led by Random Forest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
     links: {},
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
@@ -123,17 +122,21 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     approach: [
       "Built on BRFSS 2015 - 253,680 CDC health records, 22 features, and an 86/14 class imbalance handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
-      "Random Forest won decisively at 93.15% accuracy, with Decision Tree second at 91.22% and the linear and boosting families clustered in the mid-70s. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
+      // TODO verify against the raw dataset before republishing: the 63.2%
+      // prevalence figure for the 70-74 band.
+      "The tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity, then the instance-based models, and the linear baseline last. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
       "Persisted the winning model with joblib behind a Flask REST API with a React.js frontend: a 19-question, lab-free questionnaire that returns a risk classification plus a future-risk probability and lifestyle recommendations keyed to the user's dominant risk factors.",
       "During the follow-on research assistantship, extended the deployed model with SHAP and LIME attribution for per-prediction transparency.",
     ],
     decisions: [
       {
         title: "Benchmark breadth over a single favourite",
-        body: "Eleven models spanning linear, instance-based, tree, boosting, and neural families. The tree ensembles' dominance - Random Forest at 93.15% against logistic regression's 74.5% - was a measured finding, not an assumption baked in at the start.",
+        body: "Eleven models spanning linear, instance-based, tree, boosting, and neural families. The tree ensembles' dominance over the linear baseline was a measured finding, not an assumption baked in at the start.",
       },
       {
         title: "ROS over SMOTE and ADASYN",
+        // TODO confirm before stating it: whether resampling was confined to
+        // the training folds. Do not add that claim until verified.
         body: "All three balancing techniques were run head-to-head on the 86/14 imbalance. Synthetic interpolation (SMOTE/ADASYN) blurred the categorical questionnaire features; plain random over-sampling preserved the feature distributions and produced the strongest downstream classifier.",
       },
       {
@@ -146,12 +149,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "93.15% accuracy on the held-out split - best of the 11-model benchmark. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
+      "Random Forest led the 11-model benchmark on the held-out split, strongest on ROC-AUC and sensitivity - the metrics that matter on an 86/14 imbalance. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
       "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [
       "If I rebuilt it, per-prediction attribution would ship in v1 rather than arriving with the follow-on assistantship - a risk score without 'why this score' is exactly the black box the thesis argued against.",
-      "For clinical deployment beyond a paper, the next blockers are calibration and population shift: 93% on a single curated dataset doesn't mean 93% on a different hospital's intake. The model needs Platt-scaled probabilities and a population-shift detector before it's safe at the bedside.",
+      "For clinical deployment beyond a paper, the next blockers are calibration and population shift: performance on a single curated dataset does not transfer to a different hospital's intake. The model needs Platt-scaled probabilities and a population-shift detector before it's safe at the bedside.",
     ],
     related: ["sleep-efficiency", "finlaw-uk"],
   },

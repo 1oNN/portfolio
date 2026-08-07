@@ -113,6 +113,7 @@ export function DiabetesSenseHero({ accent, className }: Props) {
       })}
 
       {/* Footer caption */}
+      {/* TODO verify 63.2% against the raw BRFSS dataset before republishing. */}
       <text x="40" y="450" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
         Pearson correlation with diabetes status · prevalence peaks at 63.2% in the 70-74 age band
       </text>

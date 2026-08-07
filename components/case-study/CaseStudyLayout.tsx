@@ -382,7 +382,9 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
 
         {/* 7. RESULTS - measured numbers as a chart first, prose below */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>
-          <SectionHeader eyebrow="Results" title="What it delivers" accent={accent} />
+          {/* Mirrors "The problem in full": the expansion of the one-line
+              "What it delivers" summary above, not a repeat of its heading. */}
+          <SectionHeader eyebrow="Results" title="The results in full" accent={accent} />
           {Results && (
             <div
               className="mt-10 overflow-x-auto rounded-xl border p-6 sm:p-8"

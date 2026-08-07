@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Splits a display value like "2,100+", "93.15%", "0.82", "253K" into
+// Splits a display value like "2,100+", "~1.4s", "0.82", "253K" into
 // prefix / numeric core / suffix so the number can animate while the
 // decoration stays put. Non-numeric values ("SSE") render unchanged.
 const NUM_RE = /^([^0-9]*)([0-9][0-9,]*(?:\.[0-9]+)?)(.*)$/;
