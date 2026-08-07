@@ -36,24 +36,23 @@ function sanitize(str: string): string {
   });
 }
 
+/**
+ * No explicit `credentials` block on purpose.
+ *
+ * In the Amplify SSR Lambda, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are
+ * the compute role's TEMPORARY credentials, and temporary credentials are only
+ * valid when signed together with AWS_SESSION_TOKEN. Passing just the key pair
+ * produces a signature the service rejects, which is why every send failed.
+ * The SDK's default provider chain reads all three, so letting it resolve
+ * credentials itself is both correct in Lambda and still works locally from a
+ * profile, SSO or plain env vars.
+ */
 function getSESClient(): SESClient {
-  return new SESClient({
-    region: process.env.AWS_REGION ?? "eu-west-2",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
+  return new SESClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
 }
 
 function getDynamoClient(): DynamoDBDocumentClient {
-  const dynamo = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "eu-west-2",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
+  const dynamo = new DynamoDBClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
   return DynamoDBDocumentClient.from(dynamo);
 }
 
@@ -129,10 +128,10 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
   const safeSubject = sanitize(subject);
   const safeMessage = sanitize(message);
 
-  const awsConfigured =
-    process.env.AWS_ACCESS_KEY_ID &&
-    process.env.AWS_SECRET_ACCESS_KEY &&
-    process.env.SES_FROM_EMAIL;
+  // Gate on the app's own config, not on AWS_ACCESS_KEY_ID. Credential
+  // resolution is the SDK's job now, and the presence of that variable says
+  // nothing about whether the resulting credentials can actually sign.
+  const awsConfigured = !!process.env.SES_FROM_EMAIL;
 
   if (awsConfigured) {
     const ses = getSESClient();
@@ -182,7 +181,12 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         })
       );
     } catch (err) {
-      console.error("[/api/contact] SES send failed:", err);
+      // Name first so the failure mode is greppable in CloudWatch without
+      // reading the whole object: InvalidClientTokenId / SignatureDoesNotMatch
+      // means credentials, AccessDenied means the compute role lacks
+      // ses:SendEmail, MessageRejected means the identity is not verified.
+      const name = (err as { name?: string })?.name ?? "Unknown";
+      console.error(`[/api/contact] SES send failed [${name}]:`, err);
       if (process.env.NODE_ENV === "production") {
         return NextResponse.json(
           { success: false, message: "Failed to send your message. Please try again later." },

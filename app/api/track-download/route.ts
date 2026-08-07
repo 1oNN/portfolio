@@ -16,14 +16,11 @@ const CV_LABELS: Record<CvType, string> = {
 
 const VALID_CV_TYPES = AVAILABLE_CVS.map((cv) => cv.cvType);
 
+// Credentials come from the SDK's default chain - see the note in
+// app/api/contact/route.ts on why the explicit key pair cannot work in the
+// Amplify SSR Lambda (temporary credentials need AWS_SESSION_TOKEN too).
 function getDynamoClient(): DynamoDBDocumentClient {
-  const dynamo = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "eu-west-2",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
+  const dynamo = new DynamoDBClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
   return DynamoDBDocumentClient.from(dynamo);
 }
 
@@ -68,13 +65,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Optional SES email notification - fire-and-forget
     const sesEmail = process.env.SES_FROM_EMAIL;
     if (sesEmail) {
-      const ses = new SESClient({
-        region: process.env.AWS_REGION ?? "eu-west-2",
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-        },
-      });
+      const ses = new SESClient({ region: process.env.AWS_REGION ?? "eu-west-2" });
 
       ses
         .send(
