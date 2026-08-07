@@ -185,11 +185,22 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
       // reading the whole object: InvalidClientTokenId / SignatureDoesNotMatch
       // means credentials, AccessDenied means the compute role lacks
       // ses:SendEmail, MessageRejected means the identity is not verified.
-      const name = (err as { name?: string })?.name ?? "Unknown";
-      console.error(`[/api/contact] SES send failed [${name}]:`, err);
+      // `errName`, not `name` - the outer `name` is the sender's name and is
+      // still needed below for the DynamoDB record.
+      const errName = (err as { name?: string })?.name ?? "Unknown";
+      console.error(`[/api/contact] SES send failed [${errName}]:`, err);
       if (process.env.NODE_ENV === "production") {
         return NextResponse.json(
-          { success: false, message: "Failed to send your message. Please try again later." },
+          {
+            success: false,
+            message: "Failed to send your message. Please try again later.",
+            // TEMPORARY diagnostic. The AWS exception class name and the region
+            // the SDK resolved, so the failure can be identified without
+            // CloudWatch access. Neither is sensitive - no address, no
+            // credential, no message content. REMOVE once the form is fixed.
+            code: errName,
+            region: process.env.AWS_REGION ?? "unset",
+          },
           { status: 500 }
         );
       }
@@ -222,7 +233,12 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
     // sender believes they have made contact and nobody ever sees it.
     console.error("[/api/contact] AWS not configured in production - message dropped.");
     return NextResponse.json(
-      { success: false, message: "Failed to send your message. Please try again later." },
+      {
+        success: false,
+        message: "Failed to send your message. Please try again later.",
+        code: "NoSesFromEmail",
+        region: process.env.AWS_REGION ?? "unset",
+      },
       { status: 500 }
     );
   } else {
