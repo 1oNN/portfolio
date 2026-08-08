@@ -131,7 +131,7 @@ ADMIN_PASSWORD=your-strong-password
 SESSION_SECRET=at-least-32-random-characters
 ANALYTICS_SECRET=optional-secret-for-reading-page-view-counts
 
-APP_AWS_REGION=eu-west-2
+APP_AWS_REGION=eu-central-1
 APP_AWS_ACCESS_KEY_ID=
 APP_AWS_SECRET_ACCESS_KEY=
 SES_FROM_EMAIL=your-verified@email.com
@@ -146,7 +146,9 @@ GROQ_API_KEY=
 NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 ```
 
-**Why `APP_AWS_*` and not `AWS_*`:** Amplify's SSR compute exposes no usable credentials to the runtime, so the app carries its own IAM user. Lambda reserves `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for the execution role and refuses them as function environment variables, hence the prefix. If the `APP_AWS_*` pair is absent, `lib/aws.ts` falls back to the default provider chain, so local development still works from a profile or SSO. `AWS_REGION` is still read as a region fallback, defaulting to `eu-west-2`.
+**Why `APP_AWS_*` and not `AWS_*`:** Amplify's SSR compute exposes no usable credentials to the runtime, so the app carries its own IAM user. Lambda reserves `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for the execution role and refuses them as function environment variables, hence the prefix. If the `APP_AWS_*` pair is absent, `lib/aws.ts` falls back to the default provider chain, so local development still works from a profile or SSO.
+
+**Region:** `APP_AWS_REGION` defaults to `eu-central-1`, where the SES identity and the DynamoDB tables live. `AWS_REGION` is deliberately *not* read as a fallback: Lambda always injects it with the function's own region, so it is never absent in production and would quietly override the default, making the region an accident of where Amplify runs the function rather than a decision. SES identities do not replicate across regions - an address verified in one region is unverified everywhere else.
 
 `ANALYTICS_SECRET` is optional and gates only the read side of `/api/analytics`. The write side is an unauthenticated browser beacon by design, and stores nothing but a path and a counter.
 
