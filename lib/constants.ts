@@ -255,7 +255,6 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "scikit-learn" },
       { name: "XGBoost" },
       { name: "LightGBM" },
-      { name: "MLflow" },
       { name: "RAG" },
       { name: "Sentence Transformers" },
       { name: "Cross-encoder re-ranking", usedIn: ["finlaw-uk"] },
@@ -287,8 +286,9 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
     ],
   },
   {
-    label: "Cloud & DevOps",
+    label: "MLOps, cloud & DevOps",
     skills: [
+      { name: "MLflow" },
       { name: "Docker" },
       { name: "Git" },
       { name: "GitHub Actions", alias: ["CI/CD"] },
