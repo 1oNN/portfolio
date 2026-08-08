@@ -4,7 +4,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import type { ApiResponse } from "@/types";
-import { awsClientConfig, credentialShape } from "@/lib/aws";
+import { awsClientConfig } from "@/lib/aws";
 
 const contactAttempts = new Map<string, { count: number; resetAt: number }>();
 
@@ -35,40 +35,6 @@ function sanitize(str: string): string {
     };
     return map[c] ?? c;
   });
-}
-
-/**
- * TEMPORARY, alongside the diagnostic below. Classifies a MessageRejected
- * without disclosing an address.
- *
- * SES words this failure as "Email address is not verified. The following
- * identities failed the check in region EU-CENTRAL-1: <addresses>", so the
- * message names both the addresses it refused and the region it actually
- * checked. The addresses are the owner's and do not belong in a public error
- * body, but WHICH ROLE failed does, because the two point at completely
- * different fixes: a refused source means the sender identity is not verified
- * in the calling region, while a refused destination means the account is
- * still in the SES sandbox, where every recipient must be verified too.
- *
- * `sesRegion` is the region named by SES itself rather than the one the SDK
- * resolved, which is the one fact that can confirm a region mismatch from
- * outside the AWS console. REMOVE with the diagnostic.
- */
-function rejectionDetail(
-  err: unknown,
-  from: string,
-  to: string
-): { rejected: string; sesRegion: string | null; notVerified: boolean } {
-  const msg = (err as { message?: string })?.message ?? "";
-  const lower = msg.toLowerCase();
-  const roles: string[] = [];
-  if (from && lower.includes(from.toLowerCase())) roles.push("source");
-  if (to && to !== from && lower.includes(to.toLowerCase())) roles.push("destination");
-  return {
-    rejected: roles.length ? roles.join("+") : "unidentified",
-    sesRegion: msg.match(/in region ([A-Za-z0-9-]+)/i)?.[1] ?? null,
-    notVerified: /not verified/i.test(msg),
-  };
 }
 
 // Region and credentials both come from lib/aws.ts - see the note there.
@@ -209,23 +175,24 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
       // `errName`, not `name` - the outer `name` is the sender's name and is
       // still needed below for the DynamoDB record. The name identifies the
       // failure mode: CredentialsProviderError means no credentials resolved,
-      // AccessDenied means the IAM user lacks ses:SendEmail, MessageRejected
-      // means the sender identity is not verified in this region.
+      // AccessDenied means the IAM user lacks ses:SendEmail, and MessageRejected
+      // means an address in the send is not a verified SES identity IN THE
+      // REGION BEING CALLED - identities do not replicate across regions, and
+      // in the SES sandbox the recipient must be verified as well as the sender.
+      //
+      // All of that detail stays in CloudWatch rather than the response body:
+      // the exception name, the region and the refused address are useful to
+      // the owner and to nobody else.
       const errName = (err as { name?: string })?.name ?? "Unknown";
-      console.error(`[/api/contact] SES send failed [${errName}]:`, err);
+      console.error(
+        `[/api/contact] SES send failed [${errName}] in ${awsClientConfig().region}:`,
+        err
+      );
       if (process.env.NODE_ENV === "production") {
         return NextResponse.json(
           {
             success: false,
             message: "Failed to send your message. Please try again later.",
-            // TEMPORARY diagnostic. The AWS exception class name and the region
-            // the SDK resolved, so the failure can be identified without
-            // CloudWatch access. Neither is sensitive - no address, no
-            // credential, no message content. REMOVE once the form is fixed.
-            code: errName,
-            region: awsClientConfig().region,
-            creds: credentialShape(),
-            rejection: rejectionDetail(err, fromEmail, toEmail),
           },
           { status: 500 }
         );
@@ -257,13 +224,13 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
     // credentials used to return "Message sent successfully" while silently
     // dropping the message, which is the worst possible failure mode here: the
     // sender believes they have made contact and nobody ever sees it.
-    console.error("[/api/contact] AWS not configured in production - message dropped.");
+    console.error(
+      `[/api/contact] SES_FROM_EMAIL unset in production (region ${awsClientConfig().region}) - message dropped.`
+    );
     return NextResponse.json(
       {
         success: false,
         message: "Failed to send your message. Please try again later.",
-        code: "NoSesFromEmail",
-        region: awsClientConfig().region,
       },
       { status: 500 }
     );
