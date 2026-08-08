@@ -19,17 +19,17 @@ export function awsClientConfig(): {
   region: string;
   credentials?: { accessKeyId: string; secretAccessKey: string };
 } {
-  // APP_AWS_REGION points the SDK at wherever the SES identity and DynamoDB
-  // tables actually live, independently of where the Lambda happens to run.
+  // eu-central-1 is where the DynamoDB tables actually live, and where the
+  // Amplify SSR Lambda runs. It is the default so that local development and
+  // production talk to the same resources without further configuration.
   //
-  // AWS_REGION is deliberately NOT a fallback here. Lambda always injects it
-  // with the function's own region, so it is never absent in production and
-  // would silently win over the "eu-west-2" default every time - which is
-  // exactly what broke the contact form: the resources are in eu-west-2, the
-  // function runs in eu-central-1, and SES refused every send because the
-  // sender identity is not verified in the region it was being called in.
-  // Identities do not replicate across regions.
-  const region = process.env.APP_AWS_REGION ?? "eu-west-2";
+  // AWS_REGION is deliberately NOT a fallback. Lambda always injects it with
+  // the function's own region, so it is never absent in production and would
+  // silently win over whatever default is written here - which made the region
+  // an accident of where Amplify chose to run the function rather than a
+  // decision. It happened to match, which is worse than not matching: it hid
+  // the coupling until something moved.
+  const region = process.env.APP_AWS_REGION ?? "eu-central-1";
 
   const accessKeyId = clean(process.env.APP_AWS_ACCESS_KEY_ID);
   const secretAccessKey = clean(process.env.APP_AWS_SECRET_ACCESS_KEY);
