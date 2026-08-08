@@ -37,6 +37,40 @@ function sanitize(str: string): string {
   });
 }
 
+/**
+ * TEMPORARY, alongside the diagnostic below. Classifies a MessageRejected
+ * without disclosing an address.
+ *
+ * SES words this failure as "Email address is not verified. The following
+ * identities failed the check in region EU-CENTRAL-1: <addresses>", so the
+ * message names both the addresses it refused and the region it actually
+ * checked. The addresses are the owner's and do not belong in a public error
+ * body, but WHICH ROLE failed does, because the two point at completely
+ * different fixes: a refused source means the sender identity is not verified
+ * in the calling region, while a refused destination means the account is
+ * still in the SES sandbox, where every recipient must be verified too.
+ *
+ * `sesRegion` is the region named by SES itself rather than the one the SDK
+ * resolved, which is the one fact that can confirm a region mismatch from
+ * outside the AWS console. REMOVE with the diagnostic.
+ */
+function rejectionDetail(
+  err: unknown,
+  from: string,
+  to: string
+): { rejected: string; sesRegion: string | null; notVerified: boolean } {
+  const msg = (err as { message?: string })?.message ?? "";
+  const lower = msg.toLowerCase();
+  const roles: string[] = [];
+  if (from && lower.includes(from.toLowerCase())) roles.push("source");
+  if (to && to !== from && lower.includes(to.toLowerCase())) roles.push("destination");
+  return {
+    rejected: roles.length ? roles.join("+") : "unidentified",
+    sesRegion: msg.match(/in region ([A-Za-z0-9-]+)/i)?.[1] ?? null,
+    notVerified: /not verified/i.test(msg),
+  };
+}
+
 // Region and credentials both come from lib/aws.ts - see the note there.
 function getSESClient(): SESClient {
   return new SESClient(awsClientConfig());
@@ -191,6 +225,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
             code: errName,
             region: awsClientConfig().region,
             creds: credentialShape(),
+            rejection: rejectionDetail(err, fromEmail, toEmail),
           },
           { status: 500 }
         );
