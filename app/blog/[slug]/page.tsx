@@ -7,6 +7,7 @@ import { FiArrowLeft, FiArrowRight, FiArrowUp } from "react-icons/fi";
 import { getAllPosts, getPostBySlug } from "@/lib/blog-db";
 import { parseMarkdownDoc } from "@/lib/markdown";
 import { readingTime } from "@/lib/reading-time";
+import { POST_TYPE_LABEL } from "@/lib/post-labels";
 import TableOfContents from "@/components/blog/TableOfContents";
 import CopyLink from "@/components/blog/CopyLink";
 import Footer from "@/components/layout/Footer";
@@ -146,7 +147,7 @@ export default async function BlogPostPage({ params }: Props) {
                 border: `1px solid color-mix(in srgb, ${typeColor} 25%, transparent)`,
               }}
             >
-              {isDeepDive ? "Deep dive" : "Post"}
+              {POST_TYPE_LABEL[post.type]}
             </span>
             <span className="font-mono text-[11px] text-[var(--text-muted)]">
               {formatDate(post.createdAt)} · {mins} min read

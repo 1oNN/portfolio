@@ -43,7 +43,7 @@ interface Slide {
  */
 const SLIDES: Record<string, Slide[]> = {
   jobzyl: [
-    { label: "Live product", Visual: JobzylHero },
+    { label: "Live jobs", Visual: JobzylHero },
     { label: "Architecture", Visual: JobzylArchitecture },
   ],
   "finlaw-uk": [

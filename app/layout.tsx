@@ -1,4 +1,5 @@
 import { toJsonLd } from "@/lib/json-ld";
+import AgentConsoleLauncher from "@/components/interactive/AgentConsoleLauncher";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/metadata";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
@@ -151,6 +152,10 @@ document.documentElement.dataset.intro="play";
         </a>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          {/* Mounted here, not per page, so Ctrl+K works everywhere and the
+              "Ask my agent about this project" chip on a case study can open
+              the console in place instead of navigating home to an anchor. */}
+          <AgentConsoleLauncher />
         </ThemeProvider>
       </body>
     </html>

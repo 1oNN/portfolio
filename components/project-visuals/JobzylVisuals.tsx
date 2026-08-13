@@ -9,18 +9,28 @@ interface Props {
   className?: string;
 }
 
-// Real screenshots of the live product (jobzyl.com, Aug 2026). Deliberately not a
-// mockup: the previous hand-drawn dashboard invented job rows, which read as
-// fabricated placements. The live hero also states the case-study numbers
-// (20 live boards, 60+ countries, ~1.4s streaming) on the record.
+// Real screenshots of the live product showing REAL LISTINGS (jobzyl.com
+// /jobs/machine-learning-engineer/united-kingdom, Aug 2026). This replaced a
+// capture of the marketing landing page, which sold the product rather than
+// showing it working.
+//
+// Captured from a public category page on purpose. The in-app search sits behind
+// a free-account gate, and jobzyl.com's own marketing screenshot carries the
+// disclaimer "the listings shown are samples with invented employers, not live
+// postings" - so that one can never ship here. The category pages are the only
+// surface with real employers, real dates and real source attribution and no
+// login. Every row in these captures is a genuine posting.
 //
 // Two captures, one per theme, toggled with CSS rather than a `useTheme` hook:
 // this stays a server component and the correct image is right on first paint,
 // with no flash of the wrong one during hydration. Both are identically framed
 // at 1280x800 @2x with the consent banner dismissed - reshoot both together or
 // the light/dark switch will jump.
+//
+// These will age: the listings and the "updated N min ago" stamp are frozen at
+// capture time. Reshoot when the dates start reading as stale.
 const HERO_ALT =
-  "Jobzyl homepage: 'Every public job posting. One search.' - 20 live boards across 60+ countries, searched in parallel and streamed in about 1.4s";
+  "Jobzyl showing live Machine Learning Engineer listings in the United Kingdom: 547,019 listings indexed, refreshed minutes earlier, each row naming the employer, location and source board";
 
 export function JobzylHero({ className }: Props) {
   return (

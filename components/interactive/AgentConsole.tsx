@@ -38,19 +38,17 @@ export default function AgentConsole({ onClose }: AgentConsoleProps) {
 
   return (
     <div
-      // `dark` is the whole trick: globals.css defines the navy/green palette as
-      // custom properties under .dark, so every token inside this subtree
-      // resolves to the dark set even when the site is in light mode. That gives
-      // an always-dark console for free - no hardcoded hex literals, which is
-      // what the retired terminal needed (its TERMINAL_ACCENT #34d399 existed
-      // only because --accent would have gone deep blue on a navy panel).
-      className="dark animate-rise fixed inset-x-3 bottom-3 z-50 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-full sm:max-w-lg"
+      // Follows the page theme: light console on the light site, navy on the
+      // dark one. It briefly carried a `dark` class to force the navy palette
+      // everywhere, but on the light page that read as a foreign object pasted
+      // over the paper. Inheriting the tokens keeps it part of the same room.
+      className="animate-rise fixed inset-x-3 bottom-3 z-50 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-full sm:max-w-lg"
       // Non-modal on purpose: the page stays scrollable and usable behind the
       // console, so focus is deliberately NOT trapped. Escape closes it.
       role="dialog"
       aria-modal="false"
       aria-label="Chat with Hammad's portfolio agent"
-      style={{ filter: "drop-shadow(0 12px 32px rgba(0, 0, 0, 0.45))" }}
+      style={{ filter: "drop-shadow(0 12px 32px rgba(0, 0, 0, 0.28))" }}
     >
       <TerminalAgent onClose={onClose} compact autoFocus />
     </div>

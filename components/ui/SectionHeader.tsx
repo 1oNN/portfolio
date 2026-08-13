@@ -40,15 +40,20 @@ export default function SectionHeader({
       </h2>
       {description &&
         (statement ? (
+          // Measures are in rem, not max-w-2xl. The reading column is
+          // lg:w-[54%] of max-w-6xl, about 38.9rem, so max-w-2xl (42rem) was
+          // wider than its own container and never clamped anything: body copy
+          // ran 95-105 characters a line, well past the 60-75 that reads
+          // comfortably. These values are narrower than the column, so they bite.
           <p
-            className="max-w-2xl font-display text-xl font-medium leading-snug sm:text-2xl"
+            className="max-w-[32rem] font-display text-xl font-medium leading-snug sm:text-2xl"
             style={{ color: "var(--text-primary)" }}
           >
             {description}
           </p>
         ) : (
           <p
-            className="max-w-2xl text-base leading-relaxed"
+            className="max-w-[34rem] text-base leading-[1.7]"
             style={{ color: "var(--text-secondary)" }}
           >
             {description}

@@ -44,6 +44,13 @@ export interface CaseStudy {
     paper?: string;
     docs?: string;
   };
+  /**
+   * Why there is no repo link, for the projects that have no public source.
+   * Rendered as a muted chip beside the real links so the absence reads as a
+   * deliberate fact rather than an oversight. Only set this where `links.github`
+   * is genuinely unavailable - never as a substitute for a repo that exists.
+   */
+  sourceNote?: string;
   problem: string[];
   approach: string[];
   decisions: CaseStudyDecision[];

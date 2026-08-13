@@ -14,7 +14,10 @@ const LANGUAGES = [
 export default function About() {
   return (
     <section id="about" className="hairline-accent">
-      <div className="animate-reveal py-14 sm:py-16">
+      {/* First section on the page, so no top padding: `main` already applies
+          lg:py-24 and stacking py-14 on top of it opened the page with about
+          10rem of dead space before the first word. */}
+      <div className="animate-reveal pb-14 sm:pb-16">
         <SectionHeader
           size="lg"
           statement
@@ -26,7 +29,13 @@ export default function About() {
         <div className="mt-10 space-y-12">
           {/* Bio, languages, CV, education */}
           <div>
-            <div className="space-y-4 text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            {/* max-w in rem, narrower than the ~38.9rem column, so it actually
+                clamps - see the note in SectionHeader. Looser leading and a
+                bigger paragraph gap give the eye somewhere to rest. */}
+            <div
+              className="max-w-[34rem] space-y-5 text-base leading-[1.75]"
+              style={{ color: "var(--text-secondary)" }}
+            >
               <p>
                 I&apos;m an AI/ML engineer with an MSc in Applied Artificial Intelligence from the
                 University of Bradford. My work sits at the intersection of production systems

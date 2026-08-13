@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import type { BlogPost } from "@/types";
 import { readingTime } from "@/lib/reading-time";
+import { POST_TYPE_LABEL } from "@/lib/post-labels";
 
 interface Props {
   post: BlogPost;
@@ -33,7 +34,7 @@ export default function PostCard({ post }: Props) {
             border: `1px solid color-mix(in srgb, ${typeColor} 25%, transparent)`,
           }}
         >
-          {isDeepDive ? "Deep dive" : "Post"}
+          {POST_TYPE_LABEL[post.type]}
         </span>
         <span className="ml-auto font-mono text-[11px] text-[var(--text-muted)]">
           {formatCardDate(post.createdAt)}

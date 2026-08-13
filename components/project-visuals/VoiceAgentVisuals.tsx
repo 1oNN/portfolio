@@ -108,12 +108,22 @@ export function VoiceAgentHero({ accent, className }: Props) {
           stat reading "2,100+ sessions"; 2,100+ is call volume over the
           contract, not simultaneous load, and it now lives in the headline
           metrics panel as "Calls handled". */}
-      <g transform="translate(300, 380)" className="pv-pop pv-hover-group" style={{ animationDelay: "1.8s" }}>
-        <rect width="200" height="64" rx="6" ry="6" className="pv-node" fill={accent} fillOpacity="0.12" stroke={accent} strokeWidth="1.25" />
-        <text x="16" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">REDUCTION</text>
-        <text x="16" y="52" fontFamily="ui-sans-serif, Inter, system-ui" fontSize="22" fontWeight="700" fill={accent}>
-          −54% · 1.3s
-        </text>
+      {/* The translate MUST live on an outer group that is not animated.
+          pvPop animates the CSS `transform` property, and a CSS transform
+          always beats the SVG `transform` attribute, so putting both on one
+          element made the callout render at the SVG origin for the whole
+          animation and then snap 300/380 into place - it read as flying in
+          from the top left. Every other pv-pop group in the repo positions
+          its children with x/y instead, which is why this was the only one
+          affected. */}
+      <g transform="translate(300, 380)">
+        <g className="pv-pop pv-hover-group" style={{ animationDelay: "1.8s" }}>
+          <rect width="200" height="64" rx="6" ry="6" className="pv-node" fill={accent} fillOpacity="0.12" stroke={accent} strokeWidth="1.25" />
+          <text x="16" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">REDUCTION</text>
+          <text x="16" y="52" fontFamily="ui-sans-serif, Inter, system-ui" fontSize="22" fontWeight="700" fill={accent}>
+            −54% · 1.3s
+          </text>
+        </g>
       </g>
     </svg>
   );

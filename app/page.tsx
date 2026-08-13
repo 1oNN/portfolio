@@ -9,7 +9,6 @@ import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
 import HomeProjects from "@/components/sections/HomeProjects";
 import HomeWriting from "@/components/sections/HomeWriting";
-import AgentSection from "@/components/sections/AgentSection";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
 import AgentConsoleLauncher from "@/components/interactive/AgentConsoleLauncher";
@@ -113,13 +112,11 @@ export default function HomePage() {
           <Experience />
           <HomeProjects />
           <HomeWriting />
-          <AgentSection />
           <Publications />
           <Contact />
         </main>
       </div>
       <Footer />
-      <AgentConsoleLauncher />
       <IntroOverlay />
       <AnalyticsBeacon />
     </>

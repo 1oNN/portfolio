@@ -8,7 +8,8 @@ const SECTIONS = [
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "writing", label: "Writing" },
-  { id: "agent", label: "Agent" },
+  // No "agent" entry: the in-page chat section was removed in favour of the
+  // rail's Chat with me button, which opens the same agent as a console.
   { id: "research", label: "Research" },
   { id: "contact", label: "Contact" },
 ] as const;

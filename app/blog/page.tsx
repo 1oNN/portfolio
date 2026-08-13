@@ -7,6 +7,7 @@ import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import PostCard from "@/components/blog/PostCard";
 import Footer from "@/components/layout/Footer";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
+import { POST_TYPE_LABEL_PLURAL } from "@/lib/post-labels";
 import type { BlogPost } from "@/types";
 
 export const revalidate = 60;
@@ -28,8 +29,10 @@ export const metadata: Metadata = {
 
 const FILTERS = [
   { key: "all", label: "All" },
-  { key: "blog", label: "Posts" },
-  { key: "case-study", label: "Deep dives" },
+  // Labels come from lib/post-labels so the filter nav, the cards, the home
+  // rows and the post badge cannot drift apart again.
+  { key: "blog", label: POST_TYPE_LABEL_PLURAL.blog },
+  { key: "case-study", label: POST_TYPE_LABEL_PLURAL["case-study"] },
 ] as const;
 
 type FilterKey = (typeof FILTERS)[number]["key"];

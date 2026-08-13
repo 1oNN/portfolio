@@ -3,11 +3,7 @@ import { FiArrowRight } from "react-icons/fi";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { getAllPosts } from "@/lib/blog-db";
 import { readingTime } from "@/lib/reading-time";
-
-const TYPE_LABEL = {
-  "case-study": "Deep dive",
-  blog: "Note",
-} as const;
+import { POST_TYPE_LABEL, postTypeColor } from "@/lib/post-labels";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
@@ -35,8 +31,7 @@ export default async function HomeWriting() {
 
         <ul className="mt-6 divide-y divide-[var(--border)]">
           {posts.map((post) => {
-            const isDeepDive = post.type === "case-study";
-            const typeColor = isDeepDive ? "var(--accent-secondary)" : "var(--accent)";
+            const typeColor = postTypeColor(post.type);
             return (
               <li key={post.id}>
                 <Link
@@ -47,11 +42,21 @@ export default async function HomeWriting() {
                     aria-hidden="true"
                     className="absolute bottom-7 left-0 top-7 w-0.5 origin-center scale-y-0 rounded-full bg-[var(--accent)] transition-transform duration-200 group-hover:scale-y-100 group-focus-visible:scale-y-100"
                   />
-                  <span
-                    className="font-mono text-[10px] font-semibold uppercase tracking-widest"
-                    style={{ color: typeColor }}
-                  >
-                    {TYPE_LABEL[post.type]}
+                  {/* Pill, not bare mono text. The label used to look identical
+                      to the category eyebrow on the project rows above, so
+                      "Note" read as a section heading rather than a thing you
+                      could click through to. */}
+                  <span className="flex items-start">
+                    <span
+                      className="inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest"
+                      style={{
+                        color: typeColor,
+                        backgroundColor: `color-mix(in srgb, ${typeColor} 10%, transparent)`,
+                        border: `1px solid color-mix(in srgb, ${typeColor} 25%, transparent)`,
+                      }}
+                    >
+                      {POST_TYPE_LABEL[post.type]}
+                    </span>
                   </span>
                   <div className="mt-2 sm:mt-0">
                     <h3 className="font-display text-xl font-medium leading-snug text-[var(--text-primary)] transition duration-200 group-hover:translate-x-1 group-hover:text-[var(--accent)] group-focus-visible:translate-x-1 group-focus-visible:text-[var(--accent)]">
@@ -63,7 +68,7 @@ export default async function HomeWriting() {
                         ↗
                       </span>
                     </h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    <p className="mt-1.5 max-w-[32rem] text-sm leading-[1.7] text-[var(--text-secondary)]">
                       {post.excerpt}
                     </p>
                     <p className="mt-3 font-mono text-[11px] text-[var(--text-muted)]">

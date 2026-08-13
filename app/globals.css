@@ -448,7 +448,7 @@ html[data-intro] .intro-overlay {
   align-items: center;
   justify-content: center;
   background-color: var(--background);
-  transition: opacity 350ms ease-out;
+  transition: opacity 250ms ease-out;
 }
 
 /* "done" is the fade-out state: still painted, no longer interactive. */
@@ -496,7 +496,7 @@ html[data-intro="done"] .intro-overlay {
 }
 
 html[data-intro="play"] .intro-fill {
-  animation: introFill 1200ms linear forwards;
+  animation: introFill 700ms linear forwards;
 }
 
 .intro-ticker {

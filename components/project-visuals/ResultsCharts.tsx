@@ -357,8 +357,12 @@ export function VoiceAgentResults({ accent, className }: Props) {
         <text x={40} y={87} fontFamily="ui-sans-serif, Inter, system-ui" fontSize="13" fontWeight="600" fill={text}>
           Before
         </text>
-        <rect x={barX} y={70} width={2400 * barScale} height="26" rx="3" className="pv-grow-r" fill={surface} stroke={border} strokeWidth="1" style={{ animationDelay: "0.1s" }} />
-        <text x={barX + 2400 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "0.6s" }}>
+        {/* Each bar draws for as long as the call it represents: 2.4s here,
+            1.1s below. The comparison is then something you feel rather than
+            read - the "before" bar is still crawling when the "after" one has
+            already finished. Delays are set so both start together. */}
+        <rect x={barX} y={70} width={2400 * barScale} height="26" rx="3" className="pv-grow-r" fill={surface} stroke={border} strokeWidth="1" style={{ animationDelay: "0.2s", animationDuration: "2.4s", animationTimingFunction: "linear" }} />
+        <text x={barX + 2400 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "2.6s" }}>
           2.4s
         </text>
       </g>
@@ -367,8 +371,8 @@ export function VoiceAgentResults({ accent, className }: Props) {
         <text x={40} y={147} fontFamily="ui-sans-serif, Inter, system-ui" fontSize="13" fontWeight="600" fill={accent}>
           After
         </text>
-        <rect x={barX} y={130} width={1100 * barScale} height="26" rx="3" className="pv-grow-r" fill={accent} fillOpacity="0.85" style={{ animationDelay: "0.5s", animationDuration: "1s" }} />
-        <text x={barX + 1100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "1.4s" }}>
+        <rect x={barX} y={130} width={1100 * barScale} height="26" rx="3" className="pv-grow-r" fill={accent} fillOpacity="0.85" style={{ animationDelay: "0.2s", animationDuration: "1.1s", animationTimingFunction: "linear" }} />
+        <text x={barX + 1100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "1.3s" }}>
           1.1s · −54%
         </text>
       </g>

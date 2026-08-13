@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { PROJECTS } from "@/lib/constants";
 
-/** Total run time before the fade starts. Kept short: this sits in front of the
- *  content, and an opaque overlay can become the LCP element. */
-const DURATION_MS = 1200;
-const FADE_MS = 350;
+/** Total run time before the fade starts. 700 + 250 keeps the whole intro
+ *  under a second, which is the brief. This sits in front of the content and an
+ *  opaque overlay can become the LCP element, so it earns its time or it goes. */
+const DURATION_MS = 700;
+const FADE_MS = 250;
 const TICK_MS = Math.round(DURATION_MS / PROJECTS.length);
 
 /**

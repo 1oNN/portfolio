@@ -12,7 +12,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Compliance teams thread citations by hand across the FCA Handbook, the PRA Rulebook and MiFID II, and a plain LLM answers confidently without showing which rule it relied on.",
     delivers:
       "A retrieval pipeline where a Neo4j graph validates every citation and flags uncited rules, scored on a 110-item regulatory benchmark: 0.82 source accuracy, 0.81 citation quality.",
-    links: {},
+    links: { github: "https://github.com/1oNN/finlaw-uk" },
     problem: [
       "UK financial regulation is a moving target. The FCA Handbook alone runs to thousands of pages, cross-referenced with MiFID II, the PRA Rulebook, and binding technical standards. Compliance teams burn hours threading citations across documents, and naive LLM lookups hallucinate confidently in exactly the places that matter most.",
       "Off-the-shelf RAG fails here for two reasons. Dense retrieval surfaces semantically similar passages but misses the regulatory entity graph - a single rule is meaningful only in the context of its parent chapter, the obligated entities, and the cross-references it triggers. And without faithfulness evaluation, you can't tell a polished answer from a hallucinated one.",
@@ -65,6 +65,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     delivers:
       "1.1s mean call latency, a 54% cut, with no horizontal scaling and no change to the model - the win came out of profiling, not architecture.",
     links: {},
+    // Outlyst client work. Not the same codebase as VoiceFlow, which is a
+    // separate open-source Retell call exporter - do not link that here.
+    sourceNote: "Client work, source not public",
     problem: [
       "A voice agent's quality is dominated by latency. A 2.4-second response feels like a bad cell connection; under 1.2 seconds it feels human enough that the prospect stays on the call. The Outlyst voice agent was clearing 2.4s on warm calls, and response times spiked unpredictably under load.",
       "The hard part is that Retell AI handles speech recognition and TTS - the backend just answers structured tool calls - but the round-trip from ASR through inference and back is dominated by what we do in those middle hundreds of milliseconds. Profiling, not architecture redesign, was the actual problem.",
@@ -115,7 +118,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "A diabetes classifier can hit high accuracy and still be useless: a clinician who cannot see why a patient was flagged will not act on the score.",
     delivers:
       "An 11-model benchmark on the 253,680-record CDC BRFSS 2015 dataset, won by Random Forest at 93% accuracy and strongest on ROC-AUC and sensitivity, served as a lab-free 19-question screening app with the risk drivers shown alongside the score.",
-    links: {},
+    links: { github: "https://github.com/1oNN/diabetes-app" },
     problem: [
       "Clinical prediction models live or die by interpretability. A black-box classifier can hit 95% accuracy and still be useless if a clinician can't see why a particular patient was flagged. Diabetes risk already has good baseline accuracy from logistic regression and tree ensembles, so the real research question wasn't 'can we predict?' but 'can we predict and explain in a way clinicians will actually trust?'",
       "Adoption literature on clinical ML is consistent: when clinicians can't trace a prediction back to features they recognise, they reject the tool - even when the tool is more accurate than their own judgement. The interpretability layer isn't optional polish; it's the load-bearing part.",
@@ -270,6 +273,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     delivers:
       "One search across 20 live boards in 60+ countries with first results in about 1.4s, ATS scoring that runs in the browser, and a Kanban tracker for everything applied to.",
     links: { live: "https://jobzyl.com" },
+    sourceNote: "Commercial product, source not public",
     problem: [
       "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV.",
       "The interesting full-stack problem isn't fetching listings - it's making a multi-tenant aggregator that fans out live over a warm cache, with row-level security, live progress streaming, and ATS scoring that runs client-side: the CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest.",

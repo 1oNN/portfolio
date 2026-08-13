@@ -10,7 +10,7 @@ import {
   FiExternalLink,
   FiFileText,
   FiBookOpen,
-  FiMessageCircle,
+  FiLock,
 } from "react-icons/fi";
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
@@ -19,6 +19,7 @@ import CountUp from "@/components/interactive/CountUp";
 import { getCaseStudy } from "@/lib/case-studies";
 import { PROJECTS } from "@/lib/constants";
 import ListingCard from "./ListingCard";
+import AskAgentChip from "./AskAgentChip";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 interface Props {
@@ -182,13 +183,19 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     </a>
                   );
                 })}
-                <Link
-                  href="/#agent"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)]"
-                >
-                  <FiMessageCircle size={13} />
-                  Ask my agent about this project
-                </Link>
+                {/* Stated, not omitted: with four of six projects linking a
+                    repo, a silent gap reads as an oversight rather than a fact
+                    about the work. */}
+                {caseStudy.sourceNote && (
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-md border border-dashed border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-muted)]"
+                    style={{ backgroundColor: "transparent" }}
+                  >
+                    <FiLock size={12} />
+                    {caseStudy.sourceNote}
+                  </span>
+                )}
+                <AskAgentChip />
             </div>
           </div>
         </section>

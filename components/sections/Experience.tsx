@@ -62,7 +62,7 @@ export default function Experience() {
                     {exp.responsibilities.map((r, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-3 text-sm leading-relaxed"
+                        className="flex max-w-[32rem] items-start gap-3 text-sm leading-[1.7]"
                         style={{ color: "var(--text-secondary)" }}
                       >
                         <span className="shrink-0" style={{ color }} aria-hidden="true">

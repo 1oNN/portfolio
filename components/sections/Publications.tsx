@@ -101,7 +101,7 @@ export default function Publications() {
           >
             Research interests
           </div>
-          <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <p className="mt-3 max-w-[32rem] text-sm leading-[1.7]" style={{ color: "var(--text-secondary)" }}>
             Graph-augmented retrieval, LLM faithfulness evaluation, systems optimisation for
             high-throughput ML pipelines, and interpretable predictive modelling for clinical
             applications. Open to funded PhD positions in the EU and UK.

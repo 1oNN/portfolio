@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 font-mono text-xs text-[var(--text-muted)] sm:flex-row sm:items-center sm:justify-between md:px-10">
-        <p>© {year} Hammad Ahmad · Built with Next.js</p>
+        <p>© {year} Hammad Ahmad</p>
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           {SOCIAL_LINKS.map((link) => (
