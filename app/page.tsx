@@ -12,7 +12,8 @@ import HomeWriting from "@/components/sections/HomeWriting";
 import AgentSection from "@/components/sections/AgentSection";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
-import TerminalLauncher from "@/components/interactive/TerminalLauncher";
+import AgentConsoleLauncher from "@/components/interactive/AgentConsoleLauncher";
+import IntroOverlay from "@/components/interactive/IntroOverlay";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 
 // Title and description inherit from the root layout; the canonical and the
@@ -118,7 +119,8 @@ export default function HomePage() {
         </main>
       </div>
       <Footer />
-      <TerminalLauncher />
+      <AgentConsoleLauncher />
+      <IntroOverlay />
       <AnalyticsBeacon />
     </>
   );

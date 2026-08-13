@@ -111,28 +111,10 @@ export const PROJECTS: Project[] = [
   },
 ];
 
+// Jobzyl deliberately has NO entry here. It is self-directed project work, not
+// employment, and the experience entry duplicated its case study almost line
+// for line. It lives under Projects only - see CASE_STUDIES["jobzyl"].
 export const EXPERIENCE: Experience[] = [
-  {
-    // Not an employment entry: "Independent" as a company read as a job title
-    // the CV does not support. Framed as self-directed project work, and
-    // cross-referenced to the case study so the same work does not look like
-    // two separate things.
-    id: "independent-jobzyl",
-    company: "Jobzyl",
-    role: "Independent project work",
-    type: "engineering",
-    location: "Bradford, UK",
-    startDate: "Apr 2026",
-    endDate: "Present",
-    current: true,
-    responsibilities: [
-      "Self-directed build, shipped to jobzyl.com - the full case study is under Projects.",
-      "Designed a multi-tenant job aggregator searching 20 live boards across 60+ countries in parallel, with first results in about 1.4 seconds.",
-      "Built the aggregation layer as a FastAPI service on AWS App Runner: per-board rate limits, Server-Sent Events streaming search progress as each board responds, and scheduled 6-hourly cache refreshes behind the live fan-out.",
-      "Implemented ATS scoring that runs client-side - the CV is parsed in-browser and only sent to the server if the user saves it to their account, where it is encrypted at rest.",
-      "Modelled multi-tenant data on Supabase Postgres with row-level security and PKCE OAuth.",
-    ],
-  },
   {
     id: "outlyst",
     company: "Outlyst",
@@ -320,19 +302,6 @@ export const AGENT_SUGGESTIONS = [
   "What's your tech stack?",
 ] as const;
 
-// Mini-terminal easter egg commands (Ctrl+`)
-export const TERMINAL_COMMANDS: Record<string, string> = {
-  help: "Available commands: about, skills, experience, contact, whoami, ls, pwd, date, clear, exit",
-  about:
-    "Hammad Ahmad - AI/ML Engineer & Researcher.\nMSc Applied AI @ University of Bradford.\nSpecialising in LLMs, RAG systems, and latency optimisation.",
-  skills:
-    "Core: Python · PyTorch · FastAPI · Neo4j · RAG · LLMs\nAlso: TypeScript · React · Docker · AWS · PostgreSQL",
-  experience:
-    "→ Independent (Apr 2026-present): AI / Machine Learning Engineer, Jobzyl\n→ Outlyst (Oct 2025 - Mar 2026): AI / Machine Learning Engineer\n→ University of Bradford (Jan-Sep 2025): Research Assistant (ML)\n→ COMSATS University (Jul 2023-Jul 2024): Research Assistant (Data Science)",
-  contact:
-    "Email: hammadahmad.ml@gmail.com\nLinkedIn: linkedin.com/in/hammadahmad123\nGitHub: github.com/1oNN",
-  whoami: "hammad@portfolio:~$",
-  ls: "about.md  skills.json  projects/  research/  contact.txt",
-  pwd: "/home/hammad/portfolio",
-  date: new Date().toUTCString(),
-};
+// TERMINAL_COMMANDS was removed with the fake command shell. Ctrl+K now opens
+// the real agent console (AgentConsole.tsx) instead - one console, not two, and
+// no hand-maintained duplicate of the experience list to fall out of date.

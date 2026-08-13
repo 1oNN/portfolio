@@ -123,6 +123,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: toJsonLd(jsonLd) }}
         />
+        {/*
+          Decides the home-page intro BEFORE first paint, the same way
+          next-themes avoids a theme flash. Setting this from a React effect
+          instead would paint the page and then cover it, which reads as a bug.
+          Guarded in try/catch because sessionStorage throws outright when
+          cookies are blocked, and a decorative intro must never break the page.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{
+if(location.pathname!=="/")return;
+if(sessionStorage.getItem("intro-seen"))return;
+if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+sessionStorage.setItem("intro-seen","1");
+document.documentElement.dataset.intro="play";
+}catch(e){}})();`,
+          }}
+        />
       </head>
       <body id="top">
         <a

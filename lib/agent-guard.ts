@@ -56,7 +56,10 @@ const INJECTION_PATTERNS: RegExp[] = [
 const PROMPT_CANARIES: string[] = [
   "portfolio assistant on his personal website",
   "ABOUT HAMMAD:",
-  "AVAILABILITY AND WORK AUTHORISATION",
+  // Heading is "AVAILABILITY (answer this directly, do not deflect):" - match
+  // only the stable leading word so a reworded parenthetical cannot kill the
+  // canary the way "AVAILABILITY AND WORK AUTHORISATION" silently did.
+  "AVAILABILITY (",
   "NOT ON RECORD",
   "TECHNICAL SKILLS:",
   "RESEARCH INTERESTS:",

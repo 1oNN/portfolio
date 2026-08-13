@@ -7,6 +7,7 @@ import { SiOrcid } from "react-icons/si";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
 import CountUp from "@/components/interactive/CountUp";
+import ChatRailButton from "./ChatRailButton";
 import RailNav from "./RailNav";
 
 // Drop a portrait at public/profile.jpg (or .jpeg/.png/.webp) and it renders
@@ -151,12 +152,7 @@ export default function LeftRail() {
           <span aria-hidden="true" className="h-4 w-px bg-[var(--border)]" />
           <ThemeToggle />
         </div>
-        <p className="mt-4 hidden font-mono text-[11px] text-[var(--text-muted)] lg:block">
-          <kbd className="rounded border border-[var(--border)] bg-[var(--surface-elevated)] px-1.5 py-0.5 text-[10px] text-[var(--accent)]">
-            Ctrl+`
-          </kbd>{" "}
-          talk to my resume agent
-        </p>
+        <ChatRailButton />
       </div>
     </header>
   );

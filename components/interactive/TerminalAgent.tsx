@@ -189,7 +189,22 @@ function ThinkingIndicator() {
 // ─── Main component - the terminal window only (section shell lives in
 // AgentSection). "use client" + the full useTerminalAgent behaviour stay. ──
 
-export default function TerminalAgent() {
+interface TerminalAgentProps {
+  /**
+   * When provided, the red traffic light becomes a working close button. Only
+   * the floating console passes this - the in-page section has nothing to close.
+   */
+  onClose?: () => void;
+  /**
+   * Console variant: shorter message pane and three suggestion chips instead of
+   * six, so the floating panel does not grow taller than a laptop viewport.
+   */
+  compact?: boolean;
+  /** Move focus into the input on mount (the console opens ready to type). */
+  autoFocus?: boolean;
+}
+
+export default function TerminalAgent({ onClose, compact, autoFocus }: TerminalAgentProps = {}) {
   const { messages, isThinking, send, clear, inputHistory, historyIndex, setHistoryIndex, isAtLimit } =
     useTerminalAgent();
   const [input, setInput] = useState("");
@@ -197,6 +212,14 @@ export default function TerminalAgent() {
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const mountedRef = useRef(false);
+
+  // The console opens ready to type. Deferred a frame so the entrance animation
+  // has started before focus moves, which stops the panel jumping into view.
+  useEffect(() => {
+    if (!autoFocus) return;
+    const id = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(id);
+  }, [autoFocus]);
 
   // Scroll chat container to bottom on new messages - never scrolls the page
   useEffect(() => {
@@ -250,8 +273,18 @@ export default function TerminalAgent() {
     >
       {/* Title bar */}
       <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "var(--border)" }}>
-        <div className="flex gap-1.5 opacity-70">
-          <span className="h-3 w-3 rounded-full bg-red-500" />
+        <div className="flex items-center gap-1.5 opacity-70">
+          {onClose ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="h-3 w-3 rounded-full bg-red-500 transition-colors hover:bg-red-400 focus-visible:bg-red-400"
+              aria-label="Close chat"
+              title="Close chat"
+            />
+          ) : (
+            <span className="h-3 w-3 rounded-full bg-red-500" />
+          )}
           <span className="h-3 w-3 rounded-full bg-yellow-500" />
           <span className="h-3 w-3 rounded-full bg-green-500" />
         </div>
@@ -274,7 +307,7 @@ export default function TerminalAgent() {
       {/* Messages */}
       <div
         ref={messagesRef}
-        className="max-h-[460px] space-y-5 overflow-y-auto p-5"
+        className={`space-y-5 overflow-y-auto p-5 ${compact ? "max-h-[min(46vh,340px)]" : "max-h-[460px]"}`}
         role="log"
         aria-live="polite"
         aria-label="Conversation with resume agent"
@@ -294,7 +327,7 @@ export default function TerminalAgent() {
 
       {/* Suggestions - tech-chip-like buttons */}
       <div className="flex flex-wrap gap-2 border-t px-5 py-3" style={{ borderColor: "var(--border)" }}>
-        {AGENT_SUGGESTIONS.map((s) => (
+        {(compact ? AGENT_SUGGESTIONS.slice(0, 3) : AGENT_SUGGESTIONS).map((s) => (
           <button
             key={s}
             type="button"
