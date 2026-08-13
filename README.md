@@ -2,7 +2,7 @@
 
 # ha.
 
-**Personal portfolio for Hammad Ahmad — AI/ML Engineer & Researcher.**<br>
+**Personal portfolio for Hammad Ahmad - AI/ML Engineer & Researcher.**<br>
 Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI kit.
 
 [![Live site](https://img.shields.io/badge/live-hammadahmad.co.uk-34D399?style=flat-square&labelColor=0B1622)](https://hammadahmad.co.uk)
@@ -40,7 +40,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 </td>
 <td width="50%" valign="top">
 <a href="https://hammadahmad.co.uk/#skills"><img src=".github/assets/skills.png" alt="Technical skills section with scroll-spy navigation in the left rail"></a>
-<sub><b>Skills, wired to the work.</b> Pick a skill and it surfaces the projects that use it, derived from project <code>tech</code> and case-study <code>primaryStack</code> — never a hand-maintained list.</sub>
+<sub><b>Skills, wired to the work.</b> Pick a skill and it surfaces the projects that use it, derived from project <code>tech</code> and case-study <code>primaryStack</code> - never a hand-maintained list.</sub>
 </td>
 </tr>
 <tr>
@@ -50,7 +50,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 </td>
 <td width="50%" valign="top">
 <a href="https://hammadahmad.co.uk/projects/finlaw-uk"><img src=".github/assets/case-study.png" alt="FinLaw-UK case study hero showing a Neo4j knowledge graph visual"></a>
-<sub><b>Hand-authored SVG.</b> No chart library and no exported images — every diagram, graph, and results chart is authored SVG that themes with the page.</sub>
+<sub><b>Hand-authored SVG.</b> No chart library and no exported images - every diagram, graph, and results chart is authored SVG that themes with the page.</sub>
 </td>
 </tr>
 <tr>
@@ -65,13 +65,13 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 
 ## Features
 
-- **Editorial home page** — two-column layout with a sticky identity rail and scroll-spy nav, covering About, Skills, Experience, Projects, Writing, Publications, and Contact
+- **Editorial home page** - two-column layout with a sticky identity rail and scroll-spy nav, covering About, Skills, Experience, Projects, Writing, Publications, and Contact
 - **Six project case studies** with hand-built SVG visuals, results charts, and two interactive demos backed by published data only
 - **Interactive skills section** that derives skill → project links from real data instead of a maintained mapping
 - **Blog** with table of contents, reading progress, copy-link headings, prev/next, and a DynamoDB-backed admin panel
 - **AI chat assistant** (Groq, `llama-3.1-8b-instant`) with prompt-injection guards in `lib/agent-guard.ts`
 - **Contact form** with AWS SES delivery, plus CV downloads with tracking
-- **SEO** — per-page OpenGraph images, JSON-LD (Person, ScholarlyArticle, BlogPosting, BreadcrumbList, CollectionPage), sitemap, robots, web manifest
+- **SEO** - per-page OpenGraph images, JSON-LD (Person, ScholarlyArticle, BlogPosting, BreadcrumbList, CollectionPage), sitemap, robots, web manifest
 - **Dark/light theming** on CSS custom properties, toggled client-side
 - Press <kbd>Ctrl</kbd> + <kbd>`</kbd> anywhere on the site for the terminal easter egg
 
@@ -84,7 +84,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 | Styling | Tailwind CSS 3.4 | CSS custom properties carry the token layer |
 | Type / fonts | Inter, Space Grotesk, JetBrains Mono | Self-hosted via `next/font`, zero external font requests |
 | Visuals | Hand-authored SVG | No chart library, no animation library |
-| AI agent | Groq — `llama-3.1-8b-instant` | Input filter + output canary in front of it |
+| AI agent | Groq - `llama-3.1-8b-instant` | Input filter + output canary in front of it |
 | Email | AWS SES | Contact form delivery |
 | Database | AWS DynamoDB | Blog posts, contacts, agent logs, CV downloads |
 | Hosting | AWS Amplify Hosting (SSR) | `amplify.yml` drives the build |
@@ -120,7 +120,7 @@ npm run lint         # ESLint
 ## Configuration
 
 <details>
-<summary><b>Environment variables</b> — the full <code>.env.local</code>, and why AWS keys carry an <code>APP_</code> prefix</summary>
+<summary><b>Environment variables</b> - the full <code>.env.local</code>, and why AWS keys carry an <code>APP_</code> prefix</summary>
 
 <br>
 
@@ -155,7 +155,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 </details>
 
 <details>
-<summary><b>AWS setup</b> — DynamoDB tables, SES verification, IAM policy</summary>
+<summary><b>AWS setup</b> - DynamoDB tables, SES verification, IAM policy</summary>
 
 <br>
 
@@ -179,7 +179,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 </details>
 
 <details>
-<summary><b>Deployment</b> — AWS Amplify, and the one non-obvious build step</summary>
+<summary><b>Deployment</b> - AWS Amplify, and the one non-obvious build step</summary>
 
 <br>
 
@@ -196,7 +196,7 @@ One non-obvious step lives in the build phase: Amplify Console variables exist a
 
 <br>
 
-`.github/workflows/ci.yml` runs `npm run type-check` and `npm run build` on every push and PR to `main`, with dummy values for the build-time secrets. There is no test framework — type-check plus a clean build is the gate.
+`.github/workflows/ci.yml` runs `npm run type-check` and `npm run build` on every push and PR to `main`, with dummy values for the build-time secrets. There is no test framework - type-check plus a clean build is the gate.
 
 </details>
 
@@ -244,7 +244,7 @@ The home page is ISR (`revalidate = 300`) because it reads published posts; blog
 
 <br>
 
-Never put `#fff` or `text-white` on an accent fill — use the `--accent-contrast` token.
+Never put `#fff` or `text-white` on an accent fill - use the `--accent-contrast` token.
 
 An inline `style={{ color }}` silently kills the matching Tailwind `hover:` class, so base values for a hovered property must be bracket classes. Every hover needs a `focus-visible` twin.
 
@@ -264,7 +264,7 @@ An 8B model does not hold the line on instructions alone, so `lib/agent-guard.ts
 
 <br>
 
-**CV publishing.** Two CVs ship from `public/cv/`, labelled by audience. To add or swap one, drop the PDF in and edit `AVAILABLE_CVS` in `lib/cv-config.ts` — the About chips, the agent prompt, and the download-tracking validation all read that list. An empty list hides the CV UI entirely.
+**CV publishing.** Two CVs ship from `public/cv/`, labelled by audience. To add or swap one, drop the PDF in and edit `AVAILABLE_CVS` in `lib/cv-config.ts` - the About chips, the agent prompt, and the download-tracking validation all read that list. An empty list hides the CV UI entirely.
 
 **Seed posts.** `lib/seed-posts.ts` ships posts inside the bundle so the blog has content without a DB write. They are merged into the published read path only, and a real DB post always wins on a slug collision.
 
