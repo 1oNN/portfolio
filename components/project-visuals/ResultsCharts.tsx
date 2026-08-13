@@ -362,7 +362,12 @@ export function VoiceAgentResults({ accent, className }: Props) {
             read - the "before" bar is still crawling when the "after" one has
             already finished. Delays are set so both start together. */}
         <rect x={barX} y={70} width={2400 * barScale} height="26" rx="3" className="pv-grow-r" fill={surface} stroke={border} strokeWidth="1" style={{ animationDelay: "0.2s", animationDuration: "2.4s", animationTimingFunction: "linear" }} />
-        <text x={barX + 2400 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "2.6s" }}>
+        {/* The value lands WITH the bar, not after it. These labels used to fade
+            in only once each bar finished drawing, so for the first 2.4s you
+            watched an unlabelled bar crawl across the screen with no idea what
+            it was measuring. Showing the target up front turns the wait into
+            the point: you see 2.4s, and you watch the bar take all of it. */}
+        <text x={barX + 2400 * barScale + 8} y={88} fontFamily={MONO} fontSize="11" fontWeight="600" fill={muted} className="pv-fade" style={{ animationDelay: "0.2s" }}>
           2.4s
         </text>
       </g>
@@ -372,7 +377,7 @@ export function VoiceAgentResults({ accent, className }: Props) {
           After
         </text>
         <rect x={barX} y={130} width={1100 * barScale} height="26" rx="3" className="pv-grow-r" fill={accent} fillOpacity="0.85" style={{ animationDelay: "0.2s", animationDuration: "1.1s", animationTimingFunction: "linear" }} />
-        <text x={barX + 1100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "1.3s" }}>
+        <text x={barX + 1100 * barScale + 8} y={148} fontFamily={MONO} fontSize="11" fontWeight="700" fill={accent} className="pv-fade" style={{ animationDelay: "0.2s" }}>
           1.1s · −54%
         </text>
       </g>

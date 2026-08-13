@@ -22,7 +22,14 @@ export default function AgentConsole({ onClose }: AgentConsoleProps) {
 
   useEffect(() => {
     previouslyFocused.current = document.activeElement as HTMLElement | null;
-    return () => previouslyFocused.current?.focus?.();
+    return () => {
+      // preventScroll is load-bearing on mobile. The rail stacks above the
+      // content there, so the "Chat with me" button that opened the console is
+      // at the very top of the page - a plain focus() scrolled the reader back
+      // to the top every time they closed the chat, losing their place.
+      // Keyboard and screen-reader users still get focus back where it was.
+      previouslyFocused.current?.focus?.({ preventScroll: true });
+    };
   }, []);
 
   useEffect(() => {
