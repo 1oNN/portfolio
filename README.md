@@ -54,6 +54,16 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 </td>
 </tr>
 <tr>
+<td width="50%" valign="top">
+<a href="https://hammadahmad.co.uk/#projects"><img src=".github/assets/hover-preview.png" alt="Hovering a project row shows a floating preview panel cycling that project's visuals"></a>
+<sub><b>Hover a project, see it work.</b> A pointer-following panel cycles that project's own case-study visuals. It is <code>pointer-events: none</code>, which is what stops it stealing hover from the row underneath, so travelling between rows never flickers.</sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://hammadahmad.co.uk"><img src=".github/assets/chat-console.png" alt="The agent chat console open in the bottom right corner of the home page"></a>
+<sub><b>Ask the agent anything.</b> <kbd>Ctrl</kbd>+<kbd>K</kbd> anywhere on the site opens a chat console grounded in the CV. Real LLM, rate-limited per session, with prompt-injection guards in front of it.</sub>
+</td>
+</tr>
+<tr>
 <td colspan="2" valign="top">
 <a href="https://hammadahmad.co.uk/projects/finlaw-uk"><img src=".github/assets/demo.png" alt="Interactive benchmark explorer showing a question, gold answer, and required citations"></a>
 <sub><b>Interactive demos that only ever render real data.</b> The FinLaw benchmark explorer serves 10 verbatim items from the published 110-item eval set; the diabetes factor explorer runs on BRFSS 2015. Nothing here is illustrative filler.</sub>
@@ -67,13 +77,14 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 
 - **Editorial home page** - two-column layout with a sticky identity rail and scroll-spy nav, covering About, Skills, Experience, Projects, Writing, Publications, and Contact
 - **Six project case studies** with hand-built SVG visuals, results charts, and two interactive demos backed by published data only
+- **Hover previews on the project rows** - a pointer-following panel that cycles each project's own visuals, capability-gated so touch devices attach no handlers at all
+- **AI chat console** (Groq, `llama-3.1-8b-instant`) on <kbd>Ctrl</kbd>+<kbd>K</kbd> from any page, with prompt-injection guards in `lib/agent-guard.ts`
 - **Interactive skills section** that derives skill → project links from real data instead of a maintained mapping
 - **Blog** with table of contents, reading progress, copy-link headings, prev/next, and a DynamoDB-backed admin panel
-- **AI chat assistant** (Groq, `llama-3.1-8b-instant`) with prompt-injection guards in `lib/agent-guard.ts`
 - **Contact form** with AWS SES delivery, plus CV downloads with tracking
 - **SEO** - per-page OpenGraph images, JSON-LD (Person, ScholarlyArticle, BlogPosting, BreadcrumbList, CollectionPage), sitemap, robots, web manifest
 - **Dark/light theming** on CSS custom properties, toggled client-side
-- Press <kbd>Ctrl</kbd> + <kbd>`</kbd> anywhere on the site for the terminal easter egg
+- **A sub-second entrance intro**, once per session, decided before first paint so it never covers an already-painted page
 
 ## Tech stack
 
@@ -82,7 +93,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 | Framework | Next.js 15 (App Router), React 18 | ISR on the home page, static case studies |
 | Language | TypeScript 5.5, Node 20+ | `tsc --noEmit` is part of CI |
 | Styling | Tailwind CSS 3.4 | CSS custom properties carry the token layer |
-| Type / fonts | Inter, Space Grotesk, JetBrains Mono | Self-hosted via `next/font`, zero external font requests |
+| Type / fonts | Inter, Space Grotesk, JetBrains Mono | `next/font/google` - self-hosted at runtime, fetched at build time (see the note below) |
 | Visuals | Hand-authored SVG | No chart library, no animation library |
 | AI agent | Groq - `llama-3.1-8b-instant` | Input filter + output canary in front of it |
 | Email | AWS SES | Contact form delivery |
@@ -211,17 +222,18 @@ app/
   blog/, projects/→ Listings, detail pages, and per-slug opengraph-image routes
 components/
   blog/           → PostCard, TableOfContents, CopyLink
-  case-study/     → CaseStudyLayout, ListingCard
-  interactive/    → Theme toggle, chat agent, terminal, CountUp, analytics beacon
-  layout/         → LeftRail + RailNav (home identity rail), Footer
+  case-study/     → CaseStudyLayout, ListingCard, AskAgentChip
+  interactive/    → Theme toggle, TerminalAgent + AgentConsole (Ctrl+K),
+                    ProjectPreview (hover panel), IntroOverlay, CountUp, beacon
+  layout/         → LeftRail + RailNav (home identity rail), ChatRailButton, Footer
   project-visuals/→ Per-project hero, architecture, results, and demo visuals
   sections/       → About, Skills, Experience, HomeProjects, HomeWriting,
-                    Publications, Agent, Contact, CvDownloads
+                    Publications, Contact, CvDownloads
   ui/             → SectionHeader
 hooks/            → useTerminalAgent, useTypewriter
-lib/              → constants, case-studies, cv-config, seed-posts, blog-db, auth,
-                    aws, agent-system-prompt, agent-guard, markdown, metadata,
-                    json-ld, og-font, reading-time, demo-data
+lib/              → constants, case-studies, cv-config, post-labels, seed-posts,
+                    blog-db, auth, aws, agent-system-prompt, agent-guard, markdown,
+                    metadata, json-ld, og-font, reading-time, demo-data
 types/            → TypeScript interfaces
 public/cv/        → Downloadable CVs
 ```
@@ -277,7 +289,16 @@ An 8B model does not hold the line on instructions alone, so `lib/agent-guard.ts
 
 <br>
 
-Inter (body), Space Grotesk (`--font-display`, all headings), and JetBrains Mono (`--font-mono`, eyebrows and metrics), self-hosted via `next/font` with no external font requests. The OG image route embeds Space Grotesk as base64 in `lib/og-font.ts`, because satori cannot read woff2.
+Inter (body), Space Grotesk (`--font-display`, all headings), and JetBrains Mono (`--font-mono`, eyebrows and metrics). The OG image route embeds Space Grotesk as base64 in `lib/og-font.ts`, because satori cannot read woff2.
+
+**The build has a network dependency, and it will fail on you.** `next/font/google` self-hosts the fonts in the build *output*, so the shipped site makes no external font requests - but it fetches them from Google Fonts *during the build*. A Google Fonts blip therefore fails the build outright:
+
+```
+NextFontError: Failed to fetch `JetBrains Mono` from Google Fonts.
+> Build failed because of webpack errors
+```
+
+That happened here on a green commit and passed on re-run with no code change, so treat a lone font-fetch failure as transient before hunting for a real cause. It can hit the Amplify build as easily as CI. The permanent fix is `next/font/local` with the woff2 files committed, which removes the dependency entirely.
 
 </details>
 
