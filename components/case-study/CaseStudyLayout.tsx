@@ -10,7 +10,6 @@ import {
   FiExternalLink,
   FiFileText,
   FiBookOpen,
-  FiLock,
 } from "react-icons/fi";
 import type { Project, CaseStudy } from "@/types";
 import { getProjectVisuals } from "@/components/project-visuals";
@@ -183,18 +182,6 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
                     </a>
                   );
                 })}
-                {/* Stated, not omitted: with four of six projects linking a
-                    repo, a silent gap reads as an oversight rather than a fact
-                    about the work. */}
-                {caseStudy.sourceNote && (
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-md border border-dashed border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-muted)]"
-                    style={{ backgroundColor: "transparent" }}
-                  >
-                    <FiLock size={12} />
-                    {caseStudy.sourceNote}
-                  </span>
-                )}
                 <AskAgentChip />
             </div>
           </div>
@@ -264,6 +251,29 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
             </div>
           </dl>
         </section>
+
+        {/* 3c. WHY I BUILT IT - the owner's own account, before any architecture.
+            Only rendered where he has actually said why; set on Jobzyl only. */}
+        {caseStudy.whyIBuiltIt && caseStudy.whyIBuiltIt.length > 0 && (
+          <section
+            className="mx-auto max-w-5xl px-6 py-16 sm:py-20"
+            style={{ borderTop: "1px solid var(--border)" }}
+          >
+            <SectionHeader eyebrow="The story" title="Why I built it" accent={accent} />
+            <div className="animate-reveal mt-10 max-w-[34rem]">
+              {/* Larger and warmer than the analytical sections that follow:
+                  this is the one part of the page written in a human voice, so
+                  it should not look like more documentation. */}
+              <div className="space-y-5 text-lg leading-[1.65] text-[var(--text-primary)]">
+                {caseStudy.whyIBuiltIt.map((para, i) => (
+                  <p key={i} className={i === 0 ? "font-display font-medium" : undefined}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* 4. PROBLEM - told as a stepped story, each beat revealing on scroll */}
         <section className="mx-auto max-w-5xl px-6 py-16 sm:py-20" style={{ borderTop: "1px solid var(--border)" }}>

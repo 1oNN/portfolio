@@ -38,19 +38,19 @@ export interface CaseStudy {
    */
   tackles: string;
   delivers: string;
+  /**
+   * First-person account of why this got built, in the owner's own words.
+   * Runs above the technical sections, because the reason usually lands harder
+   * than the architecture. Only set where the owner has actually said why -
+   * never inferred from the code or written on his behalf.
+   */
+  whyIBuiltIt?: string[];
   links: {
     github?: string;
     live?: string;
     paper?: string;
     docs?: string;
   };
-  /**
-   * Why there is no repo link, for the projects that have no public source.
-   * Rendered as a muted chip beside the real links so the absence reads as a
-   * deliberate fact rather than an oversight. Only set this where `links.github`
-   * is genuinely unavailable - never as a substitute for a repo that exists.
-   */
-  sourceNote?: string;
   problem: string[];
   approach: string[];
   decisions: CaseStudyDecision[];

@@ -64,10 +64,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "At 2.4s a turn, a voice agent sounds like a bad phone line and the prospect starts talking over it. Under 1.2s it feels human enough that they stay on the call.",
     delivers:
       "1.1s mean call latency, a 54% cut, with no horizontal scaling and no change to the model - the win came out of profiling, not architecture.",
+    // No links: Outlyst client work with no public repo. Left empty rather than
+    // annotated. Do NOT link VoiceFlow here - separate codebase.
     links: {},
-    // Outlyst client work. Not the same codebase as VoiceFlow, which is a
-    // separate open-source Retell call exporter - do not link that here.
-    sourceNote: "Client work, source not public",
     problem: [
       "A voice agent's quality is dominated by latency. A 2.4-second response feels like a bad cell connection; under 1.2 seconds it feels human enough that the prospect stays on the call. The Outlyst voice agent was clearing 2.4s on warm calls, and response times spiked unpredictably under load.",
       "The hard part is that Retell AI handles speech recognition and TTS - the backend just answers structured tool calls - but the round-trip from ASR through inference and back is dominated by what we do in those middle hundreds of milliseconds. Profiling, not architecture redesign, was the actual problem.",
@@ -273,7 +272,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     delivers:
       "One search across 20 live boards in 60+ countries with first results in about 1.4s, ATS scoring that runs in the browser, and a Kanban tracker for everything applied to.",
     links: { live: "https://jobzyl.com" },
-    sourceNote: "Commercial product, source not public",
+    whyIBuiltIt: [
+      "I built this one for myself first. I was job hunting, and every search meant opening the same handful of boards, scrolling past the same reposted listings, and losing track of what I had already seen. The searching was taking longer than the applying.",
+      "The part that actually bothered me was the second half: after all that, I still had no idea whether my CV would get past the screener. You send it, and you hear nothing, and you never find out which of the two things went wrong.",
+      "So Jobzyl answers both. One search instead of five tabs, and a match score against the job description before you apply, so you know where you stand rather than guessing.",
+    ],
     problem: [
       "Job search across the major boards is a full-time data-collection job before it's a job-search activity. Each platform has different filters, different update cadences, and different opacity around how its ATS scoring works against your CV.",
       "The interesting full-stack problem isn't fetching listings - it's making a multi-tenant aggregator that fans out live over a warm cache, with row-level security, live progress streaming, and ATS scoring that runs client-side: the CV is only sent to the server if the user chooses to save it to their account, where it is encrypted at rest.",
