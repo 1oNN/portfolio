@@ -65,15 +65,17 @@ export function parseMarkdownDoc(md: string): { html: string; headings: Markdown
     return id;
   };
 
-  // Headers - h2/h3 in one pass so the collected outline stays in document order
-  html = html.replace(/^(#{2,3}) (.+)$/gm, (_m, hashes: string, t: string) => {
-    const level = hashes.length as 2 | 3;
+  // Headers in one pass so the collected outline stays in document order. A
+  // single `#` is demoted to h2: the page already renders the post title as the
+  // h1, and the old separate pass gave it no slug id and left it out of the
+  // outline, so it was both a duplicate h1 and unlinkable.
+  html = html.replace(/^(#{1,3}) (.+)$/gm, (_m, hashes: string, t: string) => {
+    const level = (hashes.length === 3 ? 3 : 2) as 2 | 3;
     const text = headingText(t);
     const id = slugify(text);
     headings.push({ id, text, level });
     return `<h${level} id="${id}">${t}</h${level}>`;
   });
-  html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
 
   // Bold / italic
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");

@@ -5,22 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import { AGENT_SYSTEM_PROMPT } from "@/lib/agent-system-prompt";
 import { GUARD_REFUSAL, isInjectionAttempt, leaksSystemPrompt } from "@/lib/agent-guard";
 import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
+import { bodyTooLarge, clientIp, createRateLimiter } from "@/lib/rate-limit";
 
 // Per-IP rate limit: 20 requests/hour. Resets on cold start - acceptable
 // for a portfolio agent since abuse cost is primarily GROQ quota, not data.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
-    return true;
-  }
-  if (entry.count >= 20) return false;
-  entry.count += 1;
-  return true;
-}
+const checkRateLimit = createRateLimiter({ limit: 20, windowMs: 60 * 60 * 1000 });
 
 let dynamoClient: DynamoDBDocumentClient | null = null;
 function getDynamoClient(): DynamoDBDocumentClient {
@@ -32,16 +21,15 @@ function getDynamoClient(): DynamoDBDocumentClient {
 }
 
 export async function POST(req: NextRequest) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown";
-
-  if (!checkRateLimit(ip)) {
+  if (!checkRateLimit(clientIp(req))) {
     return NextResponse.json(
       { error: "Rate limit exceeded. Please try again later." },
       { status: 429 }
     );
+  }
+
+  if (bodyTooLarge(req)) {
+    return NextResponse.json({ error: "Request body too large." }, { status: 413 });
   }
 
   let message: string;
@@ -75,14 +63,19 @@ export async function POST(req: NextRequest) {
         typeof (m as { role?: unknown }).role === "string" &&
         typeof (m as { content?: unknown }).content === "string"
     )
-    .filter((m) => m.role === "user" || m.role === "assistant")
+    // User turns only. An assistant turn is client-supplied too, so accepting
+    // one lets a caller put words in the model's own mouth, which steers an 8B
+    // model far harder than any instruction phrased as a user turn.
+    .filter((m) => m.role === "user")
     .map((m) => ({ role: m.role, content: m.content.slice(0, 2000) }))
     .slice(-20);
   if (sessionId.length > 128) sessionId = sessionId.slice(0, 128);
 
   // Refuse known injection phrasings before spending a Groq call on them. The
   // model does not reliably hold the line on its own - see lib/agent-guard.ts.
-  if (isInjectionAttempt(message)) {
+  // History has to be checked as well as the new message, or the payload just
+  // moves into a prior turn and rides through untouched.
+  if (isInjectionAttempt(message) || history.some((m) => isInjectionAttempt(m.content))) {
     console.warn("[/api/agent] Blocked injection attempt:", message.slice(0, 120));
     return NextResponse.json({ response: GUARD_REFUSAL });
   }
@@ -148,8 +141,11 @@ export async function POST(req: NextRequest) {
 
   const table = process.env.DYNAMODB_AGENT_TABLE;
   if (table && hasAwsCredentials()) {
-    getDynamoClient()
-      .send(
+    // Awaited, not detached: Lambda freezes the moment the response returns, so
+    // a fire-and-forget write lands only by luck. Non-fatal - the user already
+    // has their answer and this is analytics.
+    try {
+      await getDynamoClient().send(
         new PutCommand({
           TableName: table,
           Item: {
@@ -160,8 +156,10 @@ export async function POST(req: NextRequest) {
             agentResponse: text.slice(0, 200),
           },
         })
-      )
-      .catch((e) => console.error("[/api/agent] DynamoDB log failed:", e));
+      );
+    } catch (e) {
+      console.error("[/api/agent] DynamoDB log failed:", e);
+    }
   }
 
   return NextResponse.json({ response: text });

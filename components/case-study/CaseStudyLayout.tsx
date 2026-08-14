@@ -362,9 +362,13 @@ export default function CaseStudyLayout({ project, caseStudy }: Props) {
           <SectionHeader eyebrow="Engineering" title="Key technical decisions" accent={accent} />
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             {caseStudy.decisions.map((d, i) => (
+              // No lift and no shadow on hover: those two are this design's
+              // vocabulary for a link card (ListingCard, PostCard), and these are
+              // static text with nothing to activate. The border tint and the
+              // accent edge stay as plain reading emphasis.
               <div
                 key={d.title}
-                className="animate-reveal group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--cs-accent)] hover:shadow-[var(--shadow)]"
+                className="animate-reveal group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-colors duration-200 hover:border-[var(--cs-accent)]"
                 style={{ ["--cs-accent" as string]: accent }}
               >
                 {/* Accent top edge - draws across on hover */}

@@ -11,7 +11,6 @@ import HomeProjects from "@/components/sections/HomeProjects";
 import HomeWriting from "@/components/sections/HomeWriting";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
-import AgentConsoleLauncher from "@/components/interactive/AgentConsoleLauncher";
 import IntroOverlay from "@/components/interactive/IntroOverlay";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 

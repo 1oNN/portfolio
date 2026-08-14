@@ -6,6 +6,20 @@ import type { ApiResponse } from "@/types";
 const pageViews = new Map<string, number>();
 let totalViews = 0;
 
+// The key is caller-supplied on an unauthenticated route, so both its length
+// and the number of distinct keys are capped - otherwise a loop of unique
+// strings grows this map until the Lambda runs out of heap.
+const MAX_PATH_LENGTH = 128;
+const MAX_TRACKED_PAGES = 500;
+const OVERFLOW_KEY = "/other";
+
+function normalizePath(raw: unknown): string {
+  if (typeof raw !== "string" || !raw.startsWith("/")) return "/";
+  // Query and hash are dropped so ?utm=... cannot mint unlimited distinct keys.
+  const path = raw.split(/[?#]/)[0] || "/";
+  return path.length > MAX_PATH_LENGTH ? path.slice(0, MAX_PATH_LENGTH) : path;
+}
+
 // The write path is deliberately unauthenticated. It is a browser beacon, so
 // any secret it carried would be public anyway - and it used to gate on an
 // x-analytics-secret header that AnalyticsBeacon never sends, meaning every
@@ -15,9 +29,15 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse<{
   let page = "/";
   try {
     const body = await req.json();
-    page = typeof body.page === "string" ? body.page : "/";
+    page = normalizePath(body.page);
   } catch {
     // Default to root if body is unparseable
+  }
+
+  // Once the ceiling is reached, new paths land in a single overflow bucket
+  // rather than adding keys.
+  if (!pageViews.has(page) && pageViews.size >= MAX_TRACKED_PAGES) {
+    page = OVERFLOW_KEY;
   }
 
   const current = pageViews.get(page) ?? 0;

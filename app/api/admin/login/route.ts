@@ -1,25 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminToken, verifyPassword, TOKEN_MAX_AGE_SECONDS } from "@/lib/auth";
+import { clientIp, createRateLimiter } from "@/lib/rate-limit";
 
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
-
-function checkLoginRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = loginAttempts.get(ip);
-  if (!entry || now > entry.resetAt) {
-    loginAttempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count += 1;
-  return true;
-}
+const checkLoginRateLimit = createRateLimiter({ limit: 5, windowMs: 15 * 60 * 1000 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-
-  if (!checkLoginRateLimit(ip)) {
+  if (!checkLoginRateLimit(clientIp(req))) {
     return NextResponse.json(
       { success: false, message: "Too many attempts. Try again in 15 minutes." },
       { status: 429 }

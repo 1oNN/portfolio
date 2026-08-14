@@ -47,7 +47,12 @@ export function FinLawResults({ accent, className }: Props) {
     `color-mix(in srgb, ${accent} 55%, var(--surface))`,
     `color-mix(in srgb, ${accent} 26%, var(--surface))`,
   ];
-  let acc = 0;
+  // Cumulative percentage before each slice, resolved up front. This used to be
+  // a `let acc` mutated inside the map during render, which React can re-enter.
+  const sliceOffsets = FINLAW_TASKS.reduce<number[]>(
+    (offsets, tsk, i) => [...offsets, (offsets[i] ?? 0) + tsk.pct],
+    [0]
+  );
 
   return (
     <svg
@@ -105,8 +110,7 @@ export function FinLawResults({ accent, className }: Props) {
       </text>
 
       {FINLAW_TASKS.map((tsk, i) => {
-        const start = (acc / 100) * 360 - 90;
-        acc += tsk.pct;
+        const start = ((sliceOffsets[i] ?? 0) / 100) * 360 - 90;
         const dash = (tsk.pct / 100) * circ;
         return (
           <circle

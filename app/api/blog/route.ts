@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getAllPosts, createPost } from "@/lib/blog-db";
 import { isAdmin } from "@/lib/auth";
+import { bodyTooLarge } from "@/lib/rate-limit";
 import type { BlogPost } from "@/types";
+
+// Generous next to the other routes: the body carries a whole post's markdown.
+const MAX_POST_BYTES = 256 * 1024;
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = request.nextUrl;
@@ -19,6 +23,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!isAdmin(request)) {
     return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 401 });
+  }
+
+  if (bodyTooLarge(request, MAX_POST_BYTES)) {
+    return NextResponse.json(
+      { success: false, message: "Request body too large." },
+      { status: 413 }
+    );
   }
 
   let body: Omit<BlogPost, "id" | "createdAt" | "updatedAt">;

@@ -228,7 +228,13 @@ export default function TerminalAgent({ onClose, compact, autoFocus }: TerminalA
       return;
     }
     if (messagesRef.current) {
-      messagesRef.current.scrollTo({ top: messagesRef.current.scrollHeight, behavior: "smooth" });
+      // A behavior passed here overrides the CSS property, so the global
+      // reduced-motion rule in globals.css cannot reach this one.
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      messagesRef.current.scrollTo({
+        top: messagesRef.current.scrollHeight,
+        behavior: reduced ? "auto" : "smooth",
+      });
     }
   }, [messages, isThinking]);
 
@@ -275,10 +281,12 @@ export default function TerminalAgent({ onClose, compact, autoFocus }: TerminalA
       <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "var(--border)" }}>
         <div className="flex items-center gap-1.5 opacity-70">
           {onClose ? (
+            // The dot stays 12px so the traffic lights still line up; the
+            // pseudo-element pads the hit area to 24x24 (WCAG 2.2 SC 2.5.8).
             <button
               type="button"
               onClick={onClose}
-              className="h-3 w-3 rounded-full bg-red-500 transition-colors hover:bg-red-400 focus-visible:bg-red-400"
+              className="relative h-3 w-3 rounded-full bg-red-500 transition-colors after:absolute after:-inset-[6px] after:content-[''] hover:bg-red-400 focus-visible:bg-red-400"
               aria-label="Close chat"
               title="Close chat"
             />
@@ -357,7 +365,7 @@ export default function TerminalAgent({ onClose, compact, autoFocus }: TerminalA
               : "Ask anything about my experience, skills, or projects..."
           }
           disabled={isThinking || isAtLimit}
-          className="input-field flex-1 bg-transparent font-mono text-sm outline-none disabled:opacity-50"
+          className="input-field flex-1 bg-transparent font-mono text-sm outline-hidden disabled:opacity-50"
           style={{ color: "var(--text-primary)" }}
           aria-label="Ask the resume agent a question"
           spellCheck={false}

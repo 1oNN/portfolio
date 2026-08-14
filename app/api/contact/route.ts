@@ -5,23 +5,29 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import type { ApiResponse } from "@/types";
 import { awsClientConfig } from "@/lib/aws";
+import { bodyTooLarge, clientIp, createRateLimiter } from "@/lib/rate-limit";
 
-const contactAttempts = new Map<string, { count: number; resetAt: number }>();
-
-function checkContactRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = contactAttempts.get(ip);
-  if (!entry || now > entry.resetAt) {
-    contactAttempts.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count += 1;
-  return true;
-}
+const checkContactRateLimit = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
 
 function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // Comma, semicolon and angle brackets are excluded as well as whitespace:
+  // SES parses ReplyToAddresses as an address list, so any of them would split
+  // one address into two malformed ones and get the whole send rejected.
+  return /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(email);
+}
+
+/**
+ * Quote a name for use as the display part of a Reply-To header.
+ *
+ * sanitize() below is an HTML escaper and belongs to the HTML body only. Using
+ * it here delivered `O&#x27;Brien` to the inbox, and an unquoted comma in
+ * "Smith, Jane" split the address in two, which SES rejects outright - so the
+ * message was dropped with a 500 for anyone who writes their name that way.
+ */
+function headerDisplayName(raw: string): string {
+  const cleaned = raw.replace(/[\r\n]+/g, " ").trim();
+  if (!cleaned) return "";
+  return `"${cleaned.replace(/([\\"])/g, "\\$1")}"`;
 }
 
 function sanitize(str: string): string {
@@ -48,13 +54,17 @@ function getDynamoClient(): DynamoDBDocumentClient {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>> {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-
-  if (!checkContactRateLimit(ip)) {
+  if (!checkContactRateLimit(clientIp(req))) {
     return NextResponse.json(
       { success: false, message: "Too many messages. Please try again later." },
       { status: 429 }
+    );
+  }
+
+  if (bodyTooLarge(req)) {
+    return NextResponse.json(
+      { success: false, message: "Request body too large." },
+      { status: 413 }
     );
   }
 
@@ -114,10 +124,13 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
     );
   }
 
+  // safe* are HTML-escaped and belong to the HTML body only. Headers and the
+  // plain-text body use the raw values.
   const safeName = sanitize(name);
   const safeEmail = sanitize(email);
   const safeSubject = sanitize(subject);
   const safeMessage = sanitize(message);
+  const replyToDisplay = headerDisplayName(name);
 
   // Gate on the app's own config, not on AWS_ACCESS_KEY_ID. Credential
   // resolution is the SDK's job now, and the presence of that variable says
@@ -135,10 +148,12 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
         new SendEmailCommand({
           Source: fromEmail,
           Destination: { ToAddresses: [toEmail] },
-          ReplyToAddresses: [`${safeName} <${safeEmail}>`],
+          ReplyToAddresses: [replyToDisplay ? `${replyToDisplay} <${email}>` : email],
           Message: {
             Subject: {
-              Data: `[Portfolio] ${safeSubject}`,
+              // Raw, not HTML-escaped: a subject line is not HTML, so the
+              // escaper would put literal entities in the owner's inbox.
+              Data: `[Portfolio] ${subject.replace(/[\r\n]+/g, " ")}`,
               Charset: "UTF-8",
             },
             Body: {
@@ -203,8 +218,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
     const table = process.env.DYNAMODB_CONTACTS_TABLE;
     if (table) {
       const dynamo = getDynamoClient();
-      dynamo
-        .send(
+      // Awaited, not detached: Lambda freezes the moment the response returns,
+      // so a fire-and-forget write lands only by luck. Still non-fatal - the
+      // mail has already gone out, and this copy is a convenience.
+      try {
+        await dynamo.send(
           new PutCommand({
             TableName: table,
             Item: {
@@ -216,8 +234,10 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>>
               timestamp: new Date().toISOString(),
             },
           })
-        )
-        .catch((e) => console.error("[/api/contact] DynamoDB log failed:", e));
+        );
+      } catch (e) {
+        console.error("[/api/contact] DynamoDB log failed:", e);
+      }
     }
   } else if (process.env.NODE_ENV === "production") {
     // Never report success we cannot back. A production deploy missing its AWS

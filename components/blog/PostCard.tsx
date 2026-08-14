@@ -1,21 +1,34 @@
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import type { BlogPost } from "@/types";
-import { readingTime } from "@/lib/reading-time";
-import { POST_TYPE_LABEL } from "@/lib/post-labels";
+import { POST_TYPE_LABEL, postTypeColor } from "@/lib/post-labels";
+import { formatDate } from "@/lib/format";
 
-interface Props {
-  post: BlogPost;
+/**
+ * Everything a card needs and nothing else. Deliberately not BlogPost: the
+ * listing renders inside a client component so the filter can read the URL, and
+ * a BlogPost carries the post's entire markdown `content`, which would then be
+ * serialised into the page for every post just to derive a reading time. That
+ * is computed on the server instead and passed as `mins`.
+ */
+export interface PostCardView {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  type: BlogPost["type"];
+  tags: string[];
+  createdAt: string;
+  mins: number;
 }
 
-function formatCardDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+interface Props {
+  post: PostCardView;
 }
 
 export default function PostCard({ post }: Props) {
-  const isDeepDive = post.type === "case-study";
-  const typeColor = isDeepDive ? "var(--accent-secondary)" : "var(--accent)";
-  const mins = readingTime(post.content);
+  const typeColor = postTypeColor(post.type);
+  const mins = post.mins;
   const visibleTags = post.tags.slice(0, 3);
 
   return (
@@ -37,7 +50,7 @@ export default function PostCard({ post }: Props) {
           {POST_TYPE_LABEL[post.type]}
         </span>
         <span className="ml-auto font-mono text-[11px] text-[var(--text-muted)]">
-          {formatCardDate(post.createdAt)}
+          {formatDate(post.createdAt, "monthYear")}
         </span>
       </div>
 

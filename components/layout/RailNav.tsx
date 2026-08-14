@@ -42,7 +42,10 @@ export default function RailNav() {
     // Modified clicks (new tab, etc.) keep native behavior.
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    // A behavior passed here overrides the CSS property, so the global
+    // reduced-motion rule in globals.css cannot reach this one.
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById(id)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
   };
 
   return (

@@ -6,6 +6,12 @@ import { v4 as uuidv4 } from "uuid";
 
 import { AVAILABLE_CVS, type CvEntry } from "@/lib/cv-config";
 import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
+import { clientIp, createRateLimiter } from "@/lib/rate-limit";
+
+// This route is unauthenticated and every accepted call sends the owner an
+// email, so without a limit it is a mail bomb and an unbounded write bill.
+// Ten an hour is far above any real download pattern.
+const checkDownloadRateLimit = createRateLimiter({ limit: 10, windowMs: 60 * 60 * 1000 });
 
 type CvType = CvEntry["cvType"];
 
@@ -23,6 +29,10 @@ function getDynamoClient(): DynamoDBDocumentClient {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  if (!checkDownloadRateLimit(clientIp(req))) {
+    return NextResponse.json({ error: "Too many requests." }, { status: 429 });
+  }
+
   let cvType: CvType;
 
   try {
@@ -44,9 +54,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const userAgent = req.headers.get("user-agent") ?? "";
     const referrer = req.headers.get("referer") ?? "";
 
-    // Log download - fire-and-forget
-    dynamo
-      .send(
+    const tasks: Promise<unknown>[] = [
+      dynamo.send(
         new PutCommand({
           TableName: table,
           Item: {
@@ -57,16 +66,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             referrer,
           },
         })
-      )
-      .catch((e) => console.error("[/api/track-download] DynamoDB log failed:", e));
+      ),
+    ];
 
-    // Optional SES email notification - fire-and-forget
+    // Optional SES email notification
     const sesEmail = process.env.SES_FROM_EMAIL;
     if (sesEmail) {
       const ses = new SESClient(awsClientConfig());
-
-      ses
-        .send(
+      tasks.push(
+        ses.send(
           new SendEmailCommand({
             Source: sesEmail,
             Destination: { ToAddresses: [process.env.CONTACT_TO_EMAIL ?? sesEmail] },
@@ -84,7 +92,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             },
           })
         )
-        .catch((e) => console.error("[/api/track-download] SES notify failed:", e));
+      );
+    }
+
+    // Awaited rather than detached. Lambda freezes the execution environment the
+    // moment the response is returned, so a fire-and-forget promise only lands by
+    // luck - the notification mail was being lost. Failures stay non-fatal here:
+    // the CV itself is a static file and the download must not depend on logging.
+    for (const result of await Promise.allSettled(tasks)) {
+      if (result.status === "rejected") {
+        console.error("[/api/track-download] logging failed:", result.reason);
+      }
     }
   }
 

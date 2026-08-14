@@ -14,7 +14,10 @@ export default function Error({
   }, [error]);
 
   return (
-    <div
+    // main + id="main" so the root layout's skip link has a target here, and so
+    // the route has a landmark at all.
+    <main
+      id="main"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -27,6 +30,7 @@ export default function Error({
       }}
     >
       <span
+        aria-hidden="true"
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "4rem",
@@ -38,7 +42,7 @@ export default function Error({
       >
         500
       </span>
-      <h2
+      <h1
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "1.5rem",
@@ -49,7 +53,7 @@ export default function Error({
         }}
       >
         Something went wrong
-      </h2>
+      </h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: "2rem" }}>
         An unexpected error occurred. Please try again.
       </p>
@@ -68,6 +72,6 @@ export default function Error({
       >
         Try again
       </button>
-    </div>
+    </main>
   );
 }

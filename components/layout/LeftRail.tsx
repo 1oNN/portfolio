@@ -2,9 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import Image from "next/image";
 import Link from "next/link";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { SiOrcid } from "react-icons/si";
 import { SOCIAL_LINKS } from "@/lib/constants";
+import SocialIcon from "@/components/ui/SocialIcon";
 import ThemeToggle from "@/components/interactive/ThemeToggle";
 import CountUp from "@/components/interactive/CountUp";
 import ChatRailButton from "./ChatRailButton";
@@ -30,19 +29,17 @@ const STATS = [
   { value: "2,100+", label: "Calls handled", source: "Outlyst" },
 ];
 
-const iconMap: Record<string, React.ReactNode> = {
-  FiGithub: <FiGithub size={18} />,
-  FiLinkedin: <FiLinkedin size={18} />,
-  SiOrcid: <SiOrcid size={18} />,
-  FiMail: <FiMail size={18} />,
-};
+// Resolved once at module load rather than on every render: the filename is
+// fixed at build time, so re-running up to four fs.existsSync calls per render
+// bought nothing.
+const PROFILE_PHOTO = findProfilePhoto();
 
 /**
  * Home identity rail. Sticky full-height column on lg+, normal-flow intro
  * block below that. Server component - the only client child is RailNav.
  */
 export default function LeftRail() {
-  const photo = findProfilePhoto();
+  const photo = PROFILE_PHOTO;
 
   return (
     <header className="pt-16 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-[42%] lg:max-w-md lg:flex-col lg:justify-between lg:overflow-y-auto lg:py-24">
@@ -146,7 +143,7 @@ export default function LeftRail() {
               aria-label={link.platform}
               className="text-[var(--text-muted)] transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
             >
-              {iconMap[link.icon]}
+              <SocialIcon name={link.icon} size={18} />
             </a>
           ))}
           <span aria-hidden="true" className="h-4 w-px bg-[var(--border)]" />

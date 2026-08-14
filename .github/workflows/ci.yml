@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: Type-check & Build
+    name: Lint, type-check & build
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +23,13 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Gates on errors, not warnings. eslint-plugin-react-hooks v7 (new with
+      # Next 16) reports ~90 pre-existing static-components and set-state-in-effect
+      # findings as warnings; unused vars, the thing this step was added for,
+      # is configured as an error in eslint.config.mjs.
+      - name: Lint
+        run: npm run lint
 
       - name: Type-check
         run: npm run type-check

@@ -7,9 +7,14 @@ export const metadata = {
   title: "Page not found",
 };
 
+// id="main" is the target of the skip link the root layout renders on every
+// page, so without it the first tab stop on this route went nowhere.
 export default function NotFound() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[var(--background)] px-6 text-center">
+    <main
+      id="main"
+      className="relative flex min-h-screen flex-col items-center justify-center bg-[var(--background)] px-6 text-center"
+    >
       {/* Same page furniture as every other route: grid wash plus one accent glow */}
       <div
         className="grid-bg pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_70%_50%_at_50%_0%,black,transparent_65%)]"
@@ -68,6 +73,6 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

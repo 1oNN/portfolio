@@ -12,17 +12,20 @@ const inter = Inter({
   display: "swap",
 });
 
+// The -src suffix is not cosmetic: Tailwind 4 owns the --font-* namespace, so
+// emitting --font-mono / --font-display here would have them defined twice,
+// each referring to the other. app/globals.css maps these into @theme.
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-mono",
+  variable: "--font-mono-src",
   display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["500", "700"],
-  variable: "--font-display",
+  variable: "--font-display-src",
   display: "swap",
 });
 

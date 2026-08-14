@@ -5,10 +5,11 @@ import { PROJECTS } from "@/lib/constants";
 import { getCaseStudy } from "@/lib/case-studies";
 import { toJsonLd } from "@/lib/json-ld";
 import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
+import { Suspense } from "react";
 import ListingCard from "@/components/case-study/ListingCard";
+import ProjectsFilter, { type ProjectCard } from "@/components/case-study/ProjectsFilter";
 import Footer from "@/components/layout/Footer";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
-import type { Project } from "@/types";
 
 // Canonicals are set per page, never at the root: a root-level canonical is
 // inherited by every descendant that does not override it, which would declare
@@ -49,33 +50,22 @@ const collectionLd = {
   },
 };
 
-const FILTERS = [
-  { key: "all", label: "All" },
-  { key: "research", label: "Research" },
-  { key: "engineering", label: "Engineering" },
-  { key: "ml", label: "Machine Learning" },
-  { key: "fullstack", label: "Full-stack" },
-] as const;
-
-type FilterKey = (typeof FILTERS)[number]["key"];
-
-interface Props {
-  searchParams: Promise<{ category?: string }>;
-}
-
-export default async function ProjectsPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const requested = params?.category as FilterKey | undefined;
-  const active: FilterKey = FILTERS.some((f) => f.key === requested) ? (requested as FilterKey) : "all";
-
-  const filtered: Project[] =
-    active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
+// No searchParams here on purpose. Reading them made this segment dynamic, so a
+// page whose only data source is a six-item constant was being server-rendered
+// on every request. The ?category= filter now lives in ProjectsFilter, a client
+// leaf; the cards are still built here so lib/case-studies stays server-side.
+export default function ProjectsPage() {
+  const cards: ProjectCard[] = PROJECTS.map((p) => ({
+    id: p.id,
+    category: p.category,
+    node: <ListingCard project={p} caseStudy={getCaseStudy(p.id)} />,
+  }));
 
   // The lead pair - Jobzyl and FinLaw-UK, the first two in PROJECTS - gets the
-  // large treatment, but only in the unfiltered view. Filtered views stay
-  // uniform so a small category never reads as a lone-card bug.
-  const lead = active === "all" ? filtered.slice(0, 2) : [];
-  const rest = active === "all" ? filtered.slice(2) : filtered;
+  // large treatment. Rendered separately because it is a different card size.
+  const leadCards = PROJECTS.slice(0, 2).map((p) => (
+    <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} size="lead" />
+  ));
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
@@ -135,76 +125,14 @@ export default async function ProjectsPage({ searchParams }: Props) {
           </p>
         </div>
 
-        {/* Filter row - text links, no chunky pills */}
-        <nav
-          className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y border-[var(--border)] py-4"
-          aria-label="Filter projects by category"
+        {/* Suspense is what lets useSearchParams live below a static page */}
+        <Suspense
+          fallback={
+            <div className="mt-12 h-[4.5rem] border-y border-[var(--border)]" aria-hidden="true" />
+          }
         >
-          {FILTERS.map((f) => {
-            const isActive = active === f.key;
-            const href = f.key === "all" ? "/projects" : `/projects?category=${f.key}`;
-            const count =
-              f.key === "all"
-                ? PROJECTS.length
-                : PROJECTS.filter((p) => p.category === f.key).length;
-            return (
-              <Link
-                key={f.key}
-                href={href}
-                className={
-                  isActive
-                    ? "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-primary)] transition-colors"
-                    : "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-                }
-              >
-                <span
-                  className={
-                    isActive
-                      ? "font-semibold underline decoration-2 decoration-[var(--accent)] underline-offset-[6px]"
-                      : "underline decoration-2 decoration-transparent underline-offset-[6px] transition-colors group-hover:decoration-[var(--text-secondary)] group-focus-visible:decoration-[var(--text-secondary)]"
-                  }
-                >
-                  {f.label}
-                </span>
-                <span className="font-mono text-[11px] text-[var(--text-muted)]">{count}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {filtered.length === 0 ? (
-          <div
-            className="mt-20 rounded-xl border p-12 text-center"
-            style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
-          >
-            <p style={{ color: "var(--text-secondary)" }}>No projects in this category yet.</p>
-          </div>
-        ) : (
-          <>
-            {/* Lead pair */}
-            {lead.length > 0 && (
-              <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {lead.map((p) => (
-                  <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} size="lead" />
-                ))}
-              </div>
-            )}
-
-            {/* The rest - mt-12 when this is the first block after the filter row
-                (a filtered view has no lead pair above it), mt-10 when it follows one */}
-            {rest.length > 0 && (
-              <div
-                className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${
-                  lead.length > 0 ? "mt-10" : "mt-12"
-                }`}
-              >
-                {rest.map((p) => (
-                  <ListingCard key={p.id} project={p} caseStudy={getCaseStudy(p.id)} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
+          <ProjectsFilter cards={cards} leadCards={leadCards} />
+        </Suspense>
       </main>
       <Footer />
     </div>

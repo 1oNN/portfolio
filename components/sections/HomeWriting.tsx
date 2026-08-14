@@ -4,10 +4,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import { getAllPosts } from "@/lib/blog-db";
 import { readingTime } from "@/lib/reading-time";
 import { POST_TYPE_LABEL, postTypeColor } from "@/lib/post-labels";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
-}
+import { formatDate } from "@/lib/format";
 
 /**
  * Writing rows for the narrow home column, matching HomeProjects. The posts
@@ -72,7 +69,7 @@ export default async function HomeWriting() {
                       {post.excerpt}
                     </p>
                     <p className="mt-3 font-mono text-[11px] text-[var(--text-muted)]">
-                      {formatDate(post.createdAt)}  ·  {readingTime(post.content)} min read
+                      {formatDate(post.createdAt, "monthYear")}  ·  {readingTime(post.content)} min read
                     </p>
                   </div>
                 </Link>

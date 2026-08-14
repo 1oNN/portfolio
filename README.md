@@ -303,13 +303,13 @@ That happened here on a green commit and passed on re-run with no code change, s
 </details>
 
 <details>
-<summary><b>Security headers and Docker</b></summary>
+<summary><b>Security headers</b></summary>
 
 <br>
 
 CSP and the rest of the security headers are set in `next.config.js`, not at the edge.
 
-`Dockerfile` and `docker-compose.yml` are kept for a self-hosted path but are **not** how the site deploys and are not currently wired up. The image expects `output: "standalone"` in `next.config.js` (absent), and the compose file still passes the pre-`APP_` credential names.
+There is no Docker path. `Dockerfile` and `docker-compose.yml` were removed: the image copied `.next/standalone`, which was never produced because `output: "standalone"` was never set, so it could not build at all, and the compose file passed credentials under the pre-`APP_` names that `lib/aws.ts` does not read. Deployment is Amplify.
 
 </details>
 

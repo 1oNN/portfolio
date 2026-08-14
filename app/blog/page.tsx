@@ -1,14 +1,15 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { getAllPosts } from "@/lib/blog-db";
 import { toJsonLd } from "@/lib/json-ld";
 import { pageOpenGraph, SITE_URL } from "@/lib/metadata";
-import PostCard from "@/components/blog/PostCard";
+import { readingTime } from "@/lib/reading-time";
+import BlogList from "@/components/blog/BlogList";
+import type { PostCardView } from "@/components/blog/PostCard";
 import Footer from "@/components/layout/Footer";
 import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
-import { POST_TYPE_LABEL_PLURAL } from "@/lib/post-labels";
-import type { BlogPost } from "@/types";
 
 export const revalidate = 60;
 
@@ -27,27 +28,24 @@ export const metadata: Metadata = {
   }),
 };
 
-const FILTERS = [
-  { key: "all", label: "All" },
-  // Labels come from lib/post-labels so the filter nav, the cards, the home
-  // rows and the post badge cannot drift apart again.
-  { key: "blog", label: POST_TYPE_LABEL_PLURAL.blog },
-  { key: "case-study", label: POST_TYPE_LABEL_PLURAL["case-study"] },
-] as const;
-
-type FilterKey = (typeof FILTERS)[number]["key"];
-
-interface Props {
-  searchParams: Promise<{ type?: string }>;
-}
-
-export default async function BlogPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const requested = params?.type as FilterKey | undefined;
-  const active: FilterKey = FILTERS.some((f) => f.key === requested) ? (requested as FilterKey) : "all";
-
+// No searchParams here on purpose. Reading them made this segment dynamic,
+// which silently killed the `revalidate` above and put a full DynamoDB scan on
+// every request. The ?type= filter now lives in BlogList, a client leaf.
+export default async function BlogPage() {
   const posts = await getAllPosts(true);
-  const filtered: BlogPost[] = active === "all" ? posts : posts.filter((p) => p.type === active);
+
+  // Reading time is derived here so the post bodies stay on the server; the
+  // client only ever receives what a card renders.
+  const cards: PostCardView[] = posts.map((post) => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    type: post.type,
+    tags: post.tags,
+    createdAt: post.createdAt,
+    mins: readingTime(post.content),
+  }));
 
   // Always the unfiltered list: the canonical for every ?type= variant is
   // /blog, so the structured data has to describe the canonical page, not the
@@ -119,67 +117,14 @@ export default async function BlogPage({ searchParams }: Props) {
           </p>
         </div>
 
-        {/* Filter row - text links, no chunky pills */}
-        <nav
-          className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-2 border-y border-[var(--border)] py-4"
-          aria-label="Filter posts by type"
+        {/* Suspense is what lets useSearchParams live below a static page */}
+        <Suspense
+          fallback={
+            <div className="mt-12 h-[4.5rem] border-y border-[var(--border)]" aria-hidden="true" />
+          }
         >
-          {FILTERS.map((f) => {
-            const isActive = active === f.key;
-            const href = f.key === "all" ? "/blog" : `/blog?type=${f.key}`;
-            const count =
-              f.key === "all" ? posts.length : posts.filter((p) => p.type === f.key).length;
-            return (
-              <Link
-                key={f.key}
-                href={href}
-                className={
-                  isActive
-                    ? "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-primary)] transition-colors"
-                    : "group relative inline-flex items-baseline gap-1.5 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-                }
-              >
-                <span
-                  className={
-                    isActive
-                      ? "font-semibold underline decoration-2 decoration-[var(--accent)] underline-offset-[6px]"
-                      : "underline decoration-2 decoration-transparent underline-offset-[6px] transition-colors group-hover:decoration-[var(--text-secondary)] group-focus-visible:decoration-[var(--text-secondary)]"
-                  }
-                >
-                  {f.label}
-                </span>
-                <span className="font-mono text-[11px] text-[var(--text-muted)]">{count}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {filtered.length === 0 ? (
-          <div
-            className="mt-20 rounded-xl border border-[var(--border)] p-12 text-center"
-            style={{ backgroundColor: "var(--surface)" }}
-          >
-            <p className="text-[var(--text-secondary)]">
-              No posts yet. Meanwhile, the project case studies go deep on the same work.
-            </p>
-            <Link
-              href="/projects"
-              className="group mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-            >
-              View the project case studies
-              <FiArrowRight
-                size={14}
-                className="transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
-              />
-            </Link>
-          </div>
-        ) : (
-          <div className="mt-10 flex flex-col gap-5">
-            {filtered.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
+          <BlogList posts={cards} />
+        </Suspense>
       </main>
       <Footer />
     </div>

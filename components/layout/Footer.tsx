@@ -1,13 +1,5 @@
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { SiOrcid } from "react-icons/si";
 import { SOCIAL_LINKS } from "@/lib/constants";
-
-const iconMap: Record<string, React.ReactNode> = {
-  FiGithub: <FiGithub size={15} />,
-  FiLinkedin: <FiLinkedin size={15} />,
-  SiOrcid: <SiOrcid size={15} />,
-  FiMail: <FiMail size={15} />,
-};
+import SocialIcon from "@/components/ui/SocialIcon";
 
 /**
  * Rendered on every public page, not only the home page. The profile links the
@@ -33,7 +25,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
             >
-              {iconMap[link.icon]}
+              <SocialIcon name={link.icon} size={15} />
               <span>{link.platform}</span>
             </a>
           ))}

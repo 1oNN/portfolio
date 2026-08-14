@@ -2,20 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getPostBySlug, getPostById, updatePost, deletePost } from "@/lib/blog-db";
 import { isAdmin } from "@/lib/auth";
+import { bodyTooLarge } from "@/lib/rate-limit";
 import type { BlogPost } from "@/types";
 
+// Generous next to the other routes: the body carries a whole post's markdown.
+const MAX_POST_BYTES = 256 * 1024;
+
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   const { id } = await params;
+  const admin = isAdmin(request);
 
-  let post = await getPostBySlug(id);
-  if (!post) post = await getPostById(id);
+  const postNotFound = () =>
+    NextResponse.json({ success: false, message: "Post not found." }, { status: 404 });
 
-  if (!post) {
-    return NextResponse.json({ success: false, message: "Post not found." }, { status: 404 });
-  }
+  // Admin edits real rows, so resolve by id first; getPostBySlug would hand back
+  // a bundled seed, and PUTting that back upserts a phantom row.
+  let post = admin ? await getPostById(id) : null;
+  if (!post) post = await getPostBySlug(id);
+
+  if (!post) return postNotFound();
+  if (admin && post.id.startsWith("seed-")) return postNotFound();
+  // Drafts are admin-only, same rule the page route applies.
+  if (!post.published && !admin) return postNotFound();
 
   return NextResponse.json(post);
 }
@@ -26,6 +37,13 @@ export async function PUT(
 ): Promise<NextResponse> {
   if (!isAdmin(request)) {
     return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 401 });
+  }
+
+  if (bodyTooLarge(request, MAX_POST_BYTES)) {
+    return NextResponse.json(
+      { success: false, message: "Request body too large." },
+      { status: 413 }
+    );
   }
 
   const { id } = await params;

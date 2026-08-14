@@ -102,6 +102,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoFocus
+              autoComplete="current-password"
               style={{
                 width: "100%",
                 padding: "0.625rem 0.875rem",
@@ -117,7 +118,10 @@ export default function AdminLoginPage() {
           </div>
 
           {error && (
+            // role=alert so a failed login is announced; without it the only
+            // feedback was visual and a screen reader user got silence.
             <p
+              role="alert"
               style={{
                 fontSize: "0.8rem",
                 color: "var(--danger)",

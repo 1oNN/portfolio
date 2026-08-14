@@ -2,7 +2,8 @@
 node_modules/
 .pnp
 .pnp.js
-package-lock.json
+# package-lock.json is deliberately NOT ignored: it is tracked, and npm ci in
+# CI and amplify.yml both require it. Competing lockfiles stay ignored.
 yarn.lock
 pnpm-lock.yaml
 
@@ -63,7 +64,6 @@ amplify/
 
 # Local development
 data/
-.env.example
 .gstack/
 
 # Personal documents - NEVER commit or serve these (certificates, transcripts,

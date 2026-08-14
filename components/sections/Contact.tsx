@@ -1,14 +1,7 @@
 import ContactForm from "@/components/sections/ContactForm";
 import { CONTACT_EMAIL, SOCIAL_LINKS } from "@/lib/constants";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { SiOrcid } from "react-icons/si";
-
-const iconMap: Record<string, React.ReactNode> = {
-  FiGithub: <FiGithub size={18} />,
-  FiLinkedin: <FiLinkedin size={18} />,
-  SiOrcid: <SiOrcid size={18} />,
-  FiMail: <FiMail size={18} />,
-};
+import { FiMail } from "react-icons/fi";
+import SocialIcon from "@/components/ui/SocialIcon";
 
 const EMAIL = CONTACT_EMAIL;
 
@@ -86,7 +79,7 @@ export default function Contact() {
               aria-label={link.platform}
               className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-colors duration-200 hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)]"
             >
-              {iconMap[link.icon]}
+              <SocialIcon name={link.icon} size={18} />
             </a>
           ))}
         </div>

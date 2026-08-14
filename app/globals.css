@@ -1,6 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* next-themes toggles a .dark class on <html>, so the dark variant has to key
+   off that rather than v4's default prefers-color-scheme. This single line
+   carries the entire light/dark token system below. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Tailwind 4 claims the --font-* namespace for font families, which collided
+   head-on with the next/font variable names. The loaders in app/layout.tsx now
+   emit --font-*-src, and these map them onto the utilities, so both
+   `font-mono` and a raw `var(--font-mono)` resolve to the same stack. */
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-mono-src), Menlo, monospace;
+  --font-display: var(--font-display-src), system-ui, sans-serif;
+}
 
 /* ─── Design Tokens ─────────────────────────────────────────────── */
 /* Light = white paper + deep blue accent (green secondary).
@@ -144,16 +157,6 @@ body {
 
 /* ─── Utility Classes ────────────────────────────────────────────── */
 @layer utilities {
-  .surface {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-  }
-
-  .surface-elevated {
-    background-color: var(--surface-elevated);
-    border: 1px solid var(--border);
-  }
-
   .grid-bg {
     background-image: linear-gradient(var(--border) 1px, transparent 1px),
       linear-gradient(90deg, var(--border) 1px, transparent 1px);

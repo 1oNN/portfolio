@@ -69,6 +69,7 @@ function InputField({
   placeholder,
   maxLength,
   error,
+  autoComplete,
 }: {
   label: string;
   name: keyof ContactFormData;
@@ -79,6 +80,7 @@ function InputField({
   placeholder?: string;
   maxLength?: number;
   error?: string;
+  autoComplete?: string;
 }) {
   const errorId = `${name}-error`;
   return (
@@ -100,9 +102,10 @@ function InputField({
         placeholder={placeholder}
         required={required}
         maxLength={maxLength}
+        autoComplete={autoComplete}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className="input-field rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-none transition-all duration-200"
+        className="input-field rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-hidden transition-all duration-200"
         style={{
           backgroundColor: "var(--background)",
           color: "var(--text-primary)",
@@ -199,6 +202,7 @@ export default function ContactForm() {
           placeholder="Jane Smith"
           maxLength={FIELD_MAX_LENGTH.name}
           error={errors.name}
+          autoComplete="name"
         />
         <InputField
           label="Email"
@@ -209,6 +213,7 @@ export default function ContactForm() {
           required
           placeholder="jane@example.com"
           error={errors.email}
+          autoComplete="email"
         />
       </div>
       <InputField
@@ -242,7 +247,7 @@ export default function ContactForm() {
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={errors.message ? "message-error" : undefined}
           placeholder="Tell me about the opportunity or project..."
-          className="input-field resize-none rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-none transition-all duration-200"
+          className="input-field resize-none rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm outline-hidden transition-all duration-200"
           style={{
             backgroundColor: "var(--background)",
             color: "var(--text-primary)",
@@ -307,7 +312,9 @@ export default function ContactForm() {
       >
         {status === "submitting" ? (
           <>
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            {/* --accent-contrast, not white: on the dark-mode green fill white
+                is 1.92:1. Same rule the button's own text follows. */}
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[color-mix(in_srgb,var(--accent-contrast)_30%,transparent)] border-t-[var(--accent-contrast)]" />
             Sending...
           </>
         ) : (

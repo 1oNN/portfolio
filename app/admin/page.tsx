@@ -4,14 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { BlogPost } from "@/types";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
+import { formatDate } from "@/lib/format";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -288,7 +281,7 @@ export default function AdminDashboard() {
                       </span>
                     </td>
                     <td style={{ padding: "0.875rem 1rem", color: "var(--text-muted)", fontSize: "0.8rem" }}>
-                      {formatDate(post.createdAt)}
+                      {formatDate(post.createdAt, "short")}
                     </td>
                     <td style={{ padding: "0.875rem 1rem" }}>
                       <div style={{ display: "flex", gap: "0.5rem" }}>

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { toJsonLd } from "@/lib/json-ld";
 import { AUTHOR_NAME, pageOpenGraph, SITE_URL } from "@/lib/metadata";
 import type { Metadata } from "next";
@@ -7,12 +8,17 @@ import { FiArrowLeft, FiArrowRight, FiArrowUp } from "react-icons/fi";
 import { getAllPosts, getPostBySlug } from "@/lib/blog-db";
 import { parseMarkdownDoc } from "@/lib/markdown";
 import { readingTime } from "@/lib/reading-time";
-import { POST_TYPE_LABEL } from "@/lib/post-labels";
+import { POST_TYPE_LABEL, postTypeColor } from "@/lib/post-labels";
+import { formatDate } from "@/lib/format";
 import TableOfContents from "@/components/blog/TableOfContents";
 import CopyLink from "@/components/blog/CopyLink";
 import Footer from "@/components/layout/Footer";
 
 export const revalidate = 60;
+
+// generateMetadata and the page body both need the post, and each lookup is a
+// DynamoDB scan. cache() collapses them into one per request.
+const getPost = cache(getPostBySlug);
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,7 +26,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPost(slug);
   // An unknown or unpublished slug 404s in the body, but metadata is resolved
   // first and would otherwise inherit robots.index from the root.
   if (!post || !post.published) return { title: "Post Not Found", robots: { index: false } };
@@ -42,27 +48,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+
+  // The prev/next list does not depend on the post's value, only on the guard
+  // below, so both scans go out at once instead of in series.
+  const [post, posts] = await Promise.all([getPost(slug), getAllPosts(true)]);
 
   if (!post || !post.published) notFound();
 
   const { html: contentHtml, headings } = parseMarkdownDoc(post.content);
   const mins = readingTime(post.content);
-  const isDeepDive = post.type === "case-study";
-  const typeColor = isDeepDive ? "var(--accent-secondary)" : "var(--accent)";
+  const typeColor = postTypeColor(post.type);
 
   // Prev/next within the published list (newest first)
-  const posts = await getAllPosts(true);
   const idx = posts.findIndex((p) => p.slug === post.slug);
   const newer = idx > 0 ? posts[idx - 1] : null;
   const older = idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null;
