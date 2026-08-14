@@ -122,12 +122,15 @@ export function parseMarkdownDoc(md: string): { html: string; headings: Markdown
     })
     .join("\n");
 
-  // Restore code blocks and inline code
+  // Restore code blocks and inline code. The replacement MUST be a function:
+  // as a plain string, `$&`, `$'`, "$`" and `$$` are substitution patterns, so
+  // a fence containing any of them (shell `$$`, LaTeX, ANSI-C quoting) got the
+  // placeholder spliced into the rendered code instead of the literal text.
   codeBlocks.forEach((block, i) => {
-    html = html.replace(`\x00CODE_BLOCK_${i}\x00`, block);
+    html = html.replace(`\x00CODE_BLOCK_${i}\x00`, () => block);
   });
   inlineCodes.forEach((code, i) => {
-    html = html.replace(`\x00INLINE_${i}\x00`, code);
+    html = html.replace(`\x00INLINE_${i}\x00`, () => code);
   });
 
   return { html, headings };

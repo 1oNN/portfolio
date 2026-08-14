@@ -28,6 +28,8 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
+    // Load on mount: the post list comes from the API, not from props.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPosts();
   }, [fetchPosts]);
 

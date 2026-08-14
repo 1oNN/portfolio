@@ -1,3 +1,4 @@
+import { PvBox } from "./primitives";
 // Jobzyl - real product screenshot hero (captured from jobzyl.com) + aggregation pipeline arch.
 // Source boxes name only vendors with documented public APIs (matching what
 // jobzyl.com itself lists); the rest are grouped without vendor or method.
@@ -56,46 +57,6 @@ export function JobzylHero({ className }: Props) {
 
 export function JobzylArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
-  const text = "var(--text-secondary)";
-  const surface = "var(--surface-elevated)";
-  const border = "var(--border)";
-
-  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
-  }) => (
-    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
-      <rect
-        x={x} y={y} width={w} height={h} rx="6" ry="6"
-        className="pv-node"
-        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
-        stroke={highlight ? accent : border}
-        strokeWidth="1.25"
-      />
-      <text
-        x={x + w / 2}
-        y={y + (sub ? h / 2 - 4 : h / 2 + 4)}
-        textAnchor="middle"
-        fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-        fontSize="11"
-        fontWeight="600"
-        fill={highlight ? accent : text}
-      >
-        {title}
-      </text>
-      {sub && (
-        <text
-          x={x + w / 2}
-          y={y + h / 2 + 10}
-          textAnchor="middle"
-          fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-          fontSize="9"
-          fill={muted}
-        >
-          {sub}
-        </text>
-      )}
-    </g>
-  );
 
   const sources = [
     { name: "Reed", sub: "UK" },
@@ -135,7 +96,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
 
       {/* Sources stack - 6 boxes vertical, staggered like parallel fetches spinning up */}
       {sources.map((s, i) => (
-        <Box
+        <PvBox accent={accent}
           key={s.name}
           x={20}
           y={50 + i * 60}
@@ -148,20 +109,20 @@ export function JobzylArchitecture({ accent, className }: Props) {
       ))}
 
       {/* Aggregator */}
-      <Box x={210} y={200} w={140} h={56} title="FastAPI" sub="aggregator · App Runner" delay={0.55} />
+      <PvBox accent={accent} x={210} y={200} w={140} h={56} title="FastAPI" sub="aggregator · App Runner" delay={0.55} />
 
       {/* Supabase */}
-      <Box x={400} y={170} w={150} h={56} title="Supabase" sub="11 RLS-locked tables" highlight delay={0.7} />
+      <PvBox accent={accent} x={400} y={170} w={150} h={56} title="Supabase" sub="11 RLS-locked tables" highlight delay={0.7} />
 
       {/* Scheduler (cache warming) */}
-      <Box x={400} y={260} w={150} h={44} title="Scheduler" sub="6-hourly cache refresh" delay={0.78} />
+      <PvBox accent={accent} x={400} y={260} w={150} h={44} title="Scheduler" sub="6-hourly cache refresh" delay={0.78} />
 
       {/* SSE */}
-      <Box x={600} y={170} w={130} h={56} title="SSE Stream" sub="live progress" delay={0.85} />
+      <PvBox accent={accent} x={600} y={170} w={130} h={56} title="SSE Stream" sub="live progress" delay={0.85} />
 
       {/* Client */}
-      <Box x={770} y={140} w={110} h={50} title="Next.js" sub="dashboard" delay={0.95} />
-      <Box x={770} y={230} w={110} h={50} title="ATS Score" sub="client-side" delay={1.02} />
+      <PvBox accent={accent} x={770} y={140} w={110} h={50} title="Next.js" sub="dashboard" delay={0.95} />
+      <PvBox accent={accent} x={770} y={230} w={110} h={50} title="ATS Score" sub="client-side" delay={1.02} />
 
       {/* Arrows: 6 sources → aggregator */}
       {sources.map((s, i) => (

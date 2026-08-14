@@ -124,9 +124,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     approach: [
       "Built on the CDC BRFSS 2015 dataset - 253,680 records, 22 features, and a 14% positive class handled with Random Over-Sampling, chosen after comparing ROS against SMOTE and ADASYN. Benchmarked 11 classifiers spanning linear, instance-based, tree, boosting, and neural families under an 80/20 split.",
-      // TODO verify against the raw dataset before republishing: the 63.2%
-      // prevalence figure for the 70-74 band.
-      "The tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity, then the instance-based models, and the linear baseline last. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 to a peak of 63.2% in the 70-74 band.",
+      "The tree ensembles led the field, with Random Forest strongest on ROC-AUC and sensitivity, then the instance-based models, and the linear baseline last. Interpretability came from correlation-driven risk-factor analysis - general health (-0.41), high blood pressure (+0.38), high cholesterol and BMI (+0.29 each) topped the drivers, with prevalence climbing sharply from age 50 onward.",
       "Persisted the winning model with joblib behind a Flask REST API with a React.js frontend: a 19-question, lab-free questionnaire that returns a risk classification plus a future-risk probability and lifestyle recommendations keyed to the user's dominant risk factors.",
     ],
     decisions: [
@@ -146,7 +144,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "Random Forest led the 11-model benchmark on the held-out split at 93% accuracy, and was strongest on ROC-AUC and sensitivity - the metrics that matter on an 86/14 imbalance. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age, with diabetes prevalence peaking at 63.2% in the 70-74 age band.",
+      "Random Forest led the 11-model benchmark on the held-out split at 93% accuracy, and was strongest on ROC-AUC and sensitivity - the metrics that matter on an 86/14 imbalance. The risk-factor analysis surfaced clinically coherent drivers: general health, high blood pressure, high cholesterol, BMI, and age.",
       "Shipped as a screening app anyone can complete without lab tests: 19 questions in, a risk classification plus future-risk probability and tailored lifestyle recommendations out.",
     ],
     reflections: [

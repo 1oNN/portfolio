@@ -8,6 +8,10 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // The next-themes hydration guard: the server cannot know the resolved theme,
+  // so the toggle renders a placeholder until mount. Removing this setState
+  // brings back the hydration mismatch it exists to prevent.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {

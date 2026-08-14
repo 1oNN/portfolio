@@ -62,6 +62,9 @@ export function ProjectPreviewProvider({ children }: { children: ReactNode }) {
   // viewport, and a hover preview it can never trigger is dead weight there.
   useEffect(() => {
     const query = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)");
+    // Seeding from matchMedia, which only exists after mount. The subscription
+    // below keeps it in sync; this is the initial read of that external source.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnabled(query.matches);
     const onChange = (e: MediaQueryListEvent) => setEnabled(e.matches);
     query.addEventListener("change", onChange);

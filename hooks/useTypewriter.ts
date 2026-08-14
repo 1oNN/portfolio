@@ -28,6 +28,10 @@ export function useTypewriter(
   }, [onComplete]);
 
   useEffect(() => {
+    // Rewinds the animation whenever the source text changes. The timer this
+    // effect drives IS the external system; clearing the buffer is step one of
+    // restarting it, not derived state that could be computed during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayed("");
     setDone(false);
     indexRef.current = 0;

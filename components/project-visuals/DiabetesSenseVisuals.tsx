@@ -1,3 +1,4 @@
+import { PvBox, PvArrow, PvFlowDot } from "./primitives";
 // DiabetesSense - risk-factor correlation chart hero + benchmark pipeline architecture.
 // All figures are from the BSc thesis (BRFSS 2015, Table 3.1 and Figure 3.2).
 // Animation contract: pv-* classes fire when VisualFrame sets data-inview.
@@ -113,9 +114,8 @@ export function DiabetesSenseHero({ accent, className }: Props) {
       })}
 
       {/* Footer caption */}
-      {/* TODO verify 63.2% against the raw BRFSS dataset before republishing. */}
       <text x="40" y="450" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.7">
-        Pearson correlation with diabetes status · prevalence peaks at 63.2% in the 70-74 age band
+        Pearson correlation with diabetes status · BRFSS 2015, 253,680 records
       </text>
       <text x="40" y="470" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} opacity="0.5">
         Random Forest on these features: 93.15% accuracy, best of 11 models
@@ -126,70 +126,6 @@ export function DiabetesSenseHero({ accent, className }: Props) {
 
 export function DiabetesSenseArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
-  const text = "var(--text-secondary)";
-  const surface = "var(--surface-elevated)";
-  const border = "var(--border)";
-
-  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
-  }) => (
-    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
-      <rect
-        x={x} y={y} width={w} height={h} rx="6" ry="6"
-        className="pv-node"
-        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
-        stroke={highlight ? accent : border}
-        strokeWidth="1.25"
-      />
-      <text
-        x={x + w / 2}
-        y={y + (sub ? h / 2 - 4 : h / 2 + 4)}
-        textAnchor="middle"
-        fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-        fontSize="11"
-        fontWeight="600"
-        fill={highlight ? accent : text}
-      >
-        {title}
-      </text>
-      {sub && (
-        <text
-          x={x + w / 2}
-          y={y + h / 2 + 10}
-          textAnchor="middle"
-          fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-          fontSize="9"
-          fill={muted}
-        >
-          {sub}
-        </text>
-      )}
-    </g>
-  );
-
-  const Arrow = ({ x1, y1, x2, y2, delay }: { x1: number; y1: number; x2: number; y2: number; delay?: number }) => (
-    <line
-      x1={x1} y1={y1} x2={x2} y2={y2}
-      pathLength={1}
-      className="pv-draw"
-      stroke={accent} strokeWidth="1.25" opacity="0.7"
-      markerEnd="url(#dsense-arrow)"
-      style={{ animationDelay: `${delay ?? 0}s` }}
-    />
-  );
-
-  const FlowDot = ({ path, dur, delay }: { path: string; dur: number; delay: number }) => (
-    <circle
-      r="3.5"
-      className="pv-flow"
-      fill={accent}
-      style={{
-        offsetPath: `path("${path}")`,
-        ["--pv-flow-dur" as string]: `${dur}s`,
-        animationDelay: `${delay}s`,
-      }}
-    />
-  );
 
   return (
     <svg
@@ -211,27 +147,27 @@ export function DiabetesSenseArchitecture({ accent, className }: Props) {
       <text x="610" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
       <text x="785" y="26" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
 
-      <Box x={20} y={120} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
-      <Box x={210} y={120} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
-      <Box x={400} y={120} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
-      <Box x={600} y={120} w={140} h={60} title="Random Forest" sub="93.15% accuracy" highlight delay={0.45} />
+      <PvBox accent={accent} x={20} y={120} w={150} h={60} title="BRFSS 2015" sub="253,680 · 22 features" delay={0} />
+      <PvBox accent={accent} x={210} y={120} w={150} h={60} title="Random Over-Sampling" sub="86/14 → 50/50 balance" delay={0.15} />
+      <PvBox accent={accent} x={400} y={120} w={160} h={60} title="11-Model Benchmark" sub="LR · KNN · trees · MLP" delay={0.3} />
+      <PvBox accent={accent} x={600} y={120} w={140} h={60} title="Random Forest" sub="93.15% accuracy" highlight delay={0.45} />
 
-      <Box x={770} y={48} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
-      <Box x={770} y={202} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />
+      <PvBox accent={accent} x={770} y={48} w={120} h={50} title="Flask API" sub="joblib model" delay={0.6} />
+      <PvBox accent={accent} x={770} y={202} w={120} h={50} title="React.js UI" sub="19-question screen" delay={0.6} />
 
       {/* Arrows */}
-      <Arrow x1={170} y1={150} x2={210} y2={150} delay={0.1} />
-      <Arrow x1={360} y1={150} x2={400} y2={150} delay={0.25} />
-      <Arrow x1={560} y1={150} x2={600} y2={150} delay={0.4} />
-      <Arrow x1={740} y1={140} x2={770} y2={73} delay={0.55} />
-      <Arrow x1={740} y1={160} x2={770} y2={227} delay={0.55} />
+      <PvArrow accent={accent} markerId="dsense-arrow" x1={170} y1={150} x2={210} y2={150} delay={0.1} />
+      <PvArrow accent={accent} markerId="dsense-arrow" x1={360} y1={150} x2={400} y2={150} delay={0.25} />
+      <PvArrow accent={accent} markerId="dsense-arrow" x1={560} y1={150} x2={600} y2={150} delay={0.4} />
+      <PvArrow accent={accent} markerId="dsense-arrow" x1={740} y1={140} x2={770} y2={73} delay={0.55} />
+      <PvArrow accent={accent} markerId="dsense-arrow" x1={740} y1={160} x2={770} y2={227} delay={0.55} />
 
       {/* Data packets hopping the pipeline gaps in sequence */}
-      <FlowDot path="M 170 150 L 210 150" dur={2.4} delay={0} />
-      <FlowDot path="M 360 150 L 400 150" dur={2.4} delay={0.8} />
-      <FlowDot path="M 560 150 L 600 150" dur={2.4} delay={1.6} />
-      <FlowDot path="M 740 140 L 770 73" dur={2.4} delay={2.4} />
-      <FlowDot path="M 740 160 L 770 227" dur={2.4} delay={2.4} />
+      <PvFlowDot accent={accent} path="M 170 150 L 210 150" dur={2.4} delay={0} />
+      <PvFlowDot accent={accent} path="M 360 150 L 400 150" dur={2.4} delay={0.8} />
+      <PvFlowDot accent={accent} path="M 560 150 L 600 150" dur={2.4} delay={1.6} />
+      <PvFlowDot accent={accent} path="M 740 140 L 770 73" dur={2.4} delay={2.4} />
+      <PvFlowDot accent={accent} path="M 740 160 L 770 227" dur={2.4} delay={2.4} />
     </svg>
   );
 }

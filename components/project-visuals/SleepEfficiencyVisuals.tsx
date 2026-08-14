@@ -1,3 +1,4 @@
+import { PvBox, PvArrow, PvFlowDot } from "./primitives";
 // Sleep Efficiency Predictor - factor-correlation hero + study-to-app architecture.
 // All figures are from the ICSMAI 2024 paper (Springer, DOI 10.1007/978-3-031-66854-8_1).
 // Animation contract: pv-* classes fire when VisualFrame sets data-inview.
@@ -107,63 +108,6 @@ export function SleepEfficiencyHero({ accent, className }: Props) {
 
 export function SleepEfficiencyArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
-  const text = "var(--text-secondary)";
-  const surface = "var(--surface-elevated)";
-  const border = "var(--border)";
-
-  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
-  }) => (
-    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
-      <rect
-        x={x} y={y} width={w} height={h} rx="6" ry="6"
-        className="pv-node"
-        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
-        stroke={highlight ? accent : border}
-        strokeWidth="1.25"
-      />
-      <text
-        x={x + w / 2}
-        y={y + (sub ? h / 2 - 4 : h / 2 + 4)}
-        textAnchor="middle"
-        fontFamily={MONO}
-        fontSize="11"
-        fontWeight="600"
-        fill={highlight ? accent : text}
-      >
-        {title}
-      </text>
-      {sub && (
-        <text x={x + w / 2} y={y + h / 2 + 10} textAnchor="middle" fontFamily={MONO} fontSize="9" fill={muted}>
-          {sub}
-        </text>
-      )}
-    </g>
-  );
-
-  const Arrow = ({ x1, y1, x2, y2, delay }: { x1: number; y1: number; x2: number; y2: number; delay?: number }) => (
-    <line
-      x1={x1} y1={y1} x2={x2} y2={y2}
-      pathLength={1}
-      className="pv-draw"
-      stroke={accent} strokeWidth="1.25" opacity="0.7"
-      markerEnd="url(#sleep-arrow)"
-      style={{ animationDelay: `${delay ?? 0}s` }}
-    />
-  );
-
-  const FlowDot = ({ path, dur, delay }: { path: string; dur: number; delay: number }) => (
-    <circle
-      r="3.5"
-      className="pv-flow"
-      fill={accent}
-      style={{
-        offsetPath: `path("${path}")`,
-        ["--pv-flow-dur" as string]: `${dur}s`,
-        animationDelay: `${delay}s`,
-      }}
-    />
-  );
 
   return (
     <svg
@@ -185,23 +129,23 @@ export function SleepEfficiencyArchitecture({ accent, className }: Props) {
       <text x="610" y="26" fontFamily={MONO} fontSize="9" fill={muted} letterSpacing="1.5">SELECT</text>
       <text x="790" y="26" fontFamily={MONO} fontSize="9" fill={muted} letterSpacing="1.5">SERVE</text>
 
-      <Box x={20} y={120} w={150} h={60} title="Sleep dataset" sub="452 records · 15 features" delay={0} />
-      <Box x={210} y={120} w={140} h={60} title="KNN Imputation" sub="n=2 · 80/20 split" delay={0.15} />
-      <Box x={390} y={120} w={160} h={60} title="4-Model Comparison" sub="LR · DT · RF · GBR" delay={0.3} />
-      <Box x={590} y={120} w={150} h={60} title="Random Forest" sub="R² 0.8569 · MSE 0.0027" highlight delay={0.45} />
-      <Box x={780} y={120} w={110} h={60} title="Flask App" sub="score + tips" delay={0.6} />
+      <PvBox accent={accent} x={20} y={120} w={150} h={60} title="Sleep dataset" sub="452 records · 15 features" delay={0} />
+      <PvBox accent={accent} x={210} y={120} w={140} h={60} title="KNN Imputation" sub="n=2 · 80/20 split" delay={0.15} />
+      <PvBox accent={accent} x={390} y={120} w={160} h={60} title="4-Model Comparison" sub="LR · DT · RF · GBR" delay={0.3} />
+      <PvBox accent={accent} x={590} y={120} w={150} h={60} title="Random Forest" sub="R² 0.8569 · MSE 0.0027" highlight delay={0.45} />
+      <PvBox accent={accent} x={780} y={120} w={110} h={60} title="Flask App" sub="score + tips" delay={0.6} />
 
       {/* Arrows */}
-      <Arrow x1={170} y1={150} x2={210} y2={150} delay={0.1} />
-      <Arrow x1={350} y1={150} x2={390} y2={150} delay={0.25} />
-      <Arrow x1={550} y1={150} x2={590} y2={150} delay={0.4} />
-      <Arrow x1={740} y1={150} x2={780} y2={150} delay={0.55} />
+      <PvArrow accent={accent} markerId="sleep-arrow" x1={170} y1={150} x2={210} y2={150} delay={0.1} />
+      <PvArrow accent={accent} markerId="sleep-arrow" x1={350} y1={150} x2={390} y2={150} delay={0.25} />
+      <PvArrow accent={accent} markerId="sleep-arrow" x1={550} y1={150} x2={590} y2={150} delay={0.4} />
+      <PvArrow accent={accent} markerId="sleep-arrow" x1={740} y1={150} x2={780} y2={150} delay={0.55} />
 
       {/* Data packets hopping the gaps */}
-      <FlowDot path="M 170 150 L 210 150" dur={2.4} delay={0} />
-      <FlowDot path="M 350 150 L 390 150" dur={2.4} delay={0.8} />
-      <FlowDot path="M 550 150 L 590 150" dur={2.4} delay={1.6} />
-      <FlowDot path="M 740 150 L 780 150" dur={2.4} delay={2.4} />
+      <PvFlowDot accent={accent} path="M 170 150 L 210 150" dur={2.4} delay={0} />
+      <PvFlowDot accent={accent} path="M 350 150 L 390 150" dur={2.4} delay={0.8} />
+      <PvFlowDot accent={accent} path="M 550 150 L 590 150" dur={2.4} delay={1.6} />
+      <PvFlowDot accent={accent} path="M 740 150 L 780 150" dur={2.4} delay={2.4} />
 
       <text x="20" y="270" fontFamily={MONO} fontSize="9" fill={muted}>
         Published at ICSMAI 2024 (Springer Nature) · model + scaler persisted with joblib · High / Normal / Low bands with tailored recommendations

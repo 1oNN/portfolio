@@ -1,3 +1,4 @@
+import { PvBox, PvArrow, PvFlowDot } from "./primitives";
 // FinLaw-UK editorial visuals - knowledge graph hero + ingestion-to-answer architecture.
 // Animation contract: draw/pop/fade classes fire when the wrapping VisualFrame
 // sets data-inview; hover groups highlight a cluster and dim the rest (pv-* in globals.css).
@@ -188,74 +189,9 @@ export function FinLawHero({ accent, className }: Props) {
 
 export function FinLawArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
-  const text = "var(--text-secondary)";
-  const surface = "var(--surface-elevated)";
-  const border = "var(--border)";
 
   // Pipeline boxes: x, y, w, h, label, sub.
-  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
-  }) => (
-    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
-      <rect
-        x={x} y={y} width={w} height={h} rx="6" ry="6"
-        className="pv-node"
-        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
-        stroke={highlight ? accent : border}
-        strokeWidth="1.25"
-      />
-      <text
-        x={x + w / 2}
-        y={y + (sub ? h / 2 - 4 : h / 2 + 4)}
-        textAnchor="middle"
-        fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-        fontSize="11"
-        fontWeight="600"
-        fill={highlight ? accent : text}
-      >
-        {title}
-      </text>
-      {sub && (
-        <text
-          x={x + w / 2}
-          y={y + h / 2 + 10}
-          textAnchor="middle"
-          fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-          fontSize="9"
-          fill={muted}
-        >
-          {sub}
-        </text>
-      )}
-    </g>
-  );
-
-  const Arrow = ({ x1, y1, x2, y2, dashed, delay }: { x1: number; y1: number; x2: number; y2: number; dashed?: boolean; delay?: number }) => (
-    <line
-      x1={x1} y1={y1} x2={x2} y2={y2}
-      pathLength={dashed ? undefined : 1}
-      className={dashed ? "pv-fade" : "pv-draw"}
-      stroke={accent} strokeWidth="1.25" opacity="0.7"
-      strokeDasharray={dashed ? "3 3" : undefined}
-      markerEnd="url(#finlaw-arrow)"
-      style={{ animationDelay: `${delay ?? 0}s` }}
-    />
-  );
-
   // Data packets riding the two extraction streams.
-  const FlowDot = ({ path, dur, delay }: { path: string; dur: number; delay: number }) => (
-    <circle
-      r="3.5"
-      className="pv-flow"
-      fill={accent}
-      style={{
-        offsetPath: `path("${path}")`,
-        ["--pv-flow-dur" as string]: `${dur}s`,
-        animationDelay: `${delay}s`,
-      }}
-    />
-  );
-
   return (
     <svg
       viewBox="0 0 900 360"
@@ -277,44 +213,44 @@ export function FinLawArchitecture({ accent, className }: Props) {
       <text x="745" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">GENERATE</text>
 
       {/* Stage 1: Ingest */}
-      <Box x={40} y={140} w={140} h={60} title="FCA Documents" sub="chapters · MiFID · COBS" delay={0} />
+      <PvBox accent={accent} x={40} y={140} w={140} h={60} title="FCA Documents" sub="chapters · MiFID · COBS" delay={0} />
 
       {/* Stage 2a: Embedding stream (top) */}
-      <Box x={240} y={70} w={150} h={60} title="Sentence Transformer" sub="dense embeddings" delay={0.15} />
-      <Box x={420} y={70} w={130} h={60} title="Vector Index" delay={0.3} />
+      <PvBox accent={accent} x={240} y={70} w={150} h={60} title="Sentence Transformer" sub="dense embeddings" delay={0.15} />
+      <PvBox accent={accent} x={420} y={70} w={130} h={60} title="Vector Index" delay={0.3} />
 
       {/* Stage 2b: Graph stream (bottom) */}
-      <Box x={240} y={210} w={150} h={60} title="Entity Extraction" sub="rule · chapter · ref" delay={0.15} />
-      <Box x={420} y={210} w={130} h={60} title="Neo4j Graph" sub="citation validation" delay={0.3} />
+      <PvBox accent={accent} x={240} y={210} w={150} h={60} title="Entity Extraction" sub="rule · chapter · ref" delay={0.15} />
+      <PvBox accent={accent} x={420} y={210} w={130} h={60} title="Neo4j Graph" sub="citation validation" delay={0.3} />
 
       {/* Stage 3: Retrieval (merge) */}
-      <Box x={600} y={140} w={130} h={60} title="Graph-Aug Retrieval" sub="expand + re-rank" highlight delay={0.45} />
+      <PvBox accent={accent} x={600} y={140} w={130} h={60} title="Graph-Aug Retrieval" sub="expand + re-rank" highlight delay={0.45} />
 
       {/* Stage 4: Generate */}
-      <Box x={760} y={140} w={120} h={60} title="Mistral 7B" sub="cited answer" delay={0.6} />
+      <PvBox accent={accent} x={760} y={140} w={120} h={60} title="Mistral 7B" sub="cited answer" delay={0.6} />
 
       {/* RAGAS evaluation strip */}
-      <Box x={420} y={300} w={310} h={36} title="RAGAS+ · 0.82 source acc · 0.76 faithful" delay={0.75} />
+      <PvBox accent={accent} x={420} y={300} w={310} h={36} title="RAGAS+ · 0.82 source acc · 0.76 faithful" delay={0.75} />
 
       {/* Arrows */}
-      <Arrow x1={180} y1={170} x2={240} y2={100} delay={0.1} />
-      <Arrow x1={180} y1={170} x2={240} y2={240} delay={0.1} />
-      <Arrow x1={390} y1={100} x2={420} y2={100} delay={0.25} />
-      <Arrow x1={390} y1={240} x2={420} y2={240} delay={0.25} />
-      <Arrow x1={550} y1={100} x2={600} y2={155} delay={0.4} />
-      <Arrow x1={550} y1={240} x2={600} y2={185} delay={0.4} />
-      <Arrow x1={730} y1={170} x2={760} y2={170} delay={0.55} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={180} y1={170} x2={240} y2={100} delay={0.1} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={180} y1={170} x2={240} y2={240} delay={0.1} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={390} y1={100} x2={420} y2={100} delay={0.25} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={390} y1={240} x2={420} y2={240} delay={0.25} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={550} y1={100} x2={600} y2={155} delay={0.4} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={550} y1={240} x2={600} y2={185} delay={0.4} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={730} y1={170} x2={760} y2={170} delay={0.55} />
       {/* Feedback */}
-      <Arrow x1={820} y1={200} x2={730} y2={300} dashed delay={0.9} />
+      <PvArrow accent={accent} markerId="finlaw-arrow" x1={820} y1={200} x2={730} y2={300} dashed delay={0.9} />
 
       {/* Data packets hopping the pipeline gaps - top and bottom streams */}
-      <FlowDot path="M 180 170 L 240 100" dur={2.2} delay={0} />
-      <FlowDot path="M 390 100 L 420 100" dur={2.2} delay={0.7} />
-      <FlowDot path="M 550 100 L 600 155" dur={2.2} delay={1.4} />
-      <FlowDot path="M 180 170 L 240 240" dur={2.2} delay={0.35} />
-      <FlowDot path="M 390 240 L 420 240" dur={2.2} delay={1.05} />
-      <FlowDot path="M 550 240 L 600 185" dur={2.2} delay={1.75} />
-      <FlowDot path="M 730 170 L 760 170" dur={2.2} delay={2.1} />
+      <PvFlowDot accent={accent} path="M 180 170 L 240 100" dur={2.2} delay={0} />
+      <PvFlowDot accent={accent} path="M 390 100 L 420 100" dur={2.2} delay={0.7} />
+      <PvFlowDot accent={accent} path="M 550 100 L 600 155" dur={2.2} delay={1.4} />
+      <PvFlowDot accent={accent} path="M 180 170 L 240 240" dur={2.2} delay={0.35} />
+      <PvFlowDot accent={accent} path="M 390 240 L 420 240" dur={2.2} delay={1.05} />
+      <PvFlowDot accent={accent} path="M 550 240 L 600 185" dur={2.2} delay={1.75} />
+      <PvFlowDot accent={accent} path="M 730 170 L 760 170" dur={2.2} delay={2.1} />
     </svg>
   );
 }

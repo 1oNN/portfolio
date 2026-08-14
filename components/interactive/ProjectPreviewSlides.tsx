@@ -88,6 +88,9 @@ export default function ProjectPreviewSlides({ projectId, accent }: Props) {
   );
 
   // Restart from the first slide whenever the pointer moves to another project.
+  // The parent keeps one mounted instance and swaps projectId, so there is no
+  // key to remount on; resetting here is the reset.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setIndex(0), [projectId]);
 
   useEffect(() => {

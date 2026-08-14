@@ -1,3 +1,4 @@
+import { PvBox, PvFlowDot } from "./primitives";
 // Autonomous Voice Agent - latency before/after hero + websocket inference architecture.
 // Animation contract: pv-* classes fire when VisualFrame sets data-inview.
 
@@ -131,59 +132,6 @@ export function VoiceAgentHero({ accent, className }: Props) {
 
 export function VoiceAgentArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
-  const text = "var(--text-secondary)";
-  const surface = "var(--surface-elevated)";
-  const border = "var(--border)";
-
-  const Box = ({ x, y, w, h, title, sub, highlight, delay }: {
-    x: number; y: number; w: number; h: number; title: string; sub?: string; highlight?: boolean; delay?: number;
-  }) => (
-    <g className="pv-pop pv-hover-group" style={{ animationDelay: `${delay ?? 0}s` }}>
-      <rect
-        x={x} y={y} width={w} height={h} rx="6" ry="6"
-        className="pv-node"
-        fill={highlight ? `color-mix(in srgb, ${accent} 13%, transparent)` : surface}
-        stroke={highlight ? accent : border}
-        strokeWidth="1.25"
-      />
-      <text
-        x={x + w / 2}
-        y={y + (sub ? h / 2 - 4 : h / 2 + 4)}
-        textAnchor="middle"
-        fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-        fontSize="11"
-        fontWeight="600"
-        fill={highlight ? accent : text}
-      >
-        {title}
-      </text>
-      {sub && (
-        <text
-          x={x + w / 2}
-          y={y + h / 2 + 10}
-          textAnchor="middle"
-          fontFamily="ui-monospace, 'JetBrains Mono', monospace"
-          fontSize="9"
-          fill={muted}
-        >
-          {sub}
-        </text>
-      )}
-    </g>
-  );
-
-  const FlowDot = ({ path, dur, delay }: { path: string; dur: number; delay: number }) => (
-    <circle
-      r="3.5"
-      className="pv-flow"
-      fill={accent}
-      style={{
-        offsetPath: `path("${path}")`,
-        ["--pv-flow-dur" as string]: `${dur}s`,
-        animationDelay: `${delay}s`,
-      }}
-    />
-  );
 
   return (
     <svg
@@ -205,18 +153,18 @@ export function VoiceAgentArchitecture({ accent, className }: Props) {
       <text x="440" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">INFERENCE BACKEND</text>
       <text x="720" y="24" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted} letterSpacing="1.5">TOOLS · asyncio.gather</text>
 
-      <Box x={20} y={170} w={120} h={60} title="📞 Caller" sub="websocket session" delay={0} />
-      <Box x={180} y={170} w={140} h={60} title="Retell AI" sub="ASR + TTS" delay={0.15} />
-      <Box x={360} y={170} w={150} h={60} title="FastAPI WS" sub="event loop" highlight delay={0.3} />
-      <Box x={550} y={170} w={140} h={60} title="asyncpg pool" sub="PostgreSQL" delay={0.45} />
+      <PvBox accent={accent} x={20} y={170} w={120} h={60} title="📞 Caller" sub="websocket session" delay={0} />
+      <PvBox accent={accent} x={180} y={170} w={140} h={60} title="Retell AI" sub="ASR + TTS" delay={0.15} />
+      <PvBox accent={accent} x={360} y={170} w={150} h={60} title="FastAPI WS" sub="event loop" highlight delay={0.3} />
+      <PvBox accent={accent} x={550} y={170} w={140} h={60} title="asyncpg pool" sub="PostgreSQL" delay={0.45} />
 
       {/* Parallel tools (asyncio.gather) */}
-      <Box x={730} y={70} w={140} h={50} title="CRM lookup" delay={0.6} />
-      <Box x={730} y={155} w={140} h={50} title="Calendar" delay={0.68} />
-      <Box x={730} y={240} w={140} h={50} title="Enrichment" delay={0.76} />
+      <PvBox accent={accent} x={730} y={70} w={140} h={50} title="CRM lookup" delay={0.6} />
+      <PvBox accent={accent} x={730} y={155} w={140} h={50} title="Calendar" delay={0.68} />
+      <PvBox accent={accent} x={730} y={240} w={140} h={50} title="Enrichment" delay={0.76} />
 
       {/* Gatekeeper classifier (above main flow) */}
-      <Box x={360} y={70} w={150} h={50} title="Gatekeeper" sub="early-exit classifier" delay={0.9} />
+      <PvBox accent={accent} x={360} y={70} w={150} h={50} title="Gatekeeper" sub="early-exit classifier" delay={0.9} />
 
       {/* Arrows: main flow */}
       <line x1={140} y1={200} x2={180} y2={200} pathLength={1} className="pv-draw" stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#voice-arrow)" style={{ animationDelay: "0.1s" }} />
@@ -232,12 +180,12 @@ export function VoiceAgentArchitecture({ accent, className }: Props) {
       <line x1={690} y1={205} x2={730} y2={265} pathLength={1} className="pv-draw" stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#voice-arrow)" style={{ animationDelay: "0.55s" }} />
 
       {/* Call packets hopping the pipeline gaps; fan-out fires all three at once */}
-      <FlowDot path="M 140 200 L 180 200" dur={2.2} delay={0} />
-      <FlowDot path="M 320 200 L 360 200" dur={2.2} delay={0.55} />
-      <FlowDot path="M 510 200 L 550 200" dur={2.2} delay={1.1} />
-      <FlowDot path="M 690 195 L 730 95" dur={2.2} delay={1.65} />
-      <FlowDot path="M 690 200 L 730 180" dur={2.2} delay={1.65} />
-      <FlowDot path="M 690 205 L 730 265" dur={2.2} delay={1.65} />
+      <PvFlowDot accent={accent} path="M 140 200 L 180 200" dur={2.2} delay={0} />
+      <PvFlowDot accent={accent} path="M 320 200 L 360 200" dur={2.2} delay={0.55} />
+      <PvFlowDot accent={accent} path="M 510 200 L 550 200" dur={2.2} delay={1.1} />
+      <PvFlowDot accent={accent} path="M 690 195 L 730 95" dur={2.2} delay={1.65} />
+      <PvFlowDot accent={accent} path="M 690 200 L 730 180" dur={2.2} delay={1.65} />
+      <PvFlowDot accent={accent} path="M 690 205 L 730 265" dur={2.2} delay={1.65} />
 
       {/* Footnote */}
       <text x="20" y="360" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted}>

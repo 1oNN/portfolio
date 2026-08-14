@@ -24,6 +24,9 @@ export default function VisualFrame({
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
+      // Capability fallback: with no observer to subscribe to, reveal immediately
+      // rather than leave the visual permanently un-animated.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInView(true);
       return;
     }

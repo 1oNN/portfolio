@@ -240,7 +240,7 @@ export const SEED_POSTS: BlogPost[] = [
       "",
       "## A prediction without a why is a black box",
       "",
-      "Clinical adoption research is blunt about this: when clinicians cannot trace a prediction to features they recognise, they reject the tool - even when it outperforms their judgement. The thesis handled this with correlation-driven risk-factor analysis: general health was the strongest correlate at -0.41, then high blood pressure at +0.38, high cholesterol and BMI at +0.29 each, with prevalence peaking at 63.2% in the 70-74 age band. Those are drivers a clinician already reasons with, which is the point: the explanation has to be in their vocabulary, not the model's.",
+      "Clinical adoption research is blunt about this: when clinicians cannot trace a prediction to features they recognise, they reject the tool - even when it outperforms their judgement. The thesis handled this with correlation-driven risk-factor analysis: general health was the strongest correlate at -0.41, then high blood pressure at +0.38, high cholesterol and BMI at +0.29 each, with prevalence climbing sharply from age 50 onward. Those are drivers a clinician already reasons with, which is the point: the explanation has to be in their vocabulary, not the model's.",
       "",
       "## What I would do differently",
       "",
