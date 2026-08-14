@@ -82,13 +82,9 @@
 }
 
 /* ─── Base Reset & Typography ────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* No universal reset here. Tailwind preflight already does box-sizing, margin
+   and padding in @layer base, and an unlayered copy beats every p-* and m-*
+   utility on the site: unlayered wins over layered no matter the specificity. */
 
 html {
   scroll-behavior: smooth;
