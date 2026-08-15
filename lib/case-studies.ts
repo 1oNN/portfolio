@@ -11,7 +11,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     tackles:
       "Compliance teams thread citations by hand across the FCA Handbook, the PRA Rulebook and MiFID II, and a plain LLM answers confidently without showing which rule it relied on.",
     delivers:
-      "A retrieval pipeline where a Neo4j graph validates every citation and flags uncited rules, scored on a 110-item regulatory benchmark: 0.82 source accuracy, 0.81 citation quality.",
+      "A retrieval pipeline that resolves every citation against a Neo4j graph and refuses rather than answer when verification fails, released with a measurement-integrity report on which figures reproduce and which do not.",
     links: { github: "https://github.com/1oNN/finlaw-uk" },
     problem: [
       "UK financial regulation is a moving target. The FCA Handbook alone runs to thousands of pages, cross-referenced with MiFID II, the PRA Rulebook, and binding technical standards. Compliance teams burn hours threading citations across documents, and naive LLM lookups hallucinate confidently in exactly the places that matter most.",
@@ -20,9 +20,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     approach: [
       "The pipeline begins with bulk ingestion of FCA Handbook chapters and adjacent regulatory documents. Each section is chunked at the smallest semantic unit - typically a single rule or sub-rule - then run through a parallel two-stream extraction: Sentence Transformer embeddings into a vector index, and entity/relationship extraction into a Neo4j knowledge graph that captures Rule → Chapter, Rule → Entity, and Rule → Cross-reference relationships.",
-      "At query time, dense retrieval pulls the top-K candidate chunks. The candidates' graph nodes are then expanded one hop in Neo4j to add adjacent rules, parent chapter context, and any cross-referenced sections - the structural context that pure vector search loses. The expanded set is re-ranked by relevance and trimmed to fit Mistral 7B-Instruct's context window.",
+      "At query time retrieval is hybrid: BM25 lexical search and BGE-small dense search run in parallel and are fused by reciprocal rank fusion, so an exact rule reference and a paraphrased description both land. The fused candidates' graph nodes are expanded two hops in Neo4j to add adjacent rules, parent chapter context, and cross-referenced sections - the structural context pure vector search loses. A cross-encoder re-ranks the expanded set before it is trimmed to fit Mistral 7B-Instruct's context window.",
       "Generation runs locally on Mistral 7B-Instruct with strict citation-required prompting: every claim must reference a chunk ID, and every chunk ID must exist in the retrieved set. Post-generation, every response goes through a RAGAS evaluator that scores faithfulness (does the answer stay grounded in retrieved context?) and answer relevance (does it actually address the query?).",
-      "The result: 0.76 faithfulness and 0.74 answer relevance, with 0.82 source accuracy and 0.81 citation quality, on a 110-item benchmark spanning seven regulatory domains.",
+      "Evaluation runs against a 110-item benchmark I built and released: 80 factual questions, 20 document tasks, 10 case scenarios. The pipeline reaches 0.76 RAGAS faithfulness and 0.74 answer relevance, with a custom legal-completeness metric at 0.68.",
     ],
     decisions: [
       {
@@ -41,13 +41,18 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         title: "RAGAS over BLEU/ROUGE",
         body: "Surface metrics reward fluent paraphrasing. Faithfulness and answer relevance both require an LLM judge against the retrieved context, which is what actually matters for regulatory text where one wrong citation can be liability.",
       },
+      {
+        title: "Refuse rather than answer",
+        body: "Every citation is resolved against the graph before the answer ships, and an answer that cannot be verified is refused instead of returned. It scores worse: RAGAS marks a refusal zero, so 30 refusals pull the headline relevancy down 23 points. On regulatory text a confident wrong citation is the expensive failure, not a blank.",
+      },
     ],
     results: [
-      "Source accuracy peaked at 0.85 on advanced queries and document tasks cleared 0.83 on both source accuracy and citation quality - exactly the cases where graph expansion adds regulatory hierarchy that dense retrieval misses on its own. The weakest domain was consumer redress, where fragmented DISP rules dragged completeness below 0.65.",
-      "Faithfulness at 0.76 means roughly three in four answers stay grounded in retrieved context; the 24% that drift are the prompt-engineering targets for next-iteration work. Answer relevance at 0.74 tracks closely, suggesting the model is staying on-topic when it stays grounded.",
+      "The result I would lead with is a correction to my own submitted work. Re-measuring the evaluation after submission showed that the reported source-accuracy and citation-quality figures were regex shape-checks, not correctness measures: the scorer awarded a flat 0.85 to any citation-shaped string, and 103 of the 110 rows carried that constant. The true graph-verified citation rate was 3 in 110. Both figures are withdrawn, and the repository ships a measurement-integrity report stating which numbers reproduce and which do not.",
+      "The figures that do reproduce: 0.76 RAGAS faithfulness, 0.74 answer relevance, and a custom legal-completeness metric that holds at 0.68 across both evaluation tracks. That correction is what motivated the citation normaliser, the cross-encoder re-ranker and the refusal gate.",
+      "Refusing costs something measurable, and it is worth paying. Headline answer relevancy drops 23 points because RAGAS scores a refusal as zero by construction. Exclude the 30 refusals and the mean is 0.658, against 0.641 for the non-refusing baseline - which scored higher only by confabulating answers to questions the corpus cannot support.",
     ],
     reflections: [
-      "The honest failure mode is consumer redress: DISP's fragmented rule structure dragged legal completeness below 0.65, and the one-hop graph expansion that lifts the other domains couldn't stitch it back together. Rule-level chunking is the right default for most of the Handbook, but domains like DISP likely need domain-aware chunk granularity, or a second expansion hop, before completeness recovers.",
+      "The measurement bug is the part I would want a supervisor to press me on. A scorer returning the same constant for 103 of 110 rows is visible in the distribution and invisible in the mean, and I only caught it because I went back to reproduce my own numbers after the dissertation was already submitted. Publishing the correction next to the code was the only defensible option, and it changed what the system does: the refusal gate exists because the citation numbers did not survive scrutiny.",
       "If I were continuing this past the dissertation, the next move is two-pronged. First, extend the evaluation harness into a structured legal-reasoning benchmark - RAGAS catches faithfulness drift but not legal-specific failure modes like jurisdictional misapplication. Second, ship a confidence-aware UI that surfaces uncertainty when the graph expansion returns sparse adjacency, so users know when the system is reasoning from rich vs thin context.",
     ],
     related: ["ai-voice-agent", "diabetes-risk"],
@@ -262,8 +267,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",
     status: "Shipped",
-    timeline: "Apr 2026 - present",
-    role: "Solo full-stack project",
+    timeline: "May 2026 - present",
+    role: "Founder & sole engineer, self-employed",
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
     tackles:
       "Searching for a job across the major boards is a data-collection chore before it is a job search: different filters, different refresh cadences, and no visibility into how your CV scores.",

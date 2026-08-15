@@ -14,14 +14,14 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
-      "Jobzyl searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - and streams results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl serves a 617K-posting index and searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - streaming results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
     metrics: [
+      { value: "617K", label: "Postings indexed" },
       { value: "20", label: "Job boards searched" },
-      { value: "60+", label: "Countries covered" },
       { value: "~1.4s", label: "First results streamed" },
     ],
   },
@@ -35,10 +35,12 @@ export const PROJECTS: Project[] = [
     category: "research",
     featured: true,
     githubUrl: "https://github.com/1oNN/finlaw-uk",
+    // Only re-measured figures. Source accuracy and citation quality were
+    // withdrawn: that scorer was a shape-check, not a correctness measure.
     metrics: [
-      { value: "0.82", label: "Source accuracy" },
       { value: "0.76", label: "RAGAS faithfulness" },
       { value: "0.74", label: "Answer relevance" },
+      { value: "0.68", label: "Legal completeness" },
     ],
   },
   {
@@ -111,10 +113,25 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Jobzyl deliberately has NO entry here. It is self-directed project work, not
-// employment, and the experience entry duplicated its case study almost line
-// for line. It lives under Projects only - see CASE_STUDIES["jobzyl"].
+// Jobzyl is here because both CVs now list it as employment (self-employed,
+// Founder & Sole Engineer) rather than side project work. Kept to two lines on
+// purpose: the earlier entry was dropped for restating CASE_STUDIES["jobzyl"]
+// almost verbatim, and that is still the thing to avoid.
 export const EXPERIENCE: Experience[] = [
+  {
+    id: "jobzyl",
+    company: "Jobzyl (self-employed)",
+    role: "Founder & Sole Engineer",
+    type: "engineering",
+    location: "Remote",
+    startDate: "May 2026",
+    endDate: "Present",
+    current: true,
+    responsibilities: [
+      "Built and operate a live job-aggregation platform at jobzyl.com serving a 617K-posting index: cache-first reads with live parallel fan-out to 20 third-party sources on a miss, per-source timeout budgets and failure isolation so one slow board cannot block a response, and first results streamed over SSE in roughly 1.4s.",
+      "Ingestion, expiry and staleness handling across sources, server-side deduplication, salary normalisation to annual, a scheduled alerts pipeline, and an ATS-style CV matcher whose parsing stays browser-side. Next.js, TypeScript, Python, FastAPI.",
+    ],
+  },
   {
     id: "outlyst",
     company: "Outlyst",
@@ -134,7 +151,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "bradford-ra",
     company: "University of Bradford",
-    role: "Research Assistant - Machine Learning",
+    role: "MSc Research Project, Machine Learning & LLMs",
     type: "research",
     location: "Bradford, UK",
     startDate: "Jan 2025",
@@ -143,14 +160,15 @@ export const EXPERIENCE: Experience[] = [
     responsibilities: [
       "Engineered FinLaw-UK, a Retrieval-Augmented Generation architecture integrating Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware regulatory retrieval. This work was also my MSc dissertation project - the Education and Experience entries describe the same system, not two.",
       "Built a hybrid retrieval pipeline: BM25 sparse retrieval fused with BGE-small dense embeddings via reciprocal rank fusion, then cross-encoder re-ranking, with graph-grounded citation verification over Neo4j.",
-      "Evaluated on a 110-item regulatory benchmark: 0.76 faithfulness and 0.74 answer relevance (RAGAS), 0.82 source accuracy, 0.81 citation quality.",
-      "Built reproducible experimental pipelines with structured evaluation protocols, extending RAGAS with custom citation-precision and legal-completeness metrics.",
+      "Evaluated on a 110-item regulatory benchmark I built and released: 80 factual questions, 20 document tasks, 10 case scenarios. Reproducible figures are 0.76 faithfulness and 0.74 answer relevance (RAGAS) with legal completeness at 0.68.",
+      "Re-measured the submitted evaluation and found the reported source-accuracy and citation-quality figures were regex shape-checks rather than correctness measures: the scorer returned a flat 0.85 for 103 of 110 rows, and the true graph-verified citation rate was 3 in 110. Published the correction and a measurement-integrity report stating which figures reproduce.",
+      "Built reproducible experimental pipelines with structured evaluation protocols, extending RAGAS with a custom legal-completeness metric that holds at 0.68 across both evaluation tracks.",
     ],
   },
   {
     id: "comsats-ra",
     company: "COMSATS University Islamabad",
-    role: "Research Assistant - Data Science",
+    role: "Research Intern, Data Science",
     type: "research",
     location: "Islamabad, Pakistan",
     startDate: "Jul 2023",
@@ -234,7 +252,6 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
     label: "Machine learning, NLP & LLMs",
     skills: [
       { name: "PyTorch" },
-      { name: "TensorFlow" },
       { name: "scikit-learn" },
       { name: "XGBoost" },
       { name: "LightGBM" },
@@ -255,7 +272,6 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "Python" },
       { name: "TypeScript" },
       { name: "JavaScript" },
-      { name: "C++" },
       { name: "SQL" },
       { name: "FastAPI" },
       { name: "Flask" },
@@ -276,7 +292,6 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "Git" },
       { name: "GitHub Actions", alias: ["CI/CD"] },
       { name: "AWS", alias: ["AWS"] },
-      { name: "GCP" },
       { name: "Linux" },
     ],
   },

@@ -97,7 +97,11 @@ export function parseMarkdownDoc(md: string): { html: string; headings: Markdown
       .split("\n")
       .map((line) => `<li>${line.replace(/^- /, "").trim()}</li>`)
       .join("");
-    return `<ul>${items}</ul>`;
+    // Trailing newline matters: the match ate the block's own line break, so
+    // without it only one \n separates this from the next paragraph, the
+    // \n\n+ split below keeps them in one chunk, and the block-level check
+    // then returns the whole chunk unwrapped - losing the <p> on that text.
+    return `<ul>${items}</ul>\n`;
   });
 
   // Blockquotes - the ">" marker survives escapeHtml() as "&gt;"
@@ -107,7 +111,8 @@ export function parseMarkdownDoc(md: string): { html: string; headings: Markdown
       .split("\n")
       .map((line) => line.replace(/^&gt; /, "").trim())
       .join(" ");
-    return `<blockquote>${text}</blockquote>`;
+    // Same trailing-newline reason as the list above.
+    return `<blockquote>${text}</blockquote>\n`;
   });
 
   // Paragraphs

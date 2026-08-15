@@ -187,6 +187,27 @@ describe("block formatting", () => {
   it("does not wrap block-level elements in paragraphs", () => {
     expect(parseMarkdown("## Heading")).not.toContain("<p><h2");
   });
+
+  // The block replacements consume their own trailing newline, so without an
+  // explicit one the following paragraph got absorbed into the same chunk and
+  // emitted bare. Post bodies put prose straight after a pull quote.
+  it("wraps a paragraph that follows a blockquote", () => {
+    const html = parseMarkdown("> pull quote\n\nFollowing prose.");
+    expect(html).toContain("<blockquote>pull quote</blockquote>");
+    expect(html).toContain("<p>Following prose.</p>");
+  });
+
+  it("wraps a paragraph that follows a list", () => {
+    const html = parseMarkdown("- one\n- two\n\nFollowing prose.");
+    expect(html).toContain("<li>two</li>");
+    expect(html).toContain("<p>Following prose.</p>");
+  });
+
+  it("still wraps a paragraph that precedes a blockquote", () => {
+    const html = parseMarkdown("Leading prose.\n\n> pull quote");
+    expect(html).toContain("<p>Leading prose.</p>");
+    expect(html).toContain("<blockquote>pull quote</blockquote>");
+  });
 });
 
 describe("edge cases", () => {

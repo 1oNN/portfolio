@@ -44,11 +44,13 @@ export default function About() {
               </p>
               <p>
                 For my dissertation I built FinLaw-UK, a graph-augmented RAG system for UK
-                financial regulation where a Neo4j knowledge graph validates every citation and
-                flags uncited rules. Cross-encoder re-ranking took context precision to 0.84 on a
-                110-item benchmark, at 0.82 source accuracy. At Outlyst I cut mean call latency
-                54%, from 2.4s to 1.1s across 2,100+ calls, by profiling async I/O and
-                restructuring connection pooling.
+                financial regulation where a Neo4j knowledge graph resolves every citation before
+                the answer ships, and refuses rather than answer when it cannot. After submitting,
+                I re-measured my own evaluation and found two of the reported figures were regex
+                shape-checks rather than correctness measures; I published the correction and a
+                report on which numbers reproduce. At Outlyst I cut mean call latency 54%, from
+                2.4s to 1.1s across 2,100+ calls, by profiling async I/O and restructuring
+                connection pooling.
               </p>
               <p>
                 I&apos;m interested in roles where I can keep pushing that boundary - LLM

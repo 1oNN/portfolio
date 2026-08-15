@@ -12,12 +12,13 @@ const MONO = "ui-monospace, 'JetBrains Mono', monospace";
 
 /* ─── FinLaw-UK: evaluation scores + benchmark composition donut ────── */
 
+// Only the metrics that survived re-measurement. Source accuracy (0.823) and
+// citation quality (0.806) are WITHDRAWN: that scorer was a regex shape-check
+// that returned a flat 0.85 for 103 of the 110 rows. Do not restore them.
 const FINLAW_SCORES = [
-  { label: "Source accuracy", value: 0.823 },
-  { label: "Citation quality", value: 0.806 },
   { label: "RAGAS faithfulness", value: 0.76 },
   { label: "Answer relevance", value: 0.74 },
-  { label: "Legal completeness", value: 0.69 },
+  { label: "Legal completeness", value: 0.68 },
 ];
 
 const FINLAW_TASKS = [
@@ -66,14 +67,15 @@ export function FinLawResults({ accent, className }: Props) {
         EVALUATION SCORES · RAGAS + LEGAL METRICS
       </text>
 
-      {/* Gridlines 0 → 1.0 */}
+      {/* Gridlines 0 → 1.0. Stop just under the last bar: only three metrics
+          survived re-measurement, so the old full-height rules left a void. */}
       {[0, 0.25, 0.5, 0.75, 1].map((t) => (
         <g key={t}>
           <line
-            x1={barX + t * barScale} y1={68} x2={barX + t * barScale} y2={300}
+            x1={barX + t * barScale} y1={68} x2={barX + t * barScale} y2={200}
             stroke={border} strokeWidth="1" strokeDasharray="2 4" opacity="0.5"
           />
-          <text x={barX + t * barScale} y={318} textAnchor="middle" fontFamily={MONO} fontSize="9" fill={muted}>
+          <text x={barX + t * barScale} y={218} textAnchor="middle" fontFamily={MONO} fontSize="9" fill={muted}>
             {t.toFixed(2)}
           </text>
         </g>
@@ -142,8 +144,18 @@ export function FinLawResults({ accent, className }: Props) {
           </text>
         </g>
       ))}
-      <text x="580" y="318" fontFamily={MONO} fontSize="9" fill={muted} opacity="0.7">
-        7 regulatory domains · source acc peaks 0.85
+      {/* The withdrawal, stated on the chart rather than only in the prose.
+          Leaving it to the caption would let the three surviving bars read as
+          the whole evaluation, which is the impression the correction removes. */}
+      <line x1={40} y1={252} x2={520} y2={252} stroke={border} strokeWidth="1" opacity="0.6" />
+      <text x="40" y="274" fontFamily={MONO} fontSize="10" fontWeight="600" fill={muted} letterSpacing="1.5">
+        WITHDRAWN AFTER RE-MEASUREMENT
+      </text>
+      <text x="40" y="294" fontFamily={MONO} fontSize="9.5" fill={muted} opacity="0.85">
+        Source accuracy and citation quality: the scorer returned a flat 0.85
+      </text>
+      <text x="40" y="310" fontFamily={MONO} fontSize="9.5" fill={muted} opacity="0.85">
+        for 103 of 110 rows. Graph-verified citation rate: 3 / 110.
       </text>
     </svg>
   );

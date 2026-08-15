@@ -230,7 +230,7 @@ export function FinLawArchitecture({ accent, className }: Props) {
       <PvBox accent={accent} x={760} y={140} w={120} h={60} title="Mistral 7B" sub="cited answer" delay={0.6} />
 
       {/* RAGAS evaluation strip */}
-      <PvBox accent={accent} x={420} y={300} w={310} h={36} title="RAGAS+ · 0.82 source acc · 0.76 faithful" delay={0.75} />
+      <PvBox accent={accent} x={420} y={300} w={310} h={36} title="RAGAS+ · 0.76 faithful · 0.68 complete" delay={0.75} />
 
       {/* Arrows */}
       <PvArrow accent={accent} markerId="finlaw-arrow" x1={180} y1={170} x2={240} y2={100} delay={0.1} />
