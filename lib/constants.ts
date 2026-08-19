@@ -14,15 +14,19 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
-      "Jobzyl ingests 20 upstream job-board and national employment-service APIs into a 2M+ posting Postgres index - cross-source deduplication, expiry handling, and free-text salary normalised to a common annual basis - served through FastAPI over a semantic embedding index, with live parallel fan-out on a cache miss streaming results over SSE as each source responds, first results in about 1.4s. Application tracking (Saved → Applied → Interview → Offer → Rejected), an ATS-style CV matcher whose parsing stays in the browser so a CV is never uploaded whole (Fernet-encrypted at rest if saved to an account), scoring role fit by vector similarity with ranked skill-gap extraction. Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl searches 20 job boards and thousands of company careers pages in one query, over a Postgres index of more than 2M live postings. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a Postgres function that weights the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, and a liveness sweep marks a posting dead only on positive evidence. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic and Claude-scored matching are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
+    // Measured, not estimated. The posting count is the completed 2026-08-19
+    // sweep. An earlier "2M+" sat here for months as a guess and happened to
+    // land near the truth; this one is a census with a date on it. There is no
+    // first-result timing here on purpose - nothing has timed it since June.
     metrics: [
-      { value: "2M+", label: "Postings indexed" },
-      { value: "20", label: "Upstream sources" },
-      { value: "~1.4s", label: "First results streamed" },
+      { value: "2M+", label: "Live postings" },
+      { value: "20", label: "Job boards searched" },
+      { value: "61,563", label: "Duplicate rows collapsed" },
     ],
   },
   {

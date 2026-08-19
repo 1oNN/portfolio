@@ -11,7 +11,7 @@ import {
   DiabetesSenseHero,
   DiabetesSenseArchitecture,
 } from "@/components/project-visuals/DiabetesSenseVisuals";
-import { JobzylHero, JobzylArchitecture } from "@/components/project-visuals/JobzylVisuals";
+import { JobzylHeroStill, JobzylArchitecture } from "@/components/project-visuals/JobzylVisuals";
 import { VoiceFlowHero, VoiceFlowArchitecture } from "@/components/project-visuals/VoiceFlowVisuals";
 import {
   SleepEfficiencyHero,
@@ -43,7 +43,7 @@ interface Slide {
  */
 const SLIDES: Record<string, Slide[]> = {
   jobzyl: [
-    { label: "Live jobs", Visual: JobzylHero },
+    { label: "Live jobs", Visual: JobzylHeroStill },
     { label: "Architecture", Visual: JobzylArchitecture },
   ],
   "finlaw-uk": [
