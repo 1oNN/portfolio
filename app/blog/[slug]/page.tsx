@@ -7,9 +7,11 @@ import Link from "next/link";
 import { FiArrowLeft, FiArrowRight, FiArrowUp } from "react-icons/fi";
 import { getAllPosts, getPostBySlug } from "@/lib/blog-db";
 import { parseMarkdownDoc } from "@/lib/markdown";
+import { splitPostEmbeds } from "@/lib/post-embeds";
 import { readingTime } from "@/lib/reading-time";
 import { POST_TYPE_LABEL, postTypeColor } from "@/lib/post-labels";
 import { formatDate } from "@/lib/format";
+import PostEmbed from "@/components/blog/PostEmbed";
 import TableOfContents from "@/components/blog/TableOfContents";
 import CopyLink from "@/components/blog/CopyLink";
 import Footer from "@/components/layout/Footer";
@@ -58,6 +60,9 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post || !post.published) notFound();
 
   const { html: contentHtml, headings } = parseMarkdownDoc(post.content);
+  // Interactive embeds are markers in the body, so the prose either side of one
+  // is still ordinary sanitized HTML.
+  const segments = splitPostEmbeds(contentHtml);
   const mins = readingTime(post.content);
   const typeColor = postTypeColor(post.type);
 
@@ -177,10 +182,15 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Content + sticky outline */}
         <div className="mt-10 lg:grid lg:grid-cols-[minmax(0,1fr)_200px] lg:gap-14">
-          <div
-            className="blog-content max-w-3xl"
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          <div className="blog-content max-w-3xl">
+            {segments.map((segment, i) =>
+              segment.kind === "html" ? (
+                <div key={i} dangerouslySetInnerHTML={{ __html: segment.html }} />
+              ) : (
+                <PostEmbed key={i} id={segment.id} />
+              )
+            )}
+          </div>
           {headings.length >= 2 && (
             <aside className="hidden lg:block">
               <div className="sticky top-24">
