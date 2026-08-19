@@ -14,14 +14,14 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 20 job boards, with ATS resume matching",
     longDescription:
-      "Jobzyl serves a 617K-posting index and searches 20 live job boards in parallel - Reed, Adzuna, Careerjet, Jooble, USAJobs and 15 more, covering 60+ countries - streaming results over SSE as each board responds, first results in about 1.4s. It is live fan-out over a warm cache: scheduled 6-hourly refreshes keep results fresh between searches. Application tracking (Saved → Applied → Interview → Offer → Rejected), client-side ATS resume matching (the CV is only sent to the server if saved to an account, encrypted at rest), Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
+      "Jobzyl ingests 20 upstream job-board and national employment-service APIs into a 2M+ posting Postgres index - cross-source deduplication, expiry handling, and free-text salary normalised to a common annual basis - served through FastAPI over a semantic embedding index, with live parallel fan-out on a cache miss streaming results over SSE as each source responds, first results in about 1.4s. Application tracking (Saved → Applied → Interview → Offer → Rejected), an ATS-style CV matcher whose parsing stays in the browser so a CV is never uploaded whole (Fernet-encrypted at rest if saved to an account), scoring role fit by vector similarity with ranked skill-gap extraction. Supabase Auth (email + Google + LinkedIn OAuth, PKCE) with row-level security on every table. AWS App Runner backend, static-export frontend behind CDN.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
     metrics: [
-      { value: "617K", label: "Postings indexed" },
-      { value: "20", label: "Job boards searched" },
+      { value: "2M+", label: "Postings indexed" },
+      { value: "20", label: "Upstream sources" },
       { value: "~1.4s", label: "First results streamed" },
     ],
   },
@@ -113,25 +113,10 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Jobzyl is here because both CVs now list it as employment (self-employed,
-// Founder & Sole Engineer) rather than side project work. Kept to two lines on
-// purpose: the earlier entry was dropped for restating CASE_STUDIES["jobzyl"]
-// almost verbatim, and that is still the thing to avoid.
+// Employment and research posts only. Jobzyl sat here while the CVs carried it
+// as self-employment; both now file it under projects, so it lives in PROJECTS
+// and CASE_STUDIES and nowhere else - do not re-add it as a role.
 export const EXPERIENCE: Experience[] = [
-  {
-    id: "jobzyl",
-    company: "Jobzyl (self-employed)",
-    role: "Founder & Sole Engineer",
-    type: "engineering",
-    location: "Remote",
-    startDate: "May 2026",
-    endDate: "Present",
-    current: true,
-    responsibilities: [
-      "Built and operate a live job-aggregation platform at jobzyl.com serving a 617K-posting index: cache-first reads with live parallel fan-out to 20 third-party sources on a miss, per-source timeout budgets and failure isolation so one slow board cannot block a response, and first results streamed over SSE in roughly 1.4s.",
-      "Ingestion, expiry and staleness handling across sources, server-side deduplication, salary normalisation to annual, a scheduled alerts pipeline, and an ATS-style CV matcher whose parsing stays browser-side. Next.js, TypeScript, Python, FastAPI.",
-    ],
-  },
   {
     id: "outlyst",
     company: "Outlyst",
@@ -151,7 +136,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "bradford-ra",
     company: "University of Bradford",
-    role: "MSc Research Project, Machine Learning & LLMs",
+    role: "Research Assistant, Graph-Augmented LLM Engineering",
     type: "research",
     location: "Bradford, UK",
     startDate: "Jan 2025",
@@ -168,7 +153,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "comsats-ra",
     company: "COMSATS University Islamabad",
-    role: "Research Intern, Data Science",
+    role: "Research Assistant, Data Science",
     type: "research",
     location: "Islamabad, Pakistan",
     startDate: "Jul 2023",
@@ -189,7 +174,7 @@ export const EDUCATION: Education[] = [
     institution: "University of Bradford",
     degree: "MSc",
     // "(Merit)" per both CVs - the classification was missing from the site.
-    field: "Applied Artificial Intelligence & Data Analytics (Merit)",
+    field: "Artificial Intelligence (Merit)",
     location: "Bradford, UK",
     startDate: "Sep 2024",
     endDate: "Sep 2025",

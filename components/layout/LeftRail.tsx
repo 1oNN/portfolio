@@ -79,7 +79,7 @@ export default function LeftRail() {
           className="animate-rise mt-6 max-w-sm text-base leading-relaxed text-[var(--text-secondary)]"
           style={{ animationDelay: "120ms" }}
         >
-          MSc Applied AI. I build{" "}
+          MSc Artificial Intelligence. I build{" "}
           <strong className="font-semibold text-[var(--text-primary)]">LLM systems</strong>,{" "}
           <strong className="font-semibold text-[var(--text-primary)]">
             graph-augmented retrieval

@@ -267,8 +267,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",
     status: "Shipped",
-    timeline: "May 2026 - present",
-    role: "Founder & sole engineer, self-employed",
+    timeline: "Jun 2026 - present",
+    role: "Solo build - sole designer and engineer",
     primaryStack: ["Next.js", "Supabase", "FastAPI", "AWS"],
     tackles:
       "Searching for a job across the major boards is a data-collection chore before it is a job search: different filters, different refresh cadences, and no visibility into how your CV scores.",

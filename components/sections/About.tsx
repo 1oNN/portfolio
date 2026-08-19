@@ -37,8 +37,8 @@ export default function About() {
               style={{ color: "var(--text-secondary)" }}
             >
               <p>
-                I&apos;m an AI/ML engineer with an MSc (Merit) in Applied Artificial Intelligence
-                from the University of Bradford and a first-author Springer paper. My work sits
+                I&apos;m an AI/ML engineer with an MSc (Merit) in Artificial Intelligence from
+                the University of Bradford and a first-author Springer paper. My work sits
                 where applied research meets production: measuring a system honestly, then making
                 it fast enough to put in front of real users.
               </p>
