@@ -9,7 +9,6 @@ import { readingTime } from "@/lib/reading-time";
 import BlogList from "@/components/blog/BlogList";
 import type { PostCardView } from "@/components/blog/PostCard";
 import Footer from "@/components/layout/Footer";
-import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 
 export const revalidate = 60;
 
@@ -75,7 +74,6 @@ export default async function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: toJsonLd(collectionLd) }}
       />
-      <AnalyticsBeacon page="/blog" />
       {/* Sticky header */}
       <header
         className="sticky top-0 z-40 border-b backdrop-blur-md"

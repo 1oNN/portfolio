@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+
+import { trackAgentOpen } from "@/lib/analytics-client";
+import type { AgentOpenSource } from "@/lib/analytics-events";
 
 // Lazy-loaded chat console. The chunk is NOT fetched until the console is first
 // opened (ssr:false keeps it out of the server render entirely).
@@ -20,6 +23,10 @@ export const OPEN_AGENT_CONSOLE_EVENT = "open-agent-console";
  */
 export default function AgentConsoleLauncher() {
   const [open, setOpen] = useState(false);
+  // Which entry point asked for the console. Read on the open transition
+  // rather than inside the state updater, because an updater can run twice
+  // under StrictMode and would double count.
+  const source = useRef<AgentOpenSource>("shortcut");
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -31,6 +38,7 @@ export default function AgentConsoleLauncher() {
       const isCtrlBacktick = e.ctrlKey && e.key === "`";
       if (isCmdK || isCtrlBacktick) {
         e.preventDefault();
+        source.current = "shortcut";
         setOpen((prev) => !prev);
       }
     };
@@ -39,10 +47,19 @@ export default function AgentConsoleLauncher() {
   }, []);
 
   useEffect(() => {
-    const onOpenRequest = () => setOpen(true);
+    const onOpenRequest = (e: Event) => {
+      // detail is optional, so a plain Event still opens the console.
+      const detail = (e as CustomEvent<{ source?: AgentOpenSource }>).detail;
+      source.current = detail?.source ?? "event";
+      setOpen(true);
+    };
     window.addEventListener(OPEN_AGENT_CONSOLE_EVENT, onOpenRequest);
     return () => window.removeEventListener(OPEN_AGENT_CONSOLE_EVENT, onOpenRequest);
   }, []);
+
+  useEffect(() => {
+    if (open) trackAgentOpen(source.current);
+  }, [open]);
 
   return <>{open && <AgentConsole onClose={() => setOpen(false)} />}</>;
 }

@@ -9,7 +9,6 @@ import { Suspense } from "react";
 import ListingCard from "@/components/case-study/ListingCard";
 import ProjectsFilter, { type ProjectCard } from "@/components/case-study/ProjectsFilter";
 import Footer from "@/components/layout/Footer";
-import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 
 // Canonicals are set per page, never at the root: a root-level canonical is
 // inherited by every descendant that does not override it, which would declare
@@ -73,7 +72,6 @@ export default function ProjectsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: toJsonLd(collectionLd) }}
       />
-      <AnalyticsBeacon page="/projects" />
       {/* Sticky header */}
       <header
         className="sticky top-0 z-40 border-b backdrop-blur-md"

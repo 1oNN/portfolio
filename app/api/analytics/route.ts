@@ -1,73 +1,175 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ApiResponse } from "@/types";
 
-// Simple in-memory store - swap for a database or analytics service in production.
-// This is intentionally minimal: for a real deployment use Plausible, Umami, or Vercel Analytics.
-const pageViews = new Map<string, number>();
-let totalViews = 0;
+import { MAX_ANALYTICS_BODY_BYTES } from "@/lib/analytics-events";
+import {
+  deviceClassFromUserAgent,
+  isBotUserAgent,
+  normalizeCountry,
+  normalizeReferrerHost,
+  validateBatch,
+} from "@/lib/analytics-normalize";
+import { isAnalyticsConfigured } from "@/lib/analytics-db";
+import { getVisitorSalt, computeVisitorId } from "@/lib/analytics-salt";
+import { recordBatchIfConfigured } from "@/lib/analytics-write";
+import { utcDate } from "@/lib/analytics-schema";
+import { bodyTooLarge, clientIp, createRateLimiter } from "@/lib/rate-limit";
 
-// The key is caller-supplied on an unauthenticated route, so both its length
-// and the number of distinct keys are capped - otherwise a loop of unique
-// strings grows this map until the Lambda runs out of heap.
-const MAX_PATH_LENGTH = 128;
-const MAX_TRACKED_PAGES = 500;
-const OVERFLOW_KEY = "/other";
+/**
+ * The analytics beacon collector.
+ *
+ * Node runtime is not the default here by accident: node:crypto's synchronous
+ * createHash and the AWS SDK both need it. On the Edge runtime the visitor hash
+ * would have to become an awaited crypto.subtle.digest.
+ */
+export const runtime = "nodejs";
 
-function normalizePath(raw: unknown): string {
-  if (typeof raw !== "string" || !raw.startsWith("/")) return "/";
-  // Query and hash are dropped so ?utm=... cannot mint unlimited distinct keys.
-  const path = raw.split(/[?#]/)[0] || "/";
-  return path.length > MAX_PATH_LENGTH ? path.slice(0, MAX_PATH_LENGTH) : path;
+/**
+ * 200 batches per ten minutes per IP.
+ *
+ * Sizing: an engaged reader produces roughly nine events per page, which is two
+ * to four flushes, so a ten-page session is about thirty. A shared egress, a
+ * university or an office, can multiplex ten of those at once. 200 clears that
+ * comfortably and still bounds the worst case at 5,000 events per IP per window.
+ *
+ * As lib/rate-limit.ts documents, these counters live in one Lambda instance's
+ * memory and reset on a cold start, so this raises the cost of abuse rather than
+ * enforcing a cap. Anything that must actually hold a limit belongs in a
+ * CloudFront WAF rule in front, not in this process.
+ */
+const checkAnalyticsRateLimit = createRateLimiter({ limit: 200, windowMs: 10 * 60 * 1000 });
+
+/**
+ * Amplify fronts the SSR Lambda with a managed CloudFront distribution, but the
+ * viewer-country header only reaches the origin if the origin request policy
+ * forwards it, and Amplify does not expose that setting. So this is best effort
+ * across the names any fronting CDN might use, falling back to XX.
+ */
+const COUNTRY_HEADERS = [
+  "cloudfront-viewer-country",
+  "cf-ipcountry",
+  "x-vercel-ip-country",
+  "x-country",
+];
+
+let loggedHeaderNames = false;
+
+function readCountry(req: NextRequest): string {
+  for (const name of COUNTRY_HEADERS) {
+    const value = req.headers.get(name);
+    if (value) return normalizeCountry(value);
+  }
+
+  // One-shot diagnostic, so the real header name can be confirmed against
+  // production once and this block then deleted. It logs names only, never
+  // values, because the header set includes cookies and forwarded addresses.
+  if (!loggedHeaderNames) {
+    loggedHeaderNames = true;
+    console.info("[/api/analytics] no country header; saw:", [...req.headers.keys()].join(","));
+  }
+  return normalizeCountry(null);
 }
 
-// The write path is deliberately unauthenticated. It is a browser beacon, so
-// any secret it carried would be public anyway - and it used to gate on an
-// x-analytics-secret header that AnalyticsBeacon never sends, meaning every
-// page view 401'd whenever ANALYTICS_SECRET was set. Nothing identifying is
-// stored: a path string and a counter, no IP, no cookie, no user agent.
-export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse<{ views: number }>>> {
-  let page = "/";
+function ownHost(): string | undefined {
   try {
-    const body = await req.json();
-    page = normalizePath(body.page);
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "").hostname;
   } catch {
-    // Default to root if body is unparseable
+    return undefined;
   }
-
-  // Once the ceiling is reached, new paths land in a single overflow bucket
-  // rather than adding keys.
-  if (!pageViews.has(page) && pageViews.size >= MAX_TRACKED_PAGES) {
-    page = OVERFLOW_KEY;
-  }
-
-  const current = pageViews.get(page) ?? 0;
-  pageViews.set(page, current + 1);
-  totalViews++;
-
-  return NextResponse.json({
-    success: true,
-    message: "Tracked.",
-    data: { views: pageViews.get(page) ?? 1 },
-  });
 }
 
-// The read path IS gated: it returns the whole traffic profile of the site,
-// which is nobody's business but the owner's. Without ANALYTICS_SECRET set
-// there is no way to authenticate the caller, so it stays closed.
-export async function GET(
-  req: NextRequest
-): Promise<NextResponse<ApiResponse<{ total: number; pages: Record<string, number> }>>> {
-  const secret = process.env.ANALYTICS_SECRET;
-  if (!secret || req.headers.get("x-analytics-secret") !== secret) {
-    return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 401 });
+/**
+ * Always 204, including on rejection.
+ *
+ * Nothing consumes the body, sendBeacon ignores it, and returning no detail
+ * removes an oracle for probing which paths the allowlist recognises. The
+ * status codes below still differentiate for anyone reading CloudWatch.
+ */
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  if (!checkAnalyticsRateLimit(clientIp(req))) {
+    return new NextResponse(null, { status: 429 });
+  }
+  if (bodyTooLarge(req, MAX_ANALYTICS_BODY_BYTES)) {
+    return new NextResponse(null, { status: 413 });
   }
 
-  return NextResponse.json({
-    success: true,
-    message: "OK",
-    data: {
-      total: totalViews,
-      pages: Object.fromEntries(pageViews),
-    },
-  });
+  const userAgent = req.headers.get("user-agent");
+
+  // Dropped before anything is parsed or written. On a personal portfolio the
+  // preview fetchers behind LinkedIn, Slack and Google can plausibly outnumber
+  // the humans, and a dashboard that counts them is worse than none.
+  if (isBotUserAgent(userAgent)) {
+    return new NextResponse(null, { status: 204 });
+  }
+
+  let parsed: unknown;
+  try {
+    // Read as text and measure before parsing. bodyTooLarge reads content-length
+    // and its own comment notes it cannot see a chunked request that omits the
+    // header; sendBeacon always sets it, but a hand-rolled client need not.
+    const raw = await req.text();
+    if (raw.length > MAX_ANALYTICS_BODY_BYTES) {
+      return new NextResponse(null, { status: 413 });
+    }
+    parsed = JSON.parse(raw);
+  } catch {
+    return new NextResponse(null, { status: 400 });
+  }
+
+  const now = Date.now();
+  const result = validateBatch(parsed, now);
+  if (!result.ok) {
+    return new NextResponse(null, { status: 400 });
+  }
+
+  if (!isAnalyticsConfigured()) {
+    await recordBatchIfConfigured(
+      {
+        batch: result.batch,
+        visitorId: "",
+        country: "XX",
+        device: "desktop",
+        date: utcDate(new Date(now)),
+        now,
+      },
+      false
+    );
+    return new NextResponse(null, { status: 204 });
+  }
+
+  // The server assigns the day from its own receive time. A client clock never
+  // decides which rollup a row lands in, and the salt rotates on the same
+  // boundary so a visitor id is stable within the day it is counted in.
+  const date = utcDate(new Date(now));
+
+  try {
+    const salt = await getVisitorSalt(date);
+    // The raw address and user agent are used here and then dropped. Neither is
+    // stored on any row, so the hash has no preimage anywhere in the table.
+    const visitorId = computeVisitorId(clientIp(req), userAgent ?? "", salt);
+
+    const firstPageview = result.batch.events.find((event) => event.t === "pageview");
+    const referrerHost =
+      firstPageview && firstPageview.t === "pageview" && firstPageview.ref
+        ? normalizeReferrerHost(firstPageview.ref, ownHost())
+        : undefined;
+
+    await recordBatchIfConfigured(
+      {
+        batch: result.batch,
+        visitorId,
+        country: readCountry(req),
+        device: deviceClassFromUserAgent(userAgent),
+        referrerHost,
+        date,
+        now,
+      },
+      true
+    );
+  } catch (err) {
+    // Detail stays in CloudWatch and never reaches the response body. A failed
+    // beacon must not surface to the visitor in any form.
+    console.error("[/api/analytics] ingest failed:", err);
+  }
+
+  return new NextResponse(null, { status: 204 });
 }

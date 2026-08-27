@@ -16,7 +16,9 @@ export default function AskAgentChip() {
   return (
     <button
       type="button"
-      onClick={() => window.dispatchEvent(new Event(OPEN_AGENT_CONSOLE_EVENT))}
+      onClick={() => window.dispatchEvent(
+          new CustomEvent(OPEN_AGENT_CONSOLE_EVENT, { detail: { source: "chip" } })
+        )}
       aria-haspopup="dialog"
       className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-secondary)] focus-visible:text-[var(--text-primary)]"
     >

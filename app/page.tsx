@@ -12,7 +12,6 @@ import HomeWriting from "@/components/sections/HomeWriting";
 import Publications from "@/components/sections/Publications";
 import Contact from "@/components/sections/Contact";
 import IntroOverlay from "@/components/interactive/IntroOverlay";
-import AnalyticsBeacon from "@/components/interactive/AnalyticsBeacon";
 
 // Title and description inherit from the root layout; the canonical and the
 // openGraph block are page-specific (see the note in app/projects/page.tsx on
@@ -117,7 +116,6 @@ export default function HomePage() {
       </div>
       <Footer />
       <IntroOverlay />
-      <AnalyticsBeacon />
     </>
   );
 }

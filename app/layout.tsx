@@ -1,5 +1,6 @@
 import { toJsonLd } from "@/lib/json-ld";
 import AgentConsoleLauncher from "@/components/interactive/AgentConsoleLauncher";
+import AnalyticsProvider from "@/components/interactive/AnalyticsProvider";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/metadata";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
@@ -159,6 +160,10 @@ document.documentElement.dataset.intro="play";
               "Ask my agent about this project" chip on a case study can open
               the console in place instead of navigating home to an anchor. */}
           <AgentConsoleLauncher />
+          {/* Sibling, never a wrapper around {children}: wrapping would put a
+              router subscription above the whole tree and re-render every page
+              on every navigation. It renders null. */}
+          <AnalyticsProvider />
         </ThemeProvider>
       </body>
     </html>

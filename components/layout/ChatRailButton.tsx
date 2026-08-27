@@ -15,7 +15,9 @@ export default function ChatRailButton() {
   return (
     <button
       type="button"
-      onClick={() => window.dispatchEvent(new Event(OPEN_AGENT_CONSOLE_EVENT))}
+      onClick={() => window.dispatchEvent(
+          new CustomEvent(OPEN_AGENT_CONSOLE_EVENT, { detail: { source: "rail" } })
+        )}
       aria-haspopup="dialog"
       className="group mt-4 inline-flex items-center gap-2.5 rounded-full border border-[var(--border)] bg-[var(--surface)] py-1.5 pl-3 pr-2.5 transition-colors duration-200 hover:border-[var(--accent)] hover:bg-[var(--accent-muted)] focus-visible:border-[var(--accent)] focus-visible:bg-[var(--accent-muted)]"
     >
