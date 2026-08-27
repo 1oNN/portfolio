@@ -37,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // genuine updatedAt, and /blog inherits the newest of them.
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${base}/blog`, lastModified: newestPost, changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/projects`, changeFrequency: "monthly", priority: 0.7 },
   ];
