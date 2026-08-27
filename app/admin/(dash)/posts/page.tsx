@@ -2,12 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { BlogPost } from "@/types";
 import { formatDate } from "@/lib/format";
 
-export default function AdminDashboard() {
-  const router = useRouter();
+export default function AdminPostsPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -33,11 +31,6 @@ export default function AdminDashboard() {
     fetchPosts();
   }, [fetchPosts]);
 
-  async function handleLogout() {
-    await fetch("/api/admin/login", { method: "DELETE" });
-    router.push("/admin/login");
-  }
-
   async function handleDelete(id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
     setDeletingId(id);
@@ -55,56 +48,7 @@ export default function AdminDashboard() {
   const caseStudies = posts.filter((p) => p.type === "case-study").length;
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-      {/* Header */}
-      <header
-        style={{
-          borderBottom: "1px solid var(--border)",
-          backgroundColor: "var(--surface)",
-          padding: "0 1.5rem",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "900px",
-            margin: "0 auto",
-            height: "60px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontWeight: 700,
-              fontSize: "1.125rem",
-              color: "var(--accent)",
-            }}
-          >
-            ha<span style={{ color: "var(--accent-secondary)" }}>.</span>{" "}
-            <span style={{ color: "var(--text-muted)", fontWeight: 400, fontSize: "0.875rem" }}>
-              Admin
-            </span>
-          </span>
-
-          <button
-            onClick={handleLogout}
-            style={{
-              padding: "0.375rem 0.875rem",
-              borderRadius: "6px",
-              border: "1px solid var(--border)",
-              backgroundColor: "transparent",
-              color: "var(--text-muted)",
-              fontSize: "0.8rem",
-              cursor: "pointer",
-              fontFamily: "var(--font-mono)",
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </header>
+    <div>
 
       <main style={{ maxWidth: "900px", margin: "0 auto", padding: "2rem 1.5rem" }}>
         {/* Stats */}
