@@ -70,3 +70,6 @@ data/
 # theses, reference letters). Anything needed by the site gets copied out
 # deliberately, one file at a time.
 private/
+
+# Artifact hub. Indexes owner-only material, never committed.
+reports/

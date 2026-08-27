@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: Lint, type-check & build
+    name: Lint, type-check, test & build
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,12 @@ jobs:
 
       - name: Type-check
         run: npm run type-check
+
+      # The vitest suites cover the markdown sanitiser and the analytics
+      # pipeline. They are fast and have no external dependencies, so there is
+      # no reason for them to sit outside the gate.
+      - name: Test
+        run: npm test
 
       - name: Build
         run: npm run build

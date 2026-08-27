@@ -82,6 +82,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 - **Interactive skills section** that derives skill → project links from real data instead of a maintained mapping
 - **Blog** with table of contents, reading progress, copy-link headings, prev/next, and a DynamoDB-backed admin panel
 - **Contact form** with AWS SES delivery, plus CV downloads with tracking
+- **Cookieless analytics** - page views, scroll depth, dwell time and outbound clicks, with an admin dashboard that replays an individual visit as a timeline. Visitors are counted by a daily-rotating hash, so nothing is stored on the device and no consent banner is needed. See the Analytics engineering note below for what breaks it
 - **SEO** - per-page OpenGraph images, JSON-LD (Person, ScholarlyArticle, BlogPosting, BreadcrumbList, CollectionPage), sitemap, robots, web manifest
 - **Dark/light theming** on CSS custom properties, toggled client-side
 - **A sub-second entrance intro**, once per session, decided before first paint so it never covers an already-painted page
@@ -99,7 +100,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 | Email | AWS SES | Contact form delivery |
 | Database | AWS DynamoDB | Blog posts, contacts, agent logs, CV downloads |
 | Hosting | AWS Amplify Hosting (SSR) | `amplify.yml` drives the build |
-| CI | GitHub Actions | Type-check + production build on every push and PR |
+| CI | GitHub Actions | Lint, type-check, vitest and a production build on every push and PR |
 
 Runtime dependencies are deliberately few: `next`, `react`, `next-themes`, `react-icons`, `clsx`, `tailwind-merge`, `uuid`, and three AWS SDK clients. That's the whole list.
 
@@ -140,7 +141,6 @@ Create `.env.local`:
 ```ini
 ADMIN_PASSWORD=your-strong-password
 SESSION_SECRET=at-least-32-random-characters
-ANALYTICS_SECRET=optional-secret-for-reading-page-view-counts
 
 APP_AWS_REGION=eu-central-1
 APP_AWS_ACCESS_KEY_ID=
@@ -152,6 +152,7 @@ DYNAMODB_BLOG_TABLE=portfolio-blog
 DYNAMODB_CONTACTS_TABLE=portfolio-contacts
 DYNAMODB_AGENT_TABLE=portfolio-agent-logs
 DYNAMODB_DOWNLOADS_TABLE=portfolio-downloads
+DYNAMODB_ANALYTICS_TABLE=portfolio-analytics
 
 GROQ_API_KEY=
 NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
@@ -161,7 +162,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 
 **Region:** `APP_AWS_REGION` defaults to `eu-central-1`, where the SES identity and the DynamoDB tables live. `AWS_REGION` is deliberately *not* read as a fallback: Lambda always injects it with the function's own region, so it is never absent in production and would quietly override the default, making the region an accident of where Amplify runs the function rather than a decision. SES identities do not replicate across regions - an address verified in one region is unverified everywhere else.
 
-`ANALYTICS_SECRET` is optional and gates only the read side of `/api/analytics`. The write side is an unauthenticated browser beacon by design, and stores nothing but a path and a counter.
+`DYNAMODB_ANALYTICS_TABLE` has no default, unlike the others: a default would silently write to a table that does not exist and throw on every beacon, whereas leaving it unset simply turns analytics off. It also has to be listed in the `env | grep` line in `amplify.yml`, or it reads as `undefined` in the SSR Lambda while looking correctly set in the Amplify Console.
 
 </details>
 
@@ -179,6 +180,17 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 | `portfolio-agent-logs` | Agent conversation logs (write-only) |
 | `portfolio-downloads` | CV download tracking (write-only) |
 
+`portfolio-analytics` is the exception and does **not** use `id`. It is a single
+table holding six item types, so it takes a composite key `pk` (String) / `sk`
+(String), plus one GSI named `gsi1` on `gsi1pk` / `gsi1sk` projecting `ALL`, and
+TTL enabled on the attribute `ttl`:
+
+```bash
+aws dynamodb create-table --table-name portfolio-analytics --region eu-central-1 \n  --billing-mode PAY_PER_REQUEST \n  --attribute-definitions \n    AttributeName=pk,AttributeType=S AttributeName=sk,AttributeType=S \n    AttributeName=gsi1pk,AttributeType=S AttributeName=gsi1sk,AttributeType=S \n  --key-schema AttributeName=pk,KeyType=HASH AttributeName=sk,KeyType=RANGE \n  --global-secondary-indexes '[{"IndexName":"gsi1","KeySchema":[{"AttributeName":"gsi1pk","KeyType":"HASH"},{"AttributeName":"gsi1sk","KeyType":"RANGE"}],"Projection":{"ProjectionType":"ALL"}}]'
+
+aws dynamodb update-time-to-live --table-name portfolio-analytics --region eu-central-1 \n  --time-to-live-specification "Enabled=true,AttributeName=ttl"
+```
+
 **2. SES:** verify `SES_FROM_EMAIL` in the AWS SES console. In the SES sandbox, `CONTACT_TO_EMAIL` has to be verified too.
 
 **3. IAM permissions** for the credentials above:
@@ -186,6 +198,7 @@ NEXT_PUBLIC_SITE_URL=https://hammadahmad.co.uk
 - `ses:SendEmail` on the from-address identity
 - `dynamodb:PutItem`, `GetItem`, `UpdateItem`, `DeleteItem`, `Scan` on `portfolio-blog`
 - `dynamodb:PutItem` on `portfolio-contacts`, `portfolio-agent-logs`, and `portfolio-downloads`
+- `dynamodb:PutItem`, `UpdateItem`, `GetItem`, `Query`, `BatchWriteItem` on `portfolio-analytics`, plus `Query` on `portfolio-analytics/index/*`. Grant **no** `Scan`: the read layer has none, and withholding it means it cannot quietly regress into one.
 
 </details>
 
@@ -207,7 +220,7 @@ One non-obvious step lives in the build phase: Amplify Console variables exist a
 
 <br>
 
-`.github/workflows/ci.yml` runs `npm run type-check` and `npm run build` on every push and PR to `main`, with dummy values for the build-time secrets. There is no test framework - type-check plus a clean build is the gate.
+`.github/workflows/ci.yml` runs `npm run lint`, `npm run type-check`, `npm test` and `npm run build` on every push and PR to `main`, with dummy values for the build-time secrets. Lint gates on errors, not warnings. The vitest suites cover the markdown sanitiser, the post-embed splitter and the analytics pipeline.
 
 </details>
 
@@ -217,18 +230,22 @@ One non-obvious step lives in the build phase: Amplify Console variables exist a
 
 ```
 app/
-  admin/          → Cookie-gated post editor (HMAC session, see middleware.ts)
+  admin/          → Cookie-gated analytics dashboard, session trails and post
+                    editor (HMAC session, see middleware.ts). The (dash) route
+                    group adds the nav shell without changing any URL.
   api/            → agent, contact, blog, admin/login, track-download, analytics, health
   blog/, projects/→ Listings, detail pages, and per-slug opengraph-image routes
 components/
   blog/           → PostCard, TableOfContents, CopyLink
   case-study/     → CaseStudyLayout, ListingCard, AskAgentChip
   interactive/    → Theme toggle, TerminalAgent + AgentConsole (Ctrl+K),
-                    ProjectPreview (hover panel), IntroOverlay, CountUp, beacon
+                    ProjectPreview (hover panel), IntroOverlay, CountUp,
+                    AnalyticsProvider (the one capture mount point)
   layout/         → LeftRail + RailNav (home identity rail), ChatRailButton, Footer
   project-visuals/→ Per-project hero, architecture, results, and demo visuals
   sections/       → About, Skills, Experience, HomeProjects, HomeWriting,
                     Publications, Contact, CvDownloads
+  admin/          → Dashboard panels, charts, session trail rendering
   ui/             → SectionHeader
 hooks/            → useTerminalAgent, useTypewriter
 lib/              → constants, case-studies, cv-config, post-labels, seed-posts,
@@ -299,6 +316,24 @@ NextFontError: Failed to fetch `JetBrains Mono` from Google Fonts.
 ```
 
 That happened here on a green commit and passed on re-run with no code change, so treat a lone font-fetch failure as transient before hunting for a real cause. It can hit the Amplify build as easily as CI. The permanent fix is `next/font/local` with the woff2 files committed, which removes the dependency entirely.
+
+</details>
+
+<details>
+<summary><b>Analytics</b> - cookieless by construction, and the four things that break it</summary>
+
+<br>
+
+No cookies, no `localStorage`, no `sessionStorage`, nothing written to the device at all. That is a hard constraint rather than a preference: anything stored on the device engages PECR Reg 6 and would need a consent banner. Visitors are counted with `SHA-256(salt + ip + user agent)` where the salt is random, stored in the table, rotated at UTC midnight and deleted two days later. That makes it a counting mechanism rather than a tracking one, and it is why uniques are same-day only. Do **not** "simplify" the salt into `HMAC(SESSION_SECRET, date)` - a derived salt is never discarded, so anyone holding the secret could recompute any past day's salt and re-identify the whole 90-day log from a list of IPs.
+
+Four things that look right and are not:
+
+- **`pageshow` with `persisted: true` does not re-run the React effect.** A bfcache restore never unmounts `AnalyticsProvider`, so `usePathname` does not change. Without the explicit `startPage()` in that handler, every back-button visit silently disappears.
+- **Middle-click fires `auxclick`, not `click`.** Both listeners are needed or every "open in a background tab" is invisible. The click handler also must not skip `defaultPrevented` events: `RailNav` prevents default on every in-page anchor to smooth-scroll, so skipping them erases all home-page section navigation.
+- **DynamoDB TTL is epoch *seconds*.** `Date.now()` in milliseconds is a timestamp in the year 58,000, which DynamoDB ignores, so the row lives forever. Rollup rows must have no `ttl` attribute at all, not `0`.
+- **A new env var must be added to the `env | grep` line in `amplify.yml`.** Console variables exist at build time only.
+
+Counters are protected from browser beacon retries by a conditional write on a per-flush batch marker: a replayed batch still rewrites its event rows, which are idempotent, but its `ADD`s are skipped. Dwell time is treated as a proposal, not a measurement - clamped against how long the server has actually known about the session, then against a 30-minute ceiling.
 
 </details>
 
