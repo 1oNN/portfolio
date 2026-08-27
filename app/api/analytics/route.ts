@@ -39,10 +39,12 @@ export const runtime = "nodejs";
 const checkAnalyticsRateLimit = createRateLimiter({ limit: 200, windowMs: 10 * 60 * 1000 });
 
 /**
- * Amplify fronts the SSR Lambda with a managed CloudFront distribution, but the
+ * Amplify fronts the SSR Lambda with a managed CloudFront distribution, and the
  * viewer-country header only reaches the origin if the origin request policy
- * forwards it, and Amplify does not expose that setting. So this is best effort
- * across the names any fronting CDN might use, falling back to XX.
+ * forwards it. Amplify does not expose that setting, so it had to be confirmed
+ * empirically: verified arriving in production on 2026-08-27, giving a correct
+ * GB on a real request. The other names are kept as fallbacks in case the site
+ * ever moves behind a different CDN.
  */
 const COUNTRY_HEADERS = [
   "cloudfront-viewer-country",
@@ -59,9 +61,11 @@ function readCountry(req: NextRequest): string {
     if (value) return normalizeCountry(value);
   }
 
-  // One-shot diagnostic, so the real header name can be confirmed against
-  // production once and this block then deleted. It logs names only, never
-  // values, because the header set includes cookies and forwarded addresses.
+  // Kept as a regression canary rather than deleted now the header is
+  // confirmed: if CloudFront ever stops forwarding it, every visit silently
+  // becomes XX and nothing else would say why. One line per Lambda instance,
+  // and only when the header is genuinely absent. Names only, never values,
+  // because the header set includes cookies and forwarded addresses.
   if (!loggedHeaderNames) {
     loggedHeaderNames = true;
     console.info("[/api/analytics] no country header; saw:", [...req.headers.keys()].join(","));
