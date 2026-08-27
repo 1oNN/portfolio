@@ -78,7 +78,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 - **Editorial home page** - two-column layout with a sticky identity rail and scroll-spy nav, covering About, Skills, Experience, Projects, Writing, Publications, and Contact
 - **Six project case studies** with hand-built SVG visuals, results charts, and two interactive demos backed by published data only
 - **Hover previews on the project rows** - a pointer-following panel that cycles each project's own visuals, capability-gated so touch devices attach no handlers at all
-- **AI chat console** (Groq, `llama-3.1-8b-instant`) on <kbd>Ctrl</kbd>+<kbd>K</kbd> from any page, with prompt-injection guards in `lib/agent-guard.ts`
+- **AI chat console** (Groq, `openai/gpt-oss-120b`, overridable with `GROQ_MODEL`) on <kbd>Ctrl</kbd>+<kbd>K</kbd> from any page, with prompt-injection guards in `lib/agent-guard.ts`
 - **Interactive skills section** that derives skill → project links from real data instead of a maintained mapping
 - **Blog** with table of contents, reading progress, copy-link headings, prev/next, and a DynamoDB-backed admin panel
 - **Contact form** with AWS SES delivery, plus CV downloads with tracking
@@ -96,7 +96,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 | Styling | Tailwind CSS 3.4 | CSS custom properties carry the token layer |
 | Type / fonts | Inter, Space Grotesk, JetBrains Mono | `next/font/google` - self-hosted at runtime, fetched at build time (see the note below) |
 | Visuals | Hand-authored SVG | No chart library, no animation library |
-| AI agent | Groq - `llama-3.1-8b-instant` | Input filter + output canary in front of it |
+| AI agent | Groq - `openai/gpt-oss-120b` | Input filter + output canary in front of it. Model name is read from `GROQ_MODEL`, because Groq retires models without notice |
 | Email | AWS SES | Contact form delivery |
 | Database | AWS DynamoDB | Blog posts, contacts, agent logs, CV downloads |
 | Hosting | AWS Amplify Hosting (SSR) | `amplify.yml` drives the build |

@@ -7,6 +7,19 @@ import { GUARD_REFUSAL, isInjectionAttempt, leaksSystemPrompt } from "@/lib/agen
 import { awsClientConfig, hasAwsCredentials } from "@/lib/aws";
 import { bodyTooLarge, clientIp, createRateLimiter } from "@/lib/rate-limit";
 
+/**
+ * Groq retires models without notice: llama-3.1-8b-instant disappeared from the
+ * account entirely, every request 404'd, and the route surfaced only a generic
+ * "failed to get a response" while the real reason sat in CloudWatch. Reading
+ * the name from the environment makes the next retirement a Console edit rather
+ * than a deploy.
+ *
+ * gpt-oss-120b replaced it: same latency as the 20b on this workload, and the
+ * larger model holds the guard rails better, which matters because the system
+ * prompt is written for one that cannot be trusted to hold them alone.
+ */
+const GROQ_MODEL = process.env.GROQ_MODEL ?? "openai/gpt-oss-120b";
+
 // Per-IP rate limit: 20 requests/hour. Resets on cold start - acceptable
 // for a portfolio agent since abuse cost is primarily GROQ quota, not data.
 const checkRateLimit = createRateLimiter({ limit: 20, windowMs: 60 * 60 * 1000 });
@@ -104,7 +117,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${groqKey}`,
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: GROQ_MODEL,
         max_tokens: 500,
         temperature: 0.3,
         messages: groqMessages,
