@@ -64,7 +64,7 @@ export default function PrivacyPage() {
       <Section title="CV downloads">
         <P>
           Downloading a CV records which of the two CVs it was, the time, the referring page and
-          your browser user-agent. No IP address, no name.
+          your browser user-agent.
         </P>
       </Section>
 
@@ -125,19 +125,6 @@ export default function PrivacyPage() {
           If your browser sends a Global Privacy Control or Do Not Track signal, the site records
           nothing at all for your visit. You can also block the request to <Code>/api/analytics</Code>{" "}
           and the site will work exactly as before.
-        </P>
-        <P>
-          If you think I have handled your data badly you can complain to the Information
-          Commissioner&apos;s Office at{" "}
-          <a
-            href="https://ico.org.uk"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="text-[var(--accent)] underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
-          >
-            ico.org.uk
-          </a>
-          .
         </P>
       </Section>
 
