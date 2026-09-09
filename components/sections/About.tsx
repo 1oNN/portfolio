@@ -23,7 +23,7 @@ export default function About() {
           statement
           eyebrow="About"
           title="Background"
-          description="I build production LLM systems - retrieval pipelines that pair vector search with knowledge graphs, so the answers stay grounded and citable."
+          description="I build production LLM systems - semantic search and retrieval pipelines, held to what the data behind them can actually support."
         />
 
         <div className="mt-10 space-y-12">
@@ -43,18 +43,25 @@ export default function About() {
                 it fast enough to put in front of real users.
               </p>
               <p>
-                For my dissertation I built FinLaw-UK, a graph-augmented RAG system for UK
-                financial regulation where a Neo4j knowledge graph resolves every citation before
-                the answer ships, and refuses rather than answer when it cannot. After submitting,
-                I re-measured my own evaluation and found two of the reported figures were regex
-                shape-checks rather than correctness measures; I published the correction and a
-                report on which numbers reproduce. At Outlyst I cut mean call latency 54%, from
-                2.4s to 1.1s across 2,100+ calls, by profiling async I/O and restructuring
-                connection pooling.
+                Right now I build and run Jobzyl on my own: a live job search aggregator over 29
+                integrated sources and a 3.4M row Postgres index, with semantic CV-to-posting
+                matching in pgvector. The half I care about is what it refuses to say. Pay renders
+                in the period the employer quoted or not at all, and a posting that names no
+                recognised skill reports as too thin to score rather than as a confident 0%.
               </p>
               <p>
-                I&apos;m interested in roles where I can keep pushing that boundary - LLM
-                infrastructure, graph-based retrieval, or high-throughput ML systems.
+                Before that, at Outlyst, I cut mean call latency 54%, from 2.4s to 1.1s across
+                2,100+ calls, by profiling async I/O and restructuring connection pooling. For my
+                dissertation I built FinLaw-UK, a graph-augmented RAG system for UK financial
+                regulation where a Neo4j knowledge graph resolves every citation before the answer
+                ships, and refuses rather than answer when it cannot. After submitting, I
+                re-measured my own evaluation and found two of the reported figures were regex
+                shape-checks rather than correctness measures; I published the correction and a
+                report on which numbers reproduce.
+              </p>
+              <p>
+                I&apos;m interested in roles where I can keep pushing that boundary - semantic
+                search and retrieval at scale, LLM infrastructure, or high-throughput ML systems.
               </p>
             </div>
 

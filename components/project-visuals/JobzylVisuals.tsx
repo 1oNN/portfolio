@@ -21,9 +21,9 @@ interface Props {
 // source attribution. Every row in these recordings is a genuine posting.
 //
 // Both start at the search rather than the landing page, which is not a framing
-// preference: the product's hero still advertises a 2M index, and this case
-// study withdraws that number. Showing it here would contradict the page it
-// sits on.
+// preference: the product's hero still advertises a 2M index and this page now
+// carries 3.4M rows. Showing the hero would put two different numbers on one
+// screen.
 //
 // Two recordings, one per theme, because the product's dark mode is a different
 // palette rather than an inverted one. The still below is a frame from partway
@@ -82,17 +82,18 @@ function StillPair() {
 export function JobzylArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
 
-  // Only boards Jobzyl discloses publicly. LinkedIn, Glassdoor, Google Jobs and
-  // ZipRecruiter are reached through one provider's own fan-out and are not
-  // entries in the registry - naming them as sources here would be false.
+  // 23 boards plus 6 ATS platforms, five boards named and the rest counted.
+  // LinkedIn, Glassdoor, Google Jobs and ZipRecruiter are reached through one
+  // provider's own fan-out and are not entries in the registry - naming them as
+  // sources here would be false.
   const sources = [
     { name: "Reed", sub: "UK" },
     { name: "Adzuna", sub: "19 countries" },
     { name: "Careerjet", sub: "global" },
     { name: "Jooble", sub: "global" },
     { name: "USAJobs", sub: "US federal" },
-    { name: "+15 boards", sub: "incl. remote-only" },
-    { name: "7 ATS APIs", sub: "company careers" },
+    { name: "+18 boards", sub: "incl. remote-only" },
+    { name: "6 ATS APIs", sub: "company careers" },
   ];
 
   return (

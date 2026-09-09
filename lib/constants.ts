@@ -12,21 +12,23 @@ export const PROJECTS: Project[] = [
   {
     id: "jobzyl",
     title: "Jobzyl",
-    tagline: "One search across 20 job boards, with ATS resume matching",
+    tagline: "One search across 29 job sources, with semantic CV matching",
     longDescription:
-      "Jobzyl searches 20 job boards and thousands of company careers pages in one query, over a Postgres index of more than 2M live postings. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a Postgres function that weights the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, and a liveness sweep marks a posting dead only on positive evidence. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic and Claude-scored matching are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
+      "Jobzyl searches 29 integrated sources in one query - 23 job boards plus six applicant tracking systems read directly, so a company's own careers page is a source rather than an aggregator's copy of it - over a 3.4M row Postgres index spanning 26 countries. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a weighted Postgres full-text function that puts the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, a liveness sweep marks a posting dead only on positive evidence, and a posting naming no recognised skill reports as too thin to score rather than as a confident 0% match. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic matching (384-dimension multilingual embeddings in pgvector) and Claude scoring are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables, behind 1,950 automated tests and 11 CI build gates. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
-    // Measured, not estimated. The posting count is the completed 2026-08-19
-    // sweep. An earlier "2M+" sat here for months as a guess and happened to
-    // land near the truth; this one is a census with a date on it. There is no
-    // first-result timing here on purpose - nothing has timed it since June.
+    // Measured, not estimated - these are the figures the CV carries. Row count
+    // is the whole index rather than a live-posting claim, because liveness has
+    // been probed on a fraction of it. The country figure counts countries with
+    // rows in the index, not search regions: an earlier "60+" came from counting
+    // distinct location strings and is withdrawn. There is no first-result
+    // timing here on purpose - nothing has timed it since June.
     metrics: [
-      { value: "2M+", label: "Live postings" },
-      { value: "20", label: "Job boards searched" },
-      { value: "61,563", label: "Duplicate rows collapsed" },
+      { value: "3.4M", label: "Rows in the index" },
+      { value: "29", label: "Sources integrated" },
+      { value: "26", label: "Countries covered" },
     ],
   },
   {
@@ -117,10 +119,30 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Employment and research posts only. Jobzyl sat here while the CVs carried it
-// as self-employment; both now file it under projects, so it lives in PROJECTS
-// and CASE_STUDIES and nowhere else - do not re-add it as a role.
+// Follows the CV. Jobzyl has moved between this list and PROJECTS twice now,
+// because the CV kept changing its mind about whether founding it is a role;
+// the current CV opens Experience with it, so it is a role here as well as a
+// project. If it moves again, move it here first and let PROJECTS keep its own
+// entry - the two are not exclusive.
 export const EXPERIENCE: Experience[] = [
+  {
+    id: "jobzyl",
+    company: "Jobzyl",
+    role: "Founder & Sole Engineer",
+    type: "engineering",
+    location: "Bradford, UK",
+    startDate: "Apr 2026",
+    endDate: "Present",
+    current: true,
+    responsibilities: [
+      "Build and operate a live, public job search aggregator end to end: 29 provider integrations and 6 applicant tracking systems, a 3.4M row Postgres index across 26 countries, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
+      "Shipped semantic CV-to-posting matching in production: 384-dimension multilingual sentence embeddings over pgvector against the full corpus, gated so a posting naming no recognised skill reports as too thin to score rather than a confident 0%.",
+      "Built the LLM layer on Anthropic Claude (CV scoring, cover letter, interview prep), with prompt-injection defences on every call, per-user quotas and documented fail-open behaviour.",
+      "Trained a pay regression model against the shipped salary benchmark as baseline, split by employer group to prevent leakage: MAE 27,420 to 24,001, MdAPE 18.9% to 16.4%. Reported per country and seniority, and held back from deployment.",
+      "Rebuilt search ranking as a weighted Postgres full-text function with a title-relevance layer, after measuring that 27.4% of returned results had none of the user's query terms in the job title.",
+      "Hardened the platform: Fernet field encryption of CV text, row-level security across 23 tables, GDPR export and deletion, behind 1,950 automated tests and 11 CI build gates.",
+    ],
+  },
   {
     id: "outlyst",
     company: "Outlyst",
@@ -135,6 +157,7 @@ export const EXPERIENCE: Experience[] = [
       "Enhanced agent capabilities to detect gatekeepers and schedule callbacks rather than dead-ending the transfer.",
       "Conducted rigorous backend profiling to isolate inefficient asynchronous I/O and connection pooling, driving a 54% reduction in systemic latency (2.4s → 1.1s).",
       "Built an internal micro-CRM with automated contact-extraction pipelines, removing external CRM licensing costs.",
+      "Built VoiceFlow, a FastAPI service running Whisper large-v3 in-process over the 2,100+ call recordings, threading each export so blocking downloads and torch inference stay off the asyncio event loop.",
     ],
   },
   {
@@ -157,7 +180,13 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "comsats-ra",
     company: "COMSATS University Islamabad",
-    role: "Research Assistant, Data Science",
+    // "Intern" is what both the CV and the reference carry. The site had it as
+    // "Assistant", which is a different job title, so it read as inflation
+    // against the CV rather than as shorthand.
+    role: "Research Intern, Data Science",
+    // Still typed research, not internship: the badge is about the kind of work
+    // (it produced the Springer paper), and "internship" would recolour it into
+    // the engineering palette.
     type: "research",
     location: "Islamabad, Pakistan",
     startDate: "Jul 2023",
@@ -215,9 +244,9 @@ export const PUBLICATIONS: Publication[] = [
 ];
 
 /**
- * Skills, grouped as both CVs group them so the two can be diffed at a glance.
- * Every entry here appears on at least one CV - do not add anything that does
- * not, and do not drop anything that does.
+ * Skills, grouped and ordered exactly as the CV groups them, so the two can be
+ * diffed at a glance. Every entry here appears on the CV - do not add anything
+ * that does not, and do not drop anything that does.
  *
  * `alias` exists only where the CV's wording differs from the string used in a
  * project's `tech` array; the Skills section matches on it to work out which
@@ -243,14 +272,14 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "PyTorch" },
       { name: "scikit-learn" },
       { name: "XGBoost" },
-      { name: "LightGBM" },
-      { name: "RAG" },
       { name: "Sentence Transformers" },
+      { name: "fastembed (ONNX)", usedIn: ["jobzyl"] },
+      { name: "pgvector", usedIn: ["jobzyl"] },
+      { name: "Semantic search", usedIn: ["finlaw-uk", "jobzyl"] },
+      { name: "RAG" },
       { name: "Cross-encoder re-ranking", usedIn: ["finlaw-uk"] },
       { name: "RAGAS", alias: ["RAGAS"] },
-      { name: "Vector embeddings", usedIn: ["finlaw-uk"] },
-      { name: "Semantic search", usedIn: ["finlaw-uk"] },
-      { name: "Ensemble methods", alias: ["Random Forest"] },
+      { name: "Anthropic Claude API", usedIn: ["jobzyl"] },
       { name: "Ollama" },
       { name: "Whisper" },
     ],
@@ -260,28 +289,33 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
     skills: [
       { name: "Python" },
       { name: "TypeScript" },
-      { name: "JavaScript" },
       { name: "SQL" },
+      { name: "PL/pgSQL", usedIn: ["jobzyl"] },
       { name: "FastAPI" },
+      { name: "asyncio", alias: ["AsyncIO"] },
       { name: "Flask" },
       { name: "REST APIs", alias: ["REST API"] },
-      { name: "React", alias: ["React.js"] },
-      { name: "Next.js" },
       { name: "PostgreSQL" },
+      { name: "Postgres full-text search", usedIn: ["jobzyl"] },
       { name: "Supabase" },
       { name: "Neo4j" },
+      { name: "Next.js" },
+      { name: "React", alias: ["React.js"] },
       { name: "pandas / NumPy", alias: ["pandas"] },
     ],
   },
   {
-    label: "MLOps, cloud & DevOps",
+    label: "Infrastructure & quality",
     skills: [
-      { name: "MLflow" },
+      { name: "AWS", alias: ["AWS"] },
+      { name: "Oracle Cloud" },
       { name: "Docker" },
       { name: "Git" },
-      { name: "GitHub Actions", alias: ["CI/CD"] },
-      { name: "AWS", alias: ["AWS"] },
       { name: "Linux" },
+      { name: "CI build gates", alias: ["CI/CD"], usedIn: ["jobzyl"] },
+      { name: "pytest", usedIn: ["jobzyl"] },
+      { name: "Playwright", usedIn: ["jobzyl"] },
+      { name: "Sentry", usedIn: ["jobzyl"] },
     ],
   },
 ];

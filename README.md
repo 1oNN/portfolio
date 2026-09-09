@@ -293,7 +293,7 @@ An 8B model does not hold the line on instructions alone, so `lib/agent-guard.ts
 
 <br>
 
-**CV publishing.** Two CVs ship from `public/cv/`, labelled by audience. To add or swap one, drop the PDF in and edit `AVAILABLE_CVS` in `lib/cv-config.ts` - the About chips, the agent prompt, and the download-tracking validation all read that list. An empty list hides the CV UI entirely.
+**CV publishing.** One CV ships from `public/cv/`. To add or swap one, drop the PDF in and edit `AVAILABLE_CVS` in `lib/cv-config.ts` - the About chips, the agent prompt, and the download-tracking validation all read that list. With more than one entry, label them by audience so the visitor is not guessing which they get. An empty list hides the CV UI entirely.
 
 **Seed posts.** `lib/seed-posts.ts` ships posts inside the bundle so the blog has content without a DB write. They are merged into the published read path only, and a real DB post always wins on a slug collision.
 

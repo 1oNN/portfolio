@@ -21,12 +21,14 @@ function findProfilePhoto(): string | null {
 }
 
 // Each figure carries its source: three unlabelled numbers read as one
-// achievement set, which they are not - two are from Outlyst, one is from a
-// public-dataset model benchmark.
+// achievement set, which they are not - they come from three different pieces
+// of work. One each, current first. The Outlyst call volume (2,100+) came out
+// when Jobzyl went in, because two figures from the same contract crowded out
+// the current role.
 const STATS = [
+  { value: "3.4M", label: "Rows indexed", source: "Jobzyl" },
   { value: "54%", label: "Latency cut", source: "Outlyst" },
   { value: "93%", label: "Random Forest accuracy", source: "BRFSS 2015" },
-  { value: "2,100+", label: "Calls handled", source: "Outlyst" },
 ];
 
 // Resolved once at module load rather than on every render: the filename is
@@ -80,10 +82,8 @@ export default function LeftRail() {
           style={{ animationDelay: "120ms" }}
         >
           MSc Artificial Intelligence. I build{" "}
-          <strong className="font-semibold text-[var(--text-primary)]">LLM systems</strong>,{" "}
-          <strong className="font-semibold text-[var(--text-primary)]">
-            graph-augmented retrieval
-          </strong>
+          <strong className="font-semibold text-[var(--text-primary)]">semantic search</strong>,{" "}
+          <strong className="font-semibold text-[var(--text-primary)]">LLM and RAG systems</strong>
           , and the latency work that makes them usable in production.
         </p>
 

@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 
+import { SITE_DESCRIPTION } from "@/lib/metadata";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Hammad Ahmad - AI/ML Engineer",
     short_name: "Hammad Ahmad",
-    description:
-      "AI/ML Engineer working on graph-augmented retrieval, LLM evaluation, and latency optimisation. MSc Artificial Intelligence (Merit), University of Bradford.",
+    // Read from lib/metadata rather than copied: this string had already drifted
+    // once from the one the pages serve.
+    description: SITE_DESCRIPTION,
     start_url: "/",
     display: "browser",
     background_color: "#0d1b2a",
