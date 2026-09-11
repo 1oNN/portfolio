@@ -107,7 +107,7 @@ export default function DedupeKeyExplorer() {
 
   return (
     <div
-      className="my-10 rounded-xl border p-5 sm:p-6"
+      className="post-embed my-10 rounded-xl border p-5 sm:p-6"
       style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
     >
       <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>

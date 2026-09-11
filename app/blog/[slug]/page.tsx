@@ -165,14 +165,17 @@ export default async function BlogPostPage({ params }: Props) {
 
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
+              {/* Links, not labels: a tag is the one thing on this page a
+                  reader might want more of, and /blog reads ?tag= on arrival. */}
               {post.tags.map((tag) => (
-                <span
+                <Link
                   key={tag}
-                  className="rounded px-2 py-0.5 font-mono text-[11px] text-[var(--text-secondary)]"
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  className="rounded px-2 py-0.5 font-mono text-[11px] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
                   style={{ backgroundColor: "var(--surface-elevated)" }}
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}

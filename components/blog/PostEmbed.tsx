@@ -1,6 +1,9 @@
+import BandYieldExplorer from "./embeds/BandYieldExplorer";
 import DedupeKeyExplorer from "./embeds/DedupeKeyExplorer";
 import FacetCountExplorer from "./embeds/FacetCountExplorer";
 import MatchPathExplorer from "./embeds/MatchPathExplorer";
+import StreamLeakExplorer from "./embeds/StreamLeakExplorer";
+import WorkingSetExplorer from "./embeds/WorkingSetExplorer";
 
 /**
  * Every embed a post body may reference by `[[embed:id]]`.
@@ -13,9 +16,12 @@ import MatchPathExplorer from "./embeds/MatchPathExplorer";
  * the data around them are in the server HTML too.
  */
 const EMBEDS: Record<string, React.ComponentType> = {
+  "band-yield": BandYieldExplorer,
   "dedupe-key": DedupeKeyExplorer,
   "facet-counts": FacetCountExplorer,
   "match-paths": MatchPathExplorer,
+  "stream-leak": StreamLeakExplorer,
+  "working-set": WorkingSetExplorer,
 };
 
 export default function PostEmbed({ id }: { id: string }) {

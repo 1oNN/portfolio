@@ -54,11 +54,23 @@ const collectionLd = {
 // on every request. The ?category= filter now lives in ProjectsFilter, a client
 // leaf; the cards are still built here so lib/case-studies stays server-side.
 export default function ProjectsPage() {
-  const cards: ProjectCard[] = PROJECTS.map((p) => ({
-    id: p.id,
-    category: p.category,
-    node: <ListingCard project={p} caseStudy={getCaseStudy(p.id)} />,
-  }));
+  const cards: ProjectCard[] = PROJECTS.map((p) => {
+    const caseStudy = getCaseStudy(p.id);
+    // The stack the card actually shows, so a chip always corresponds to
+    // something visible on it. Falls back to project.tech where there is no
+    // case study, which is the same rule ListingCard uses to pick its pills.
+    const tech = caseStudy?.primaryStack ?? p.tech;
+    return {
+      id: p.id,
+      category: p.category,
+      // Flattened here rather than in the client: the card is a rendered node
+      // by the time it crosses the boundary, so the search box has no text of
+      // its own to read.
+      search: [p.title, p.tagline, caseStudy?.tackles ?? "", ...tech].join(" "),
+      tech,
+      node: <ListingCard project={p} caseStudy={caseStudy} />,
+    };
+  });
 
   // The lead pair - Jobzyl and FinLaw-UK, the first two in PROJECTS - gets the
   // large treatment. Rendered separately because it is a different card size.

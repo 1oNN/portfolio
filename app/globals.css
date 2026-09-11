@@ -207,6 +207,21 @@ body {
     animation: glowDrift 38s ease-in-out infinite alternate-reverse;
   }
 
+  /* Listing reflow after a filter change. The container is keyed on the
+     filter, so React remounts it and this replays; a short stagger on the
+     first few children makes it read as a new set arriving rather than rows
+     swapping under the reader. Capped at six so a long list does not crawl.
+     Reduced-motion is covered by the global duration-zeroing rule. */
+  .filter-reveal > * {
+    animation: filterIn 0.32s ease-out backwards;
+  }
+  .filter-reveal > *:nth-child(1) { animation-delay: 0ms; }
+  .filter-reveal > *:nth-child(2) { animation-delay: 28ms; }
+  .filter-reveal > *:nth-child(3) { animation-delay: 56ms; }
+  .filter-reveal > *:nth-child(4) { animation-delay: 84ms; }
+  .filter-reveal > *:nth-child(5) { animation-delay: 112ms; }
+  .filter-reveal > *:nth-child(n + 6) { animation-delay: 140ms; }
+
   /* Scroll-driven section reveal (reuses the `rise` keyframes). Base state
      is fully visible: only browsers with scroll-timeline support opt in, and
      reduced-motion opts back out explicitly - the global duration-zeroing
@@ -242,6 +257,13 @@ body {
 @layer base {
   @keyframes rise {
     from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Shorter and shallower than `rise`: this fires on every keystroke in the
+     search box, so it has to settle before the next one lands. */
+  @keyframes filterIn {
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: none; }
   }
 
@@ -419,6 +441,10 @@ section {
 .blog-content pre code { background: none; padding: 0; color: var(--text-secondary); }
 .blog-content ul { list-style: none; margin-bottom: 1rem; }
 .blog-content ul li::before { content: "→ "; color: var(--accent); }
+/* An embed is UI sitting inside prose, so prose list decoration must not reach
+   into it: a stack of error log lines is not a bulleted paragraph. */
+.blog-content .post-embed ul { margin-bottom: 0; }
+.blog-content .post-embed ul li::before { content: none; }
 .blog-content blockquote { border-left: 2px solid var(--accent); padding-left: 1rem; color: var(--text-secondary); font-style: italic; margin-bottom: 1rem; }
 .blog-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 /* Anchored headings land below the sticky header (TOC + copied deep links). */
