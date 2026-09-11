@@ -4,28 +4,31 @@ import { useState } from "react";
 import Link from "next/link";
 // AWS comes from Font Awesome: Simple Icons dropped its Amazon/AWS marks in
 // react-icons 5.7, and it also dropped SiOpenai, so Whisper is text-only now.
-import { FaAws } from "react-icons/fa6";
+import { FaAws, FaDatabase, FaMasksTheater } from "react-icons/fa6";
+// Oracle's ring is Grommet-only. Simple Icons has no Oracle mark at all.
+import { GrOracle } from "react-icons/gr";
 import {
-  SiApachespark,
-  SiCplusplus,
+  SiClaude,
   SiDocker,
   SiFastapi,
   SiFlask,
   SiGit,
   SiGithubactions,
-  SiGooglecloud,
-  SiJavascript,
+  SiHuggingface,
   SiLinux,
-  SiMlflow,
+  SiNeo4J,
   SiNextdotjs,
+  SiOllama,
+  SiOnnx,
   SiPandas,
   SiPostgresql,
-  SiPytorch,
+  SiPytest,
   SiPython,
+  SiPytorch,
   SiReact,
   SiScikitlearn,
+  SiSentry,
   SiSupabase,
-  SiTensorflow,
   SiTypescript,
 } from "react-icons/si";
 
@@ -44,34 +47,51 @@ export interface SkillGroupView {
 }
 
 /**
- * Brand marks where react-icons actually ships one. Deliberately partial:
- * Neo4j, Ollama, XGBoost and the concept-level skills (RAG, semantic search)
- * have no icon in the set, and a wrong-but-close glyph is worse than none, so
- * those render as text only.
+ * One mark per chip, in SKILL_GROUPS order. Three kinds of entry here:
+ *
+ * - the skill's own brand mark, where react-icons ships one;
+ * - the parent product's mark, where the skill is a part of it and nothing else
+ *   would be more accurate: pgvector and PL/pgSQL are Postgres, fastembed is an
+ *   ONNX runtime, sentence-transformers is Hugging Face's, and the CI gates run
+ *   in GitHub Actions;
+ * - a plain glyph for the two with no mark in any pack react-icons carries -
+ *   a cylinder for SQL, and theatre masks for Playwright, whose own logo is a
+ *   mask but is a seven-path colour illustration that turns to mud at 13px.
+ *
+ * Still text-only, because there is no mark and no honest stand-in: XGBoost,
+ * Whisper (SiOpenai is gone), RAGAS, asyncio, REST APIs, and the technique-level
+ * entries - semantic search, RAG, cross-encoder re-ranking.
  */
 const SKILL_ICONS: Record<string, React.ReactNode> = {
   PyTorch: <SiPytorch />,
-  TensorFlow: <SiTensorflow />,
   "scikit-learn": <SiScikitlearn />,
-  MLflow: <SiMlflow />,
-  "Ensemble methods": <SiApachespark />,
+  "Sentence Transformers": <SiHuggingface />,
+  "fastembed (ONNX)": <SiOnnx />,
+  pgvector: <SiPostgresql />,
+  "Anthropic Claude API": <SiClaude />,
+  Ollama: <SiOllama />,
   Python: <SiPython />,
   TypeScript: <SiTypescript />,
-  JavaScript: <SiJavascript />,
-  "C++": <SiCplusplus />,
+  SQL: <FaDatabase />,
+  "PL/pgSQL": <SiPostgresql />,
   FastAPI: <SiFastapi />,
   Flask: <SiFlask />,
-  React: <SiReact />,
-  "Next.js": <SiNextdotjs />,
   PostgreSQL: <SiPostgresql />,
+  "Postgres full-text search": <SiPostgresql />,
   Supabase: <SiSupabase />,
+  Neo4j: <SiNeo4J />,
+  "Next.js": <SiNextdotjs />,
+  React: <SiReact />,
   "pandas / NumPy": <SiPandas />,
+  AWS: <FaAws />,
+  "Oracle Cloud": <GrOracle />,
   Docker: <SiDocker />,
   Git: <SiGit />,
-  "GitHub Actions": <SiGithubactions />,
-  AWS: <FaAws />,
-  GCP: <SiGooglecloud />,
   Linux: <SiLinux />,
+  "CI build gates": <SiGithubactions />,
+  pytest: <SiPytest />,
+  Playwright: <FaMasksTheater />,
+  Sentry: <SiSentry />,
 };
 
 /**
