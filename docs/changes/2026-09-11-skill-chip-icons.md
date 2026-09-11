@@ -8,7 +8,9 @@ touch the icon map, so the map had drifted in both directions at once.
 
 Seven keys pointed at skills that no longer existed anywhere on the site:
 `TensorFlow`, `MLflow`, `Ensemble methods`, `JavaScript`, `C++`, `GCP` and
-`GitHub Actions`. Their imports were still in the bundle.
+`GitHub Actions`. Their imports were still in the bundle. Corrected 2026-09-11:
+the sync stranded four of those. TensorFlow, C++ and GCP left `SKILL_GROUPS`
+earlier, in `9a9c63f`, and had been dead longer.
 
 Every skill the sync added rendered as bare text: fastembed (ONNX), pgvector,
 Anthropic Claude API, PL/pgSQL, pytest, Playwright, Sentry. So did Neo4j,

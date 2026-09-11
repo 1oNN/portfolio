@@ -131,7 +131,7 @@ export const EXPERIENCE: Experience[] = [
     role: "Founder & Sole Engineer",
     type: "engineering",
     location: "Bradford, UK",
-    startDate: "Apr 2026",
+    startDate: "May 2026",
     endDate: "Present",
     current: true,
     responsibilities: [

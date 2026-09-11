@@ -267,7 +267,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "jobzyl",
     accent: "var(--status-fullstack)",
     status: "Shipped",
-    timeline: "Apr 2026 - present",
+    timeline: "May 2026 - present",
     role: "Solo build - sole designer and engineer",
     primaryStack: ["Next.js", "FastAPI", "Supabase", "AWS"],
     tackles:
