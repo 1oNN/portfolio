@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 // AWS comes from Font Awesome: Simple Icons dropped its Amazon/AWS marks in
-// react-icons 5.7, and it also dropped SiOpenai, so Whisper is text-only now.
+// react-icons 5.7, along with SiOpenai.
 import { FaAws, FaDatabase, FaMasksTheater } from "react-icons/fa6";
 // Oracle's ring is Grommet-only. Simple Icons has no Oracle mark at all.
 import { GrOracle } from "react-icons/gr";
+// Remix Icon still carries the OpenAI knot that Simple Icons dropped.
+import { RiOpenaiFill } from "react-icons/ri";
 import {
   SiClaude,
   SiDocker,
@@ -52,15 +54,16 @@ export interface SkillGroupView {
  * - the skill's own brand mark, where react-icons ships one;
  * - the parent product's mark, where the skill is a part of it and nothing else
  *   would be more accurate: pgvector and PL/pgSQL are Postgres, fastembed is an
- *   ONNX runtime, sentence-transformers is Hugging Face's, and the CI gates run
- *   in GitHub Actions;
+ *   ONNX runtime, sentence-transformers is Hugging Face's, the CI gates run in
+ *   GitHub Actions, Whisper is an OpenAI model, and asyncio is Python's own
+ *   standard library;
  * - a plain glyph for the two with no mark in any pack react-icons carries -
  *   a cylinder for SQL, and theatre masks for Playwright, whose own logo is a
  *   mask but is a seven-path colour illustration that turns to mud at 13px.
  *
  * Still text-only, because there is no mark and no honest stand-in: XGBoost,
- * Whisper (SiOpenai is gone), RAGAS, asyncio, REST APIs, and the technique-level
- * entries - semantic search, RAG, cross-encoder re-ranking.
+ * RAGAS, REST APIs, and the technique-level entries - semantic search, RAG,
+ * cross-encoder re-ranking.
  */
 const SKILL_ICONS: Record<string, React.ReactNode> = {
   PyTorch: <SiPytorch />,
@@ -70,11 +73,13 @@ const SKILL_ICONS: Record<string, React.ReactNode> = {
   pgvector: <SiPostgresql />,
   "Anthropic Claude API": <SiClaude />,
   Ollama: <SiOllama />,
+  Whisper: <RiOpenaiFill />,
   Python: <SiPython />,
   TypeScript: <SiTypescript />,
   SQL: <FaDatabase />,
   "PL/pgSQL": <SiPostgresql />,
   FastAPI: <SiFastapi />,
+  asyncio: <SiPython />,
   Flask: <SiFlask />,
   PostgreSQL: <SiPostgresql />,
   "Postgres full-text search": <SiPostgresql />,

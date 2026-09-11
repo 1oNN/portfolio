@@ -107,9 +107,9 @@ describe("classifyLink", () => {
 
   describe("cv downloads", () => {
     it("classifies anything under /cv/ as a download", () => {
-      expect(classify("/cv/Hammad_Ahmad_CV_AI_ML_Engineer.pdf")).toEqual({
+      expect(classify("/cv/Hammad_Ahmad_CV.pdf")).toEqual({
         kind: "cv-download",
-        target: "/cv/Hammad_Ahmad_CV_AI_ML_Engineer.pdf",
+        target: "/cv/Hammad_Ahmad_CV.pdf",
       });
     });
 

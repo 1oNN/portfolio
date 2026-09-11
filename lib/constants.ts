@@ -192,7 +192,7 @@ export const EDUCATION: Education[] = [
     institution: "University of Bradford",
     degree: "MSc",
     // "(Merit)" per both CVs - the classification was missing from the site.
-    field: "Artificial Intelligence (Merit)",
+    field: "Applied Artificial Intelligence and Data Analytics (Merit)",
     location: "Bradford, UK",
     startDate: "Sep 2024",
     endDate: "Sep 2025",

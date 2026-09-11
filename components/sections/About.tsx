@@ -4,10 +4,9 @@ import { EDUCATION } from "@/lib/constants";
 import { AVAILABLE_CVS } from "@/lib/cv-config";
 
 // Short mono form of language proficiency - derived from the fuller facts
-// (English fluent/IELTS 7.0, Urdu native, German A1.2 learning).
+// (English fluent/IELTS 7.0, German A1.2 learning).
 const LANGUAGES = [
   { code: "EN", level: "fluent" },
-  { code: "UR", level: "native" },
   { code: "DE", level: "A1" },
 ];
 
@@ -37,7 +36,7 @@ export default function About() {
               style={{ color: "var(--text-secondary)" }}
             >
               <p>
-                I&apos;m an AI/ML engineer with an MSc (Merit) in Artificial Intelligence from
+                I&apos;m an AI/ML engineer with an MSc (Merit) in Applied Artificial Intelligence and Data Analytics from
                 the University of Bradford and a first-author Springer paper. My work sits
                 where applied research meets production: measuring a system honestly, then making
                 it fast enough to put in front of real users.

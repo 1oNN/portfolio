@@ -5,7 +5,7 @@ export const SITE_NAME = "Hammad Ahmad";
 export const AUTHOR_NAME = "Hammad Ahmad";
 export const SITE_TITLE = "Hammad Ahmad - AI/ML Engineer & Researcher";
 export const SITE_DESCRIPTION =
-  "AI/ML Engineer working on semantic search, LLMs and RAG, and the latency work that puts them in production. MSc Artificial Intelligence (Merit), University of Bradford.";
+  "AI/ML Engineer working on semantic search, LLMs and RAG, and the latency work that puts them in production. MSc Applied AI and Data Analytics (Merit), University of Bradford.";
 
 const SITE_IMAGE = {
   url: "/og.png",

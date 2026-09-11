@@ -14,7 +14,7 @@ export interface CvEntry {
 export const AVAILABLE_CVS: CvEntry[] = [
   {
     label: "Download CV",
-    href: "/cv/Hammad_Ahmad_CV_AI_ML_Engineer.pdf",
+    href: "/cv/Hammad_Ahmad_CV.pdf",
     cvType: "ai-ml",
   },
 ];

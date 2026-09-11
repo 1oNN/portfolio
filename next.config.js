@@ -44,6 +44,18 @@ const nextConfig = {
     ];
   },
 
+  // The CV was renamed on 2026-09-11. Anything already linking the old path -
+  // LinkedIn, a sent application - would 404 without this.
+  async redirects() {
+    return [
+      {
+        source: "/cv/Hammad_Ahmad_CV_AI_ML_Engineer.pdf",
+        destination: "/cv/Hammad_Ahmad_CV.pdf",
+        permanent: true,
+      },
+    ];
+  },
+
   compress: true,
 
   experimental: {

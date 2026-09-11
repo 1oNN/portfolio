@@ -81,7 +81,7 @@ export default function LeftRail() {
           className="animate-rise mt-6 max-w-sm text-base leading-relaxed text-[var(--text-secondary)]"
           style={{ animationDelay: "120ms" }}
         >
-          MSc Artificial Intelligence. I build{" "}
+          MSc Applied Artificial Intelligence and Data Analytics. I build{" "}
           <strong className="font-semibold text-[var(--text-primary)]">semantic search</strong>,{" "}
           <strong className="font-semibold text-[var(--text-primary)]">LLM and RAG systems</strong>
           , and the latency work that makes them usable in production.
