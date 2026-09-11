@@ -59,6 +59,15 @@ Measured after the change: `tsc --noEmit` clean, `eslint .` clean, 209 tests in
 built HTML, and `/projects/diabetes-risk` renders the new timeline. Five files,
 30 insertions and 45 deletions plus the PDF.
 
+The GitHub profile carried the same two claims and got the same treatment
+(`1oNN/1oNN` `253874c`). Its Experience section goes from four blocks to three.
+Nothing was deleted there either: the FinLaw retrieval and evaluation bullets
+and the supervisors moved onto the MSc dissertation, and the diabetes benchmark
+moved onto the BSc thesis with the Jan 2024 - Jun 2024 dates the CV gives it.
+Worth noting the profile already spelled the degree "MSc, Applied Artificial
+Intelligence & Data Analytics (Merit)" in two places, which is the title the
+site is missing.
+
 ## Rejected
 
 **Mirroring the CV's new heading with a Research & Projects section on the
