@@ -161,42 +161,27 @@ export const EXPERIENCE: Experience[] = [
     ],
   },
   {
-    id: "bradford-ra",
-    company: "University of Bradford",
-    role: "Research Assistant, Graph-Augmented LLM Engineering",
-    type: "research",
-    location: "Bradford, UK",
-    startDate: "Jan 2025",
-    endDate: "Sep 2025",
-    current: false,
-    responsibilities: [
-      "Engineered FinLaw-UK, a Retrieval-Augmented Generation architecture integrating Mistral 7B-Instruct with a Neo4j knowledge graph for domain-aware regulatory retrieval. This work was also my MSc dissertation project - the Education and Experience entries describe the same system, not two.",
-      "Built a hybrid retrieval pipeline: BM25 sparse retrieval fused with BGE-small dense embeddings via reciprocal rank fusion, then cross-encoder re-ranking, with graph-grounded citation verification over Neo4j.",
-      "Evaluated on a 110-item regulatory benchmark I built and released: 80 factual questions, 20 document tasks, 10 case scenarios. Reproducible figures are 0.76 faithfulness and 0.74 answer relevance (RAGAS) with legal completeness at 0.68.",
-      "Re-measured the submitted evaluation and found the reported source-accuracy and citation-quality figures were regex shape-checks rather than correctness measures: the scorer returned a flat 0.85 for 103 of 110 rows, and the true graph-verified citation rate was 3 in 110. Published the correction and a measurement-integrity report stating which figures reproduce.",
-      "Built reproducible experimental pipelines with structured evaluation protocols, extending RAGAS with a custom legal-completeness metric that holds at 0.68 across both evaluation tracks.",
-    ],
-  },
-  {
-    id: "comsats-ra",
+    // The CV no longer lists this as a role. FinLaw-UK was the MSc dissertation,
+    // and it is carried by PROJECTS, its case study and the EDUCATION entry, so
+    // dropping the Experience entry loses no detail. The old bradford-ra entry
+    // said as much in its own first bullet.
+    id: "comsats-intern",
     company: "COMSATS University Islamabad",
-    // "Intern" is what both the CV and the reference carry. The site had it as
-    // "Assistant", which is a different job title, so it read as inflation
-    // against the CV rather than as shorthand.
-    role: "Research Intern, Data Science",
+    // A three-month summer internship. The site previously ran it to Jul 2024
+    // and hung the diabetes thesis off it; the CV now separates the two, and
+    // the thesis is its own final-year project.
+    role: "Data Science Intern",
     // Still typed research, not internship: the badge is about the kind of work
     // (it produced the Springer paper), and "internship" would recolour it into
     // the engineering palette.
     type: "research",
     location: "Islamabad, Pakistan",
     startDate: "Jul 2023",
-    endDate: "Jul 2024",
+    endDate: "Sep 2023",
     current: false,
     responsibilities: [
-      "Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records, resampling confined to the training folds; Random Forest led at 93% accuracy and performed best on ROC-AUC and sensitivity.",
-      "Deployed predictive models via REST APIs with correlation-driven risk-factor analysis surfacing the drivers behind each score.",
-      "Built a production web interface (React.js + Flask) for real-time clinical risk scoring.",
-      "First and corresponding author on a Springer conference paper; presented at ICSMAI 2024, Saidia, Morocco.",
+      "Implemented and compared machine learning models for sleep-efficiency prediction in Python (scikit-learn, pandas, NumPy): four models over 452 study records, Random Forest strongest at R² 0.8569.",
+      "Developed the work into a first and corresponding author Springer paper, presented at ICSMAI 2024 in Saidia, Morocco.",
     ],
   },
 ];

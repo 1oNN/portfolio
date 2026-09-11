@@ -16,7 +16,7 @@ export default function Experience() {
           size="lg"
           eyebrow="Experience"
           title="Where I've built"
-          description="Engineering roles and research posts, most recent first - what I built and shipped at each."
+          description="Engineering roles and a research internship, most recent first - what I built and shipped at each."
         />
 
         <div className="mt-4 divide-y divide-[var(--border)]">

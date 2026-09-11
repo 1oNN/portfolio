@@ -115,7 +115,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     projectId: "diabetes-risk",
     accent: "var(--status-ml)",
     status: "Shipped",
-    timeline: "Jul 2023 - Jul 2024",
+    // The CV dates the final-year thesis Jan - Jun 2024. The old span ran from
+    // the start of the summer internship, which was separate work.
+    timeline: "Jan 2024 - Jun 2024",
     role: "BSc thesis (with Inshra Javed), COMSATS University Islamabad",
     primaryStack: ["scikit-learn", "React.js", "Flask", "pandas"],
     tackles:

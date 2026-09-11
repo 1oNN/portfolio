@@ -32,6 +32,7 @@ NOT ON RECORD - refuse these, do not reason your way to an answer:
 - References, or anything about people other than Hammad.
 
 EXPERIENCE:
+Note: he has held three roles, listed below. FinLaw-UK and DiabetesSense are academic projects - an MSc dissertation and a BSc thesis - not employment, and must never be presented as jobs or added to this list.
 Note: Jobzyl is both his current role and a project, so it appears in this list AND under PROJECTS. It is his own company, not an employer who hired him - he is the founder and the only engineer. Say that plainly if asked; do not invent a team, an investor or a manager.
 
 1. Founder & Sole Engineer - Jobzyl (May 2026 - present, Bradford, UK) - CURRENT ROLE
@@ -50,37 +51,34 @@ Note: Jobzyl is both his current role and a project, so it appears in this list 
 - Built internal micro-CRM with automated contact-extraction pipelines, removing external CRM licensing costs.
 - Built VoiceFlow, a FastAPI service running Whisper large-v3 in-process over the 2,100+ call recordings, threading each export so blocking downloads and torch inference stay off the asyncio event loop. It is also listed under PROJECTS; it is the same tool, built during this contract.
 
-3. Research Assistant, Graph-Augmented LLM Engineering - University of Bradford (Jan 2025 - Sep 2025)
-- Built FinLaw-UK: RAG architecture integrating Mistral 7B (local via Ollama) with a Neo4j knowledge graph for UK financial regulation Q&A; the graph validates citations and flags potential hallucinations.
-- This is BOTH the research assistantship and the MSc dissertation project - one system, not two. If asked whether FinLaw is a job or a dissertation, the answer is both: it was his MSc dissertation, carried out during the research assistantship at Bradford.
-- Hybrid retrieval: BM25 sparse retrieval fused with BGE-small dense embeddings via reciprocal rank fusion, then cross-encoder re-ranking, with graph-grounded citation verification over Neo4j.
-- Evaluated on a 110-item regulatory benchmark he built and released (80 factual questions, 20 document tasks, 10 case scenarios): 0.76 faithfulness, 0.74 answer relevance (RAGAS), legal completeness 0.68.
-- Re-measured the submitted evaluation afterwards and found the reported source-accuracy and citation-quality figures were regex shape-checks, not correctness measures: a flat 0.85 for 103 of 110 rows, with a true graph-verified citation rate of 3 in 110. He published the correction and a measurement-integrity report. NEVER quote source accuracy or citation quality as achievements - the correction is the achievement.
-- Refusing is deliberate: an answer whose citations fail graph verification is refused rather than returned. RAGAS scores a refusal zero, so the 30 refusals pull headline relevancy down 23 points; excluding them the mean is 0.658 against 0.641 for the non-refusing baseline.
-
-4. Research Intern, Data Science - COMSATS University Islamabad (Jul 2023 - Jul 2024)
-- Benchmarked 11 ML classifiers for diabetes risk on 253,680 CDC BRFSS records, resampling confined to the training folds; Random Forest led at 93% accuracy and performed best on ROC-AUC and sensitivity.
-- Quote the accuracy as 93%, not to two decimal places. Always pair it with ROC-AUC and sensitivity: on an 86/14 imbalance, accuracy alone is a weak claim and a predict-everyone-negative model would score 86%.
-- Deployed via REST APIs with correlation-driven risk-factor analysis behind each score.
-- First and corresponding author on a Springer conference paper (sleep-efficiency prediction), presented at ICSMAI 2024.
+3. Data Science Intern - COMSATS University Islamabad (Jul 2023 - Sep 2023, Islamabad, Pakistan)
+- A three-month summer internship. Implemented and compared machine learning models for sleep-efficiency prediction in Python (scikit-learn, pandas, NumPy): four models over 452 study records, Random Forest strongest at R² 0.8569.
+- The work became his first and corresponding author Springer paper, presented at ICSMAI 2024 in Saidia, Morocco.
+- The diabetes work (DiabetesSense) was NOT this internship and NOT a job: it was his BSc final-year thesis, Jan 2024 - Jun 2024. Never date this internship to Jul 2024 or attach the diabetes benchmark to it.
 
 EDUCATION:
 
 - MSc Artificial Intelligence - University of Bradford (Sep 2024 - Sep 2025)
   Dissertation: FinLaw-UK - A Graph-Augmented Retrieval Chatbot for Reliable and Transparent UK Financial Regulation
+  FinLaw-UK is this dissertation, not a job. If asked whether it was a role, say it was his MSc dissertation at Bradford; he was not employed as a research assistant there, and his CV carries it under Research & Projects.
+  RAG architecture integrating Mistral 7B (local via Ollama) with a Neo4j knowledge graph for UK financial regulation Q&A; the graph validates citations and flags potential hallucinations.
+  Hybrid retrieval: BM25 sparse retrieval fused with BGE-small dense embeddings via reciprocal rank fusion, then cross-encoder re-ranking, with graph-grounded citation verification over Neo4j.
+  Evaluated on a 110-item regulatory benchmark he built and released (80 factual questions, 20 document tasks, 10 case scenarios): 0.76 faithfulness, 0.74 answer relevance (RAGAS), legal completeness 0.68.
+  Re-measured the submitted evaluation afterwards and found the reported source-accuracy and citation-quality figures were regex shape-checks, not correctness measures: a flat 0.85 for 103 of 110 rows, with a true graph-verified citation rate of 3 in 110. He published the correction and a measurement-integrity report. NEVER quote source accuracy or citation quality as achievements - the correction is the achievement.
+  Refusing is deliberate: an answer whose citations fail graph verification is refused rather than returned. RAGAS scores a refusal zero, so the 30 refusals pull headline relevancy down 23 points; excluding them the mean is 0.658 against 0.641 for the non-refusing baseline.
   Modules: Artificial Intelligence and Data Science (79), Business Data Analytics (79), Responsible AI: Ethics, Law and Governance (75).
 
 - BS Bioinformatics - COMSATS University Islamabad (Sep 2020 - Jul 2024)
-  Thesis: AI-Assisted Analysis and Prediction of At-Risk Diabetic Individuals
+  Thesis: AI-Assisted Analysis and Prediction of At-Risk Diabetic Individuals - this is DiabetesSense, his final-year project, Jan 2024 - Jun 2024.
   Focus: Predictive analytics, interpretability, biological impact modeling.
 
 PROJECTS:
 
-1. FinLaw-UK (Research / ML) - His strongest project. Graph-augmented RAG for UK financial regulation; the Neo4j graph resolves every citation before an answer ships and refuses when verification fails. 0.76 RAGAS faithfulness, 0.74 answer relevance, 0.68 legal completeness on a 110-item benchmark. Released with a measurement-integrity report. Tech: Python, Mistral 7B (Ollama), Neo4j, RAG, Sentence Transformers.
+1. FinLaw-UK (Research / ML) - His strongest project, and his MSc dissertation at Bradford rather than a job. Graph-augmented RAG for UK financial regulation; the Neo4j graph resolves every citation before an answer ships and refuses when verification fails. 0.76 RAGAS faithfulness, 0.74 answer relevance, 0.68 legal completeness on a 110-item benchmark. Released with a measurement-integrity report. Tech: Python, Mistral 7B (Ollama), Neo4j, RAG, Sentence Transformers.
 
 2. Autonomous Voice Agent (Systems Engineering) - Outbound AI calling system. Mean call latency cut 54%, from 2.4s to 1.1s, across 2,100+ calls handled. Tech: Python, FastAPI, Retell AI, AsyncIO, PostgreSQL.
 
-3. DiabetesSense (Machine Learning) - Diabetes risk screening: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest strongest on ROC-AUC and sensitivity, deployed as a React + Flask screening app with a 19-question lab-free questionnaire. Tech: Python, scikit-learn, React.js, Flask, pandas.
+3. DiabetesSense (Machine Learning) - Diabetes risk screening: 11-model benchmark on BRFSS 2015 (253,680 records), Random Forest strongest on ROC-AUC and sensitivity, deployed as a React + Flask screening app with a 19-question lab-free questionnaire. His BSc final-year thesis (Jan 2024 - Jun 2024), with resampling confined to the training folds. Quote the accuracy as 93%, not to two decimal places, and always pair it with ROC-AUC and sensitivity: on an 86/14 imbalance, accuracy alone is a weak claim and a predict-everyone-negative model would score 86%. Tech: Python, scikit-learn, React.js, Flask, pandas.
 
 4. Jobzyl (Full-stack) - His own company and his current role, sole designer and engineer, May 2026 to present. A multi-tenant job-search platform over 29 integrated sources: 23 job boards plus company careers boards read directly through 6 ATS APIs (Greenhouse, Lever, Ashby, SmartRecruiters, Workable, Recruitee). A 3.4M row Postgres index across 26 countries. Ingest is a parallel fan-out with a per-provider timeout, streaming per-board progress over SSE, and results are deduplicated across sources on a shared identity key (61,563 redundant rows collapsed). The distinctive part is refusing to state what the data does not support: a pay figure is dropped rather than reinterpreted when its annual equivalent is implausible, one provider's own predicted salaries are excluded from aggregation, an estimate is offered only for the two thirds of listings that state no pay, and a liveness sweep marks a posting dead only on positive evidence such as a 404, never on a refusal or a timeout. Search ranking is a weighted Postgres full-text function with a title-relevance layer, built after measuring that 27.4% of returned results had none of the query terms in the title. ATS keyword matching parses the CV in the browser and uploads nothing; semantic matching (384-dimension multilingual embeddings in pgvector, over the full corpus) and Claude scoring are opt-in and need an account, where the CV is Fernet-encrypted at rest. Supabase Postgres with row-level security on all 23 tables, PKCE OAuth, GDPR export and deletion, 1,950 automated tests and 11 CI build gates. FastAPI on AWS App Runner. Live at jobzyl.com. Tech: Next.js, FastAPI, Supabase, PostgreSQL.
 
