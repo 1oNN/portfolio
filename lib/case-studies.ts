@@ -63,7 +63,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     accent: "var(--status-engineering)",
     status: "In Production",
     timeline: "Oct 2025 - Mar 2026",
-    role: "AI / Machine Learning Engineer @ Outlyst",
+    role: "AI/ML Engineer @ Outlyst",
     primaryStack: ["FastAPI", "Retell AI", "AsyncIO", "PostgreSQL"],
     tackles:
       "At 2.4s a turn, a voice agent sounds like a bad phone line and the prospect starts talking over it. Under 1.2s it feels human enough that they stay on the call.",
@@ -270,7 +270,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     accent: "var(--status-fullstack)",
     status: "Shipped",
     timeline: "May 2026 - present",
-    role: "Solo build - sole designer and engineer",
+    role: "AI/ML Engineer · self-employed, sole designer and engineer",
     primaryStack: ["Next.js", "FastAPI", "Supabase", "AWS"],
     tackles:
       "Searching for a job across the major boards is a data-collection chore before it is a job search: different filters, different refresh cadences, the same role listed under four different URLs, and no visibility into how your CV scores.",

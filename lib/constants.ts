@@ -119,16 +119,19 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Follows the CV. Jobzyl has moved between this list and PROJECTS twice now,
-// because the CV kept changing its mind about whether founding it is a role;
-// the current CV opens Experience with it, so it is a role here as well as a
-// project. If it moves again, move it here first and let PROJECTS keep its own
-// entry - the two are not exclusive.
+// Follows the CV, with one deliberate divergence: the CV still titles Jobzyl
+// "Founder & Sole Engineer" and the site says "AI/ML Engineer" at
+// "Jobzyl · Self-Employed", because that is the title being applied for and
+// founder reads as not-looking. Don't revert it on the next CV sync.
+// Jobzyl has moved between this list and PROJECTS twice now; the current CV
+// opens Experience with it, so it is a role here as well as a project. If it
+// moves again, move it here first and let PROJECTS keep its own entry - the
+// two are not exclusive.
 export const EXPERIENCE: Experience[] = [
   {
     id: "jobzyl",
-    company: "Jobzyl",
-    role: "Founder & Sole Engineer",
+    company: "Jobzyl · Self-Employed",
+    role: "AI/ML Engineer",
     type: "engineering",
     location: "Bradford, UK",
     startDate: "May 2026",
@@ -146,7 +149,7 @@ export const EXPERIENCE: Experience[] = [
   {
     id: "outlyst",
     company: "Outlyst",
-    role: "AI / Machine Learning Engineer",
+    role: "AI/ML Engineer (fixed-term contract)",
     type: "engineering",
     location: "Leeds, UK (Remote)",
     startDate: "Oct 2025",
