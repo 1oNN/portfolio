@@ -26,7 +26,7 @@ function findProfilePhoto(): string | null {
 // when Jobzyl went in, because two figures from the same contract crowded out
 // the current role.
 const STATS = [
-  { value: "3.4M", label: "Rows indexed", source: "Jobzyl" },
+  { value: "4.2M+", label: "Rows indexed", source: "Jobzyl" },
   { value: "54%", label: "Latency cut", source: "Outlyst" },
   { value: "93%", label: "Random Forest accuracy", source: "BRFSS 2015" },
 ];

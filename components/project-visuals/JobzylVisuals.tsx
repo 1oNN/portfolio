@@ -22,7 +22,7 @@ interface Props {
 //
 // Both start at the search rather than the landing page, which is not a framing
 // preference: the product's hero still advertises a 2M index and this page now
-// carries 3.4M rows. Showing the hero would put two different numbers on one
+// carries 4.2M+ rows. Showing the hero would put two different numbers on one
 // screen.
 //
 // Two recordings, one per theme, because the product's dark mode is a different

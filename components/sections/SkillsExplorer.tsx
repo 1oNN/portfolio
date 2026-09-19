@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 // AWS comes from Font Awesome: Simple Icons dropped its Amazon/AWS marks in
 // react-icons 5.7, along with SiOpenai.
-import { FaAws, FaDatabase, FaMasksTheater } from "react-icons/fa6";
+import { FaAws, FaCircleCheck, FaDatabase, FaMasksTheater } from "react-icons/fa6";
 // Oracle's ring is Grommet-only. Simple Icons has no Oracle mark at all.
 import { GrOracle } from "react-icons/gr";
 // Remix Icon still carries the OpenAI knot that Simple Icons dropped.
@@ -16,6 +16,7 @@ import {
   SiFlask,
   SiGit,
   SiGithubactions,
+  SiGithubcopilot,
   SiHuggingface,
   SiLinux,
   SiNeo4J,
@@ -54,12 +55,15 @@ export interface SkillGroupView {
  * - the skill's own brand mark, where react-icons ships one;
  * - the parent product's mark, where the skill is a part of it and nothing else
  *   would be more accurate: pgvector and PL/pgSQL are Postgres, fastembed is an
- *   ONNX runtime, sentence-transformers is Hugging Face's, the CI gates run in
- *   GitHub Actions, Whisper is an OpenAI model, and asyncio is Python's own
- *   standard library;
- * - a plain glyph for the two with no mark in any pack react-icons carries -
- *   a cylinder for SQL, and theatre masks for Playwright, whose own logo is a
- *   mask but is a seven-path colour illustration that turns to mud at 13px.
+ *   ONNX runtime, sentence-transformers is Hugging Face's, Whisper is an OpenAI
+ *   model, asyncio is Python's own standard library, and AI-assisted
+ *   development takes Copilot's mark because Claude's is already on the Claude
+ *   API chip two groups up;
+ * - a plain glyph for the three with no mark in any pack react-icons carries -
+ *   a cylinder for SQL, theatre masks for Playwright, whose own logo is a mask
+ *   but is a seven-path colour illustration that turns to mud at 13px, and a
+ *   tick for the CI build gates, which had the GitHub Actions mark until
+ *   Actions became a chip of its own and the two sat side by side.
  *
  * Still text-only, because there is no mark and no honest stand-in: XGBoost,
  * RAGAS, REST APIs, and the technique-level entries - semantic search, RAG,
@@ -92,11 +96,13 @@ const SKILL_ICONS: Record<string, React.ReactNode> = {
   "Oracle Cloud": <GrOracle />,
   Docker: <SiDocker />,
   Git: <SiGit />,
+  "GitHub Actions": <SiGithubactions />,
   Linux: <SiLinux />,
-  "CI build gates": <SiGithubactions />,
+  "CI build gates": <FaCircleCheck />,
   pytest: <SiPytest />,
   Playwright: <FaMasksTheater />,
   Sentry: <SiSentry />,
+  "AI-assisted development": <SiGithubcopilot />,
 };
 
 /**

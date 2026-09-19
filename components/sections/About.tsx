@@ -43,7 +43,7 @@ export default function About() {
               </p>
               <p>
                 Right now I build and run Jobzyl on my own: a live job search aggregator over 29
-                integrated sources and a 3.4M row Postgres index, with semantic CV-to-posting
+                integrated sources and a 4.2M+ row Postgres index, with semantic CV-to-posting
                 matching in pgvector. The half I care about is what it refuses to say. Pay renders
                 in the period the employer quoted or not at all, and a posting that names no
                 recognised skill reports as too thin to score rather than as a confident 0%.

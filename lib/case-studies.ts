@@ -275,7 +275,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     tackles:
       "Searching for a job across the major boards is a data-collection chore before it is a job search: different filters, different refresh cadences, the same role listed under four different URLs, and no visibility into how your CV scores.",
     delivers:
-      "One search across 29 integrated sources and thousands of company careers pages over a 3.4M row index spanning 26 countries, deduplicated across sources, with a pay estimate only where the employer stated nothing, semantic CV matching against the full corpus, and a seven-stage tracker for everything applied to.",
+      "One search across 29 integrated sources and thousands of company careers pages over a 4.2M+ row index spanning 26 countries, deduplicated across sources, with a pay estimate only where the employer stated nothing, semantic CV matching against the full corpus, and a seven-stage tracker for everything applied to.",
     links: { live: "https://jobzyl.com" },
     whyIBuiltIt: [
       "I built this one for myself first. I was job hunting, and every search meant opening the same handful of boards, scrolling past the same reposted listings, and losing track of what I had already seen. The searching was taking longer than the applying.",
@@ -329,7 +329,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     results: [
-      "A 3.4M row index across 26 countries, over a taxonomy of 1,173 keywords in 42 groups. On the 2026-08-17 census, 82.7% of the corpus had been posted within the previous 30 days. 29 sources are integrated: 23 job boards and 6 ATS platforms ingested directly.",
+      "A 4.2M+ row index across 26 countries, over a taxonomy of 1,173 keywords in 42 groups. On the 2026-08-17 census, taken when the index held 3.4M rows, 82.7% of the corpus had been posted within the previous 30 days. 29 sources are integrated: 23 job boards and 6 ATS platforms ingested directly.",
       "The source count has grown from six at launch to twenty-nine with no architectural change. The parallel, rate-limited fan-out absorbed every new one, which is the strongest evidence that the ingest shape was right.",
       "The integrity work is the part I would actually defend. 61,563 duplicate rows collapsed on the shared identity key. Two thirds of listings state no pay at all, so the estimate speaks only where the employer did not, is a lookup over measured cells rather than a model, and has no country-wide fallback, because a national median tells a nurse nothing about nursing. Cells are deduplicated per job before they count: one poster ran the same role 220 times at an identical figure, and on raw row counts that one poster would have set a UK salary cell that every UK engineer reading it would have taken as fact.",
       "Operationally: 23 RLS-locked tables over 43 migrations, 1,950 automated tests behind 11 CI build gates, GDPR export and deletion, PKCE OAuth for Google, LinkedIn and GitHub, header-only admin auth with an audit log that escalates to Sentry if its own write fails, and 200 generated category pages of which 2.0% ship noindexed against a build gate set at 15%.",

@@ -14,7 +14,7 @@ export const PROJECTS: Project[] = [
     title: "Jobzyl",
     tagline: "One search across 29 job sources, with semantic CV matching",
     longDescription:
-      "Jobzyl searches 29 integrated sources in one query - 23 job boards plus six applicant tracking systems read directly, so a company's own careers page is a source rather than an aggregator's copy of it - over a 3.4M row Postgres index spanning 26 countries. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a weighted Postgres full-text function that puts the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, a liveness sweep marks a posting dead only on positive evidence, and a posting naming no recognised skill reports as too thin to score rather than as a confident 0% match. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic matching (384-dimension multilingual embeddings in pgvector) and Claude scoring are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables, behind 1,950 automated tests and 11 CI build gates. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
+      "Jobzyl searches 29 integrated sources in one query - 23 job boards plus six applicant tracking systems read directly, so a company's own careers page is a source rather than an aggregator's copy of it - over a 4.2M+ row Postgres index spanning 26 countries. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a weighted Postgres full-text function that puts the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, a liveness sweep marks a posting dead only on positive evidence, and a posting naming no recognised skill reports as too thin to score rather than as a confident 0% match. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic matching (384-dimension multilingual embeddings in pgvector) and Claude scoring are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables, behind 1,950 automated tests and 11 CI build gates. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
@@ -26,7 +26,7 @@ export const PROJECTS: Project[] = [
     // distinct location strings and is withdrawn. There is no first-result
     // timing here on purpose - nothing has timed it since June.
     metrics: [
-      { value: "3.4M", label: "Rows in the index" },
+      { value: "4.2M+", label: "Rows in the index" },
       { value: "29", label: "Sources integrated" },
       { value: "26", label: "Countries covered" },
     ],
@@ -119,10 +119,11 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Follows the CV, with one deliberate divergence: the CV still titles Jobzyl
-// "Founder & Sole Engineer" and the site says "AI/ML Engineer" at
-// "Jobzyl · Self-Employed", because that is the title being applied for and
-// founder reads as not-looking. Don't revert it on the next CV sync.
+// Follows the CV. The site led here: it dropped "Founder & Sole Engineer" for
+// "AI/ML Engineer" at "Jobzyl · Self-Employed" on 2026-09-15, and the CV of
+// 2026-09-19 now says "AI / Machine Learning Engineer (self-employed)" too, so
+// the two agree. The slash spacing and the parenthetical are the CV's; the
+// split across role and company is the card's.
 // Jobzyl has moved between this list and PROJECTS twice now; the current CV
 // opens Experience with it, so it is a role here as well as a project. If it
 // moves again, move it here first and let PROJECTS keep its own entry - the
@@ -138,12 +139,12 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Present",
     current: true,
     responsibilities: [
-      "Build and operate a live, public job search aggregator end to end: 29 provider integrations and 6 applicant tracking systems, a 3.4M row Postgres index across 26 countries, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
-      "Shipped semantic CV-to-posting matching in production: 384-dimension multilingual sentence embeddings over pgvector against the full corpus, gated so a posting naming no recognised skill reports as too thin to score rather than a confident 0%.",
+      "Build and operate a live, public job search aggregator end to end: 29 provider integrations and 6 applicant tracking systems, a 4.2M+ row Postgres index across 26 countries, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
       "Built the LLM layer on Anthropic Claude (CV scoring, cover letter, interview prep), with prompt-injection defences on every call, per-user quotas and documented fail-open behaviour.",
-      "Trained a pay regression model against the shipped salary benchmark as baseline, split by employer group to prevent leakage: MAE 27,420 to 24,001, MdAPE 18.9% to 16.4%. Reported per country and seniority, and held back from deployment.",
-      "Rebuilt search ranking as a weighted Postgres full-text function with a title-relevance layer, after measuring that 27.4% of returned results had none of the user's query terms in the job title.",
       "Hardened the platform: Fernet field encryption of CV text, row-level security across 23 tables, GDPR export and deletion, behind 1,950 automated tests and 11 CI build gates.",
+      "Shipped semantic CV-to-posting matching in production: 384-dimension multilingual sentence embeddings over pgvector against the full corpus, gated so a posting naming no recognised skill reports as too thin to score rather than a confident 0%.",
+      "Rebuilt search ranking as a weighted Postgres full-text function with a title-relevance layer, after measuring that 27.4% of returned results had none of the user's query terms in the job title.",
+      "Trained a pay regression model against the shipped salary benchmark as baseline, split by employer group to prevent leakage: MAE 27,420 to 24,001, MdAPE 18.9% to 16.4%. Reported per country and seniority, and deliberately not released: the error band stayed too wide to put in front of a user as a prediction about their own pay.",
     ],
   },
   {
@@ -299,11 +300,16 @@ export const SKILL_GROUPS: { label: string; skills: Skill[] }[] = [
       { name: "Oracle Cloud" },
       { name: "Docker" },
       { name: "Git" },
+      { name: "GitHub Actions", usedIn: ["jobzyl"] },
       { name: "Linux" },
       { name: "CI build gates", alias: ["CI/CD"], usedIn: ["jobzyl"] },
       { name: "pytest", usedIn: ["jobzyl"] },
       { name: "Playwright", usedIn: ["jobzyl"] },
       { name: "Sentry", usedIn: ["jobzyl"] },
+      // The CV names the tools in brackets - Claude Code and GitHub Copilot -
+      // the way it does for AWS. Chips carry the capability, not the vendor
+      // list, same as the AWS chip.
+      { name: "AI-assisted development" },
     ],
   },
 ];
