@@ -12,23 +12,24 @@ export const PROJECTS: Project[] = [
   {
     id: "jobzyl",
     title: "Jobzyl",
-    tagline: "One search across 29 job sources, with semantic CV matching",
+    tagline: "One job search over 11 sources and 111,000 employer career pages",
     longDescription:
-      "Jobzyl searches 29 integrated sources in one query - 23 job boards plus six applicant tracking systems read directly, so a company's own careers page is a source rather than an aggregator's copy of it - over a 4.2M+ row Postgres index spanning 26 countries. The fan-out is parallel with a per-provider timeout and streams back over SSE, so you can see which boards have answered while the rest are still going. Results are deduped across sources on a shared identity key, ranked by a weighted Postgres full-text function that puts the title above the description, and filtered on 11 dimensions with facet counts that apply every filter except the one being counted. The work that mattered was refusing to state what the data cannot support: pay renders in the period the employer quoted or not at all, one provider's own predicted salaries are excluded from aggregation, a liveness sweep marks a posting dead only on positive evidence, and a posting naming no recognised skill reports as too thin to score rather than as a confident 0% match. ATS keyword scoring parses the CV in the browser and uploads nothing; semantic matching (384-dimension multilingual embeddings in pgvector) and Claude scoring are opt-in, and need an account where the CV is Fernet-encrypted at rest. Seven-stage Kanban tracker, email alerts, Supabase Auth (email plus Google, LinkedIn and GitHub OAuth, PKCE) with row-level security on all 23 tables, behind 1,950 automated tests and 11 CI build gates. FastAPI on AWS App Runner, static-export frontend behind a CDN.",
+      "Jobzyl is a live job search engine I build and run alone. One query searches 11 job sources (Reed, Careerjet, USAJOBS and other public job sites) alongside jobs read straight from employers' own career pages: a separate crawler I wrote reads more than 35 applicant tracking systems by fixed rules, with no AI, and on 19 November 2026 it held 2.6M open jobs from 111,850 employer pages. In the seven days to 18 November, 51% of new jobs came from an employer's page rather than a job board's copy of it. Behind that sits a 4.4M row Postgres index, ranked by a weighted full-text function that puts the title above the description and filtered on 13 dimensions, with facet counts that apply every filter except the one being counted. The source list went down, not up: on 18 November the search went from 29 sources to 11, after an audit found the rest added little unique coverage for their cost, and their 1.79M rows were archived rather than deleted. The work that mattered is still refusing to state what the data cannot support. Pay renders in the period the employer quoted or not at all, a liveness sweep marks a posting dead only on positive evidence, a job naming fewer than three recognised skills gets no CV score rather than a confident 0%, and the site stopped saying duplicate listings are merged once the overlap between boards was measured. Claude Haiku sorts job ads into sections, drafts cover letters and interview prep under a daily quota that fails closed, and runs Zyl, a beta assistant that answers questions about the job you have open. Seven-stage tracker, email alerts, Supabase Auth with row-level security on every table, and over 10,000 automated tests. FastAPI on AWS App Runner, server-rendered Next.js on Amplify, self-hosted Supabase Postgres with pgvector.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
     liveUrl: "https://jobzyl.com",
-    // Measured, not estimated - these are the figures the CV carries. Row count
-    // is the whole index rather than a live-posting claim, because liveness has
-    // been probed on a fraction of it. The country figure counts countries with
-    // rows in the index, not search regions: an earlier "60+" came from counting
-    // distinct location strings and is withdrawn. There is no first-result
-    // timing here on purpose - nothing has timed it since June.
+    // Dated measurements from the Jobzyl repo, not estimates. Rows: 4.44M on
+    // 2026-11-20, the whole index rather than a live-posting count. Employer
+    // pages: 111,850 on 2026-11-19, from the crawler's own report. Tests: the
+    // API and frontend suites passed 7,255 and 2,965 on 2026-11-20. The country
+    // figure is gone on purpose: the last count (26) is from 2026-09-26, before
+    // the source cut, and nothing has recounted it. No first-result timing
+    // either, and never "60+ countries".
     metrics: [
-      { value: "4.2M+", label: "Rows in the index" },
-      { value: "29", label: "Sources integrated" },
-      { value: "26", label: "Countries covered" },
+      { value: "4.4M+", label: "Rows in the index" },
+      { value: "111K", label: "Employer career pages read" },
+      { value: "10,000+", label: "Automated tests" },
     ],
   },
   {
@@ -47,6 +48,27 @@ export const PROJECTS: Project[] = [
       { value: "0.76", label: "RAGAS faithfulness" },
       { value: "0.74", label: "Answer relevance" },
       { value: "0.68", label: "Legal completeness" },
+    ],
+  },
+  {
+    id: "claude-desk",
+    title: "Claude Desk",
+    tagline: "One Windows app for many Claude Code sessions, across accounts",
+    // Wording on accounts follows the public README: separate sign-ins in
+    // separate config folders, limits shown side by side. Never a count of
+    // accounts, and never anything that reads as getting around a limit.
+    longDescription:
+      "Claude Desk is an open-source Windows app (Electron, MIT) that runs real Claude Code terminals in one to eight panes across several windows, with projects in a sidebar. Every session row says working, needs you, finished or idle beside the last thing you asked it, and a session that stops to ask raises a notification and flashes the taskbar. Sessions can belong to different Claude accounts, each with its own config folder so logins never mix, and a Usage page puts every account's five-hour and weekly limits side by side. The state is read from files Claude Code already writes rather than invented: its session registry is polled every two seconds, the last ask comes from the tail of the transcript, and the limits arrive through a status line script, so Desk spends no tokens to show any of it. It does not edit code or show git; the terminal is Claude Code itself. Eight releases since 6 November 2026, 48 tests on every push, updates from GitHub Releases. An independent project, not made by or affiliated with Anthropic.",
+    tech: ["Electron", "JavaScript", "Node.js", "node-pty", "xterm.js", "GitHub Actions"],
+    category: "engineering",
+    featured: true,
+    githubUrl: "https://github.com/1oNN/claude_desk",
+    // Counted on main at 0.2.6 (2026-11-20). Stars, views and downloads are
+    // deliberately absent: the repo is two weeks old and they say nothing yet.
+    metrics: [
+      { value: "1-8", label: "Panes per window" },
+      { value: "48", label: "Tests on every push" },
+      { value: "8", label: "Releases since 6 Nov 2026" },
     ],
   },
   {
@@ -128,6 +150,9 @@ export const PROJECTS: Project[] = [
 // opens Experience with it, so it is a role here as well as a project. If it
 // moves again, move it here first and let PROJECTS keep its own entry - the
 // two are not exclusive.
+// The Jobzyl bullets are ahead of the CV as of 2026-11-20: the PDF of
+// 2026-09-19 still says 29 integrations and 4.2M rows. Regenerate the CV from
+// these, not the other way round.
 export const EXPERIENCE: Experience[] = [
   {
     id: "jobzyl",
@@ -139,11 +164,12 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Present",
     current: true,
     responsibilities: [
-      "Build and operate a live, public job search aggregator end to end: 29 provider integrations and 6 applicant tracking systems, a 4.2M+ row Postgres index across 26 countries, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
-      "Built the LLM layer on Anthropic Claude (CV scoring, cover letter, interview prep), with prompt-injection defences on every call, per-user quotas and documented fail-open behaviour.",
-      "Hardened the platform: Fernet field encryption of CV text, row-level security across 23 tables, GDPR export and deletion, behind 1,950 automated tests and 11 CI build gates.",
-      "Shipped semantic CV-to-posting matching in production: 384-dimension multilingual sentence embeddings over pgvector against the full corpus, gated so a posting naming no recognised skill reports as too thin to score rather than a confident 0%.",
-      "Rebuilt search ranking as a weighted Postgres full-text function with a title-relevance layer, after measuring that 27.4% of returned results had none of the user's query terms in the job title.",
+      "Build and operate a live, public job search engine end to end: 11 job sources plus a crawler reading employer career pages across more than 35 applicant tracking systems, a 4.4M row Postgres index, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
+      "Wrote the crawler as its own rules-only system (no AI, one honest user agent, robots.txt obeyed): 2.6M open jobs across 111,850 employer pages on 19 Nov 2026, and 51% of Jobzyl's new jobs in the seven days to 18 Nov.",
+      "Built the LLM layer on Anthropic Claude (job-ad structuring, cover letter, interview prep and the Zyl assistant), with prompt-injection defences on every call and per-user quotas that fail closed.",
+      "Hardened the platform: Fernet field encryption of CV text, row-level security on every table, account data export and deletion, behind over 10,000 automated tests and 11 build checks.",
+      "Built semantic matching on 384-dimension multilingual sentence embeddings in pgvector, then moved embedding off the API onto a dedicated worker after measuring that only 8.9% of 4.44M rows had a vector: about 458,000 rows a day on one core, measured live, against 800 to 3,200 a day before. A one-off backfill of 3.57M rows the same day left 22,243 live jobs without one.",
+      "Rebuilt search ranking as a weighted Postgres full-text function with a title-relevance layer, after measuring that 27.4% of returned results had none of the user's query terms in the job title. Later cut a broad search's database time on the live site from 2,654 ms to 490 ms, by ranking the match set once instead of once per page and letting the title index decide the match.",
       "Trained a pay regression model against the shipped salary benchmark as baseline, split by employer group to prevent leakage: MAE 27,420 to 24,001, MdAPE 18.9% to 16.4%. Reported per country and seniority, and deliberately not released: the error band stayed too wide to put in front of a user as a prediction about their own pay.",
     ],
   },

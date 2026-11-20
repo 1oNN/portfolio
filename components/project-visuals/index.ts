@@ -5,6 +5,7 @@ import { DiabetesSenseHero, DiabetesSenseArchitecture } from "./DiabetesSenseVis
 import { JobzylHero, JobzylArchitecture } from "./JobzylVisuals";
 import { VoiceFlowHero, VoiceFlowArchitecture } from "./VoiceFlowVisuals";
 import { SleepEfficiencyHero, SleepEfficiencyArchitecture } from "./SleepEfficiencyVisuals";
+import { ClaudeDeskHero, ClaudeDeskArchitecture } from "./ClaudeDeskVisuals";
 import {
   FinLawResults,
   DiabetesSenseResults,
@@ -49,6 +50,7 @@ export const PROJECT_VISUALS: Record<string, ProjectVisuals> = {
     demoHeader: { eyebrow: "Try it", title: "Explore the risk factors" },
   },
   jobzyl: { Hero: JobzylHero, Architecture: JobzylArchitecture },
+  "claude-desk": { Hero: ClaudeDeskHero, Architecture: ClaudeDeskArchitecture },
   voiceflow: { Hero: VoiceFlowHero, Architecture: VoiceFlowArchitecture },
   "sleep-efficiency": {
     Hero: SleepEfficiencyHero,

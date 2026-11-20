@@ -24,7 +24,7 @@ const CATEGORY_LABEL: Record<Project["category"], string> = {
   fullstack: "Full-stack",
 };
 
-// All six, in PROJECTS order. The list used to show only the featured four,
+// All of them, in PROJECTS order. The list used to show only the featured four,
 // which quietly hid VoiceFlow and the Sleep Efficiency Predictor from anyone
 // who never clicked through to /projects.
 

@@ -21,9 +21,8 @@ interface Props {
 // source attribution. Every row in these recordings is a genuine posting.
 //
 // Both start at the search rather than the landing page, which is not a framing
-// preference: the product's hero still advertises a 2M index and this page now
-// carries 4.2M+ rows. Showing the hero would put two different numbers on one
-// screen.
+// preference: the hero's source count and index size move faster than this page
+// is reshot, and showing it would put two different numbers on one screen.
 //
 // Two recordings, one per theme, because the product's dark mode is a different
 // palette rather than an inverted one. The still below is a frame from partway
@@ -82,18 +81,17 @@ function StillPair() {
 export function JobzylArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
 
-  // 23 boards plus 6 ATS platforms, five boards named and the rest counted.
-  // LinkedIn, Glassdoor, Google Jobs and ZipRecruiter are reached through one
-  // provider's own fan-out and are not entries in the registry - naming them as
-  // sources here would be false.
+  // 11 sources in the registry since the cut of 2026-11-18: five with a
+  // documented public API named, the other six counted. The last box is the
+  // crawler, which is a separate service and not a registry entry.
   const sources = [
     { name: "Reed", sub: "UK" },
-    { name: "Adzuna", sub: "19 countries" },
     { name: "Careerjet", sub: "global" },
-    { name: "Jooble", sub: "global" },
-    { name: "USAJobs", sub: "US federal" },
-    { name: "+18 boards", sub: "incl. remote-only" },
-    { name: "6 ATS APIs", sub: "company careers" },
+    { name: "USAJOBS", sub: "US federal" },
+    { name: "France Travail", sub: "France" },
+    { name: "JobTechDev", sub: "Sweden" },
+    { name: "+6 sources", sub: "11 in all" },
+    { name: "Crawler", sub: "111K employer pages" },
   ];
 
   return (
@@ -101,7 +99,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
       viewBox="0 0 900 480"
       className={className}
       role="img"
-      aria-label="Jobzyl ingest pipeline: parallel source fan-out, an integrity pass that dedupes and gates what it cannot verify, RLS-locked storage, and SSE streaming to the client"
+      aria-label="Jobzyl ingest pipeline: parallel source fan-out, an integrity pass that gates what it cannot verify, RLS-locked storage, and SSE streaming to the client"
       style={{ width: "100%", height: "auto" }}
     >
       <defs>
@@ -141,13 +139,13 @@ export function JobzylArchitecture({ accent, className }: Props) {
       <PvBox accent={accent} x={210} y={150} w={150} h={52} title="FastAPI" sub="fan-out · App Runner" delay={0.55} />
 
       {/* The integrity pass - the part of this pipeline that is actually load-bearing */}
-      <PvBox accent={accent} x={210} y={235} w={150} h={52} title="Integrity" sub="dedupe · pay gate" highlight delay={0.65} />
+      <PvBox accent={accent} x={210} y={235} w={150} h={52} title="Integrity" sub="pay gate · merge" highlight delay={0.65} />
 
       {/* Supabase */}
-      <PvBox accent={accent} x={400} y={150} w={150} h={52} title="Supabase" sub="23 RLS-locked tables" highlight delay={0.75} />
+      <PvBox accent={accent} x={400} y={150} w={150} h={52} title="Supabase" sub="RLS on every table" highlight delay={0.75} />
 
       {/* Scheduler */}
-      <PvBox accent={accent} x={400} y={235} w={150} h={52} title="Scheduler" sub="6-hourly · 30-min queue" delay={0.82} />
+      <PvBox accent={accent} x={400} y={235} w={150} h={52} title="Scheduler" sub="own worker" delay={0.82} />
 
       {/* Liveness sweep */}
       <PvBox accent={accent} x={400} y={320} w={150} h={42} title="Liveness" sub="reprobes stored URLs" delay={0.88} />
@@ -157,7 +155,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
 
       {/* Client */}
       <PvBox accent={accent} x={770} y={125} w={110} h={48} title="Next.js" sub="results" delay={0.98} />
-      <PvBox accent={accent} x={770} y={210} w={110} h={48} title="ATS Score" sub="in-browser" delay={1.05} />
+      <PvBox accent={accent} x={770} y={210} w={110} h={48} title="Fit score" sub="skills count" delay={1.05} />
 
       {/* Arrows: sources → aggregator */}
       {sources.map((s, i) => (
@@ -189,7 +187,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
       <line x1={550} y1={176} x2={600} y2={176} pathLength={1} className="pv-draw" stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#jobzyl-arrow)" style={{ animationDelay: "0.85s" }} />
       {/* SSE → Next.js */}
       <line x1={730} y1={168} x2={770} y2={149} pathLength={1} className="pv-draw" stroke={accent} strokeWidth="1.25" opacity="0.7" markerEnd="url(#jobzyl-arrow)" style={{ animationDelay: "0.95s" }} />
-      {/* Next.js → ATS (client-only) */}
+      {/* Next.js → fit score */}
       <line x1={825} y1={173} x2={825} y2={210} className="pv-fade" stroke={accent} strokeWidth="1.25" opacity="0.55" markerEnd="url(#jobzyl-arrow)" strokeDasharray="3 3" style={{ animationDelay: "1.08s" }} />
 
       {/* Job packets: sources → aggregator → integrity → storage → stream → client */}
@@ -213,7 +211,7 @@ export function JobzylArchitecture({ accent, className }: Props) {
 
       {/* Footer */}
       <text x="20" y="462" fontFamily="ui-monospace, 'JetBrains Mono', monospace" fontSize="9" fill={muted}>
-        Keyword scoring runs in the browser and uploads nothing. Semantic and AI scoring are opt-in: they need an account and a CV stored encrypted at rest.
+        The fit score is a count of skills, not a model. Semantic matching is opt-in: it needs an account and a CV stored encrypted at rest.
       </text>
     </svg>
   );

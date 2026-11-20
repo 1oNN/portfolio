@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   }),
 };
 
-// ItemList so the listing reads as a collection rather than six loose links.
+// ItemList so the listing reads as a collection rather than loose links.
 // Derived from PROJECTS, so it cannot drift from what the page renders.
 const collectionLd = {
   "@context": "https://schema.org",

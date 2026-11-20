@@ -42,11 +42,13 @@ export default function About() {
                 it fast enough to put in front of real users.
               </p>
               <p>
-                Right now I build and run Jobzyl on my own: a live job search aggregator over 29
-                integrated sources and a 4.2M+ row Postgres index, with semantic CV-to-posting
-                matching in pgvector. The half I care about is what it refuses to say. Pay renders
-                in the period the employer quoted or not at all, and a posting that names no
-                recognised skill reports as too thin to score rather than as a confident 0%.
+                Right now I build and run Jobzyl on my own: a live job search over 11 sources and
+                a crawler I wrote that reads 111,000 employer career pages directly, into a 4.4M
+                row Postgres index. The half I care about is what it refuses to say. Pay renders
+                in the period the employer quoted or not at all, and a posting that names fewer
+                than three recognised skills gets no CV score rather than a confident 0%. On the
+                side I maintain Claude Desk, an open source Windows app for running several
+                Claude Code sessions in one window.
               </p>
               <p>
                 Before that, at Outlyst, I cut mean call latency 54%, from 2.4s to 1.1s across

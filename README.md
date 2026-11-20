@@ -46,7 +46,7 @@ Next.js 15 App Router, TypeScript, Tailwind. No animation library, no CMS, no UI
 <tr>
 <td width="50%" valign="top">
 <a href="https://hammadahmad.co.uk/projects"><img src=".github/assets/projects.png" alt="Projects and case studies listing with category filters"></a>
-<sub><b>Six case studies.</b> Filtered by discipline, each with a full write-up of the architecture and the decisions behind it.</sub>
+<sub><b>Seven case studies.</b> Filtered by discipline, each with a full write-up of the architecture and the decisions behind it.</sub>
 </td>
 <td width="50%" valign="top">
 <a href="https://hammadahmad.co.uk/projects/finlaw-uk"><img src=".github/assets/case-study.png" alt="FinLaw-UK case study hero showing a Neo4j knowledge graph visual"></a>

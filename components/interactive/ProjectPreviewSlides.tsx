@@ -18,6 +18,11 @@ import {
   SleepEfficiencyArchitecture,
 } from "@/components/project-visuals/SleepEfficiencyVisuals";
 import {
+  ClaudeDeskHero,
+  ClaudeDeskUsage,
+  ClaudeDeskArchitecture,
+} from "@/components/project-visuals/ClaudeDeskVisuals";
+import {
   FinLawResults,
   DiabetesSenseResults,
   VoiceAgentResults,
@@ -50,6 +55,11 @@ const SLIDES: Record<string, Slide[]> = {
     { label: "Overview", Visual: FinLawHero },
     { label: "Architecture", Visual: FinLawArchitecture },
     { label: "Results", Visual: FinLawResults },
+  ],
+  "claude-desk": [
+    { label: "Sessions", Visual: ClaudeDeskHero },
+    { label: "Usage", Visual: ClaudeDeskUsage },
+    { label: "Architecture", Visual: ClaudeDeskArchitecture },
   ],
   "ai-voice-agent": [
     { label: "Overview", Visual: VoiceAgentHero },
