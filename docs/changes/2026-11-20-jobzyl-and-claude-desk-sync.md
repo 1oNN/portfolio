@@ -91,7 +91,7 @@ from the public repo.
 ## Checks
 
 `npx tsc --noEmit` clean, `npm run lint` clean, `npm test` 228 passed in 10 files,
-`next build --webpack` in a detached worktree.
+`npm run build` in a detached worktree, at both commits.
 
 The `1oNN/1oNN` profile README is updated separately, after this deploys, because its
 Writing table links to the four new posts.
