@@ -42,9 +42,9 @@ export default function About() {
                 it fast enough to put in front of real users.
               </p>
               <p>
-                Right now I build and run Jobzyl on my own: a live job search over 11 sources and
-                a crawler I wrote that reads 111,000 employer career pages directly, into a 4.4M
-                row Postgres index. The half I care about is what it refuses to say. Pay renders
+                Right now I build and run Jobzyl on my own: a live job search over more than
+                100,000 sources, nearly all of them employer career pages read directly by a
+                crawler I wrote, into a 4.4M row Postgres index. The half I care about is what it refuses to say. Pay renders
                 in the period the employer quoted or not at all, and a posting that names fewer
                 than three recognised skills gets no CV score rather than a confident 0%. On the
                 side I maintain Claude Desk, an open source Windows app for running several

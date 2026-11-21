@@ -81,7 +81,7 @@ function StillPair() {
 export function JobzylArchitecture({ accent, className }: Props) {
   const muted = "var(--text-muted)";
 
-  // 11 sources in the registry since the cut of 2026-11-18: five with a
+  // 11 job boards in the registry since the cut of 2026-11-18: five with a
   // documented public API named, the other six counted. The last box is the
   // crawler, which is a separate service and not a registry entry.
   const sources = [
@@ -90,8 +90,8 @@ export function JobzylArchitecture({ accent, className }: Props) {
     { name: "USAJOBS", sub: "US federal" },
     { name: "France Travail", sub: "France" },
     { name: "JobTechDev", sub: "Sweden" },
-    { name: "+6 sources", sub: "11 in all" },
-    { name: "Crawler", sub: "111K employer pages" },
+    { name: "+6 job boards", sub: "11 boards in all" },
+    { name: "Crawler", sub: "111,850 employer sites" },
   ];
 
   return (

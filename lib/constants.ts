@@ -12,9 +12,9 @@ export const PROJECTS: Project[] = [
   {
     id: "jobzyl",
     title: "Jobzyl",
-    tagline: "One job search over 11 sources and 111,000 employer career pages",
+    tagline: "One job search over 100,000+ sources, mostly employers' own career pages",
     longDescription:
-      "Jobzyl is a live job search engine I build and run alone. One query searches 11 job sources (Reed, Careerjet, USAJOBS and other public job sites) alongside jobs read straight from employers' own career pages: a separate crawler I wrote reads more than 35 applicant tracking systems by fixed rules, with no AI, and on 19 November 2026 it held 2.6M open jobs from 111,850 employer pages. In the seven days to 18 November, 51% of new jobs came from an employer's page rather than a job board's copy of it. Behind that sits a 4.4M row Postgres index, ranked by a weighted full-text function that puts the title above the description and filtered on 13 dimensions, with facet counts that apply every filter except the one being counted. The source list went down, not up: on 18 November the search went from 29 sources to 11, after an audit found the rest added little unique coverage for their cost, and their 1.79M rows were archived rather than deleted. The work that mattered is still refusing to state what the data cannot support. Pay renders in the period the employer quoted or not at all, a liveness sweep marks a posting dead only on positive evidence, a job naming fewer than three recognised skills gets no CV score rather than a confident 0%, and the site stopped saying duplicate listings are merged once the overlap between boards was measured. Claude Haiku sorts job ads into sections, drafts cover letters and interview prep under a daily quota that fails closed, and runs Zyl, a beta assistant that answers questions about the job you have open. Seven-stage tracker, email alerts, Supabase Auth with row-level security on every table, and over 10,000 automated tests. FastAPI on AWS App Runner, server-rendered Next.js on Amplify, self-hosted Supabase Postgres with pgvector.",
+      "Jobzyl is a live job search engine I build and run alone. One search runs over jobs from more than 100,000 sources. Nearly all of them are employers' own career pages: a separate crawler I wrote reads more than 35 applicant tracking systems by fixed rules, with no AI, and on 19 November 2026 it held 2.6M open jobs from 111,850 employer pages. The other 11 are job boards and public job sites (Reed, Careerjet, USAJOBS and others), queried live. In the seven days to 18 November, 51% of new jobs came from an employer's page rather than a job board's copy of it. Behind that sits a 4.4M row Postgres index, ranked by a weighted full-text function that puts the title above the description and filtered on 13 dimensions, with facet counts that apply every filter except the one being counted. The job board list went the other way: on 18 November it was cut from 29 boards and feeds to 11, after an audit found the rest added little unique coverage for their cost, and their 1.79M rows were archived rather than deleted. The work that mattered is still refusing to state what the data cannot support. Pay renders in the period the employer quoted or not at all, a liveness sweep marks a posting dead only on positive evidence, a job naming fewer than three recognised skills gets no CV score rather than a confident 0%, and the site stopped saying duplicate listings are merged once the overlap between boards was measured. Claude Haiku sorts job ads into sections, drafts cover letters and interview prep under a daily quota that fails closed, and runs Zyl, a beta assistant that answers questions about the job you have open. Seven-stage tracker, email alerts, Supabase Auth with row-level security on every table, and over 10,000 automated tests. FastAPI on AWS App Runner, server-rendered Next.js on Amplify, self-hosted Supabase Postgres with pgvector.",
     tech: ["Next.js", "React.js", "TypeScript", "FastAPI", "Supabase", "PostgreSQL", "Python", "Tailwind CSS", "AWS"],
     category: "fullstack",
     featured: true,
@@ -24,11 +24,11 @@ export const PROJECTS: Project[] = [
     // pages: 111,850 on 2026-11-19, from the crawler's own report. Tests: the
     // API and frontend suites passed 7,255 and 2,965 on 2026-11-20. The country
     // figure is gone on purpose: the last count (26) is from 2026-09-26, before
-    // the source cut, and nothing has recounted it. No first-result timing
+    // the job board cut, and nothing has recounted it. No first-result timing
     // either, and never "60+ countries".
     metrics: [
       { value: "4.4M+", label: "Rows in the index" },
-      { value: "111K", label: "Employer career pages read" },
+      { value: "100K+", label: "Sources, mostly employer career pages" },
       { value: "10,000+", label: "Automated tests" },
     ],
   },
@@ -164,7 +164,7 @@ export const EXPERIENCE: Experience[] = [
     endDate: "Present",
     current: true,
     responsibilities: [
-      "Build and operate a live, public job search engine end to end: 11 job sources plus a crawler reading employer career pages across more than 35 applicant tracking systems, a 4.4M row Postgres index, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
+      "Build and operate a live, public job search engine end to end: more than 100,000 sources (111,850 employer career pages read by a crawler across more than 35 applicant tracking systems, plus 11 job boards and public job sites), a 4.4M row Postgres index, FastAPI backend, Next.js frontend and AWS deploy pipeline.",
       "Wrote the crawler as its own rules-only system (no AI, one honest user agent, robots.txt obeyed): 2.6M open jobs across 111,850 employer pages on 19 Nov 2026, and 51% of Jobzyl's new jobs in the seven days to 18 Nov.",
       "Built the LLM layer on Anthropic Claude (job-ad structuring, cover letter, interview prep and the Zyl assistant), with prompt-injection defences on every call and per-user quotas that fail closed.",
       "Hardened the platform: Fernet field encryption of CV text, row-level security on every table, account data export and deletion, behind over 10,000 automated tests and 11 build checks.",

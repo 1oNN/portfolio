@@ -19,7 +19,7 @@ export const SEED_POSTS: BlogPost[] = [
     createdAt: "2026-06-28T09:00:00.000Z",
     updatedAt: "2026-06-28T09:00:00.000Z",
     content: [
-      "> Update, 20 November 2026: the source list was cut to 11 on 18 November, beside a crawler that reads employer career pages directly. This post describes the ingest as it stood in the summer.",
+      "> Update, 20 November 2026: the job board list was cut to 11 on 18 November, beside a crawler that reads 111,850 employer career pages directly, which is where most of the sources now are. This post describes the ingest as it stood in the summer.",
       "",
       "Jobzyl went live in June searching six job boards. It searches twenty today, plus company careers boards through seven applicant tracking systems. The interesting part of that sentence is not the number. It is that nothing about the ingest changed shape to get there.",
       "",
